@@ -2,11 +2,11 @@
 using System.Collections;
 
 public class RabbitMover : MonoBehaviour {
-	Vector3 currentTarget;
+	private Vector3 currentTarget;
 	public bool Moving;
-	WorldGen wg;
-	Animator anim;
-	bool facingleft = true;
+	private WorldGen wg;
+	private Animator anim;
+	private bool facingleft = true;
 
 	// Use this for initialization
 	void Start () {
