@@ -103,7 +103,7 @@ public class WorldGen : MonoBehaviour {
 	}
 
 	public Vertex Vector3ToVertex(Vector3 v){
-		return new Vector(Mathf.RoundToInt(transform.position.x - v.x), Mathf.RoundToInt(transform.position.y + v.y));
+		return new Vertex(Mathf.RoundToInt(transform.position.x - v.x), Mathf.RoundToInt(transform.position.y + v.y));
 	}
 
 	public Vertex ClickToVertex(){
