@@ -12,11 +12,12 @@ public class WorldGen : MonoBehaviour {
 	private int[,] world;
 	private GameObject[,] prefabs;
 
-	const int AIR = 0;
-	const int DIRT = 1;
-	const int GRASS = 2;
-	const int CARROT = 3;
-	const int TUNNEL = 4;
+	public const int OUT = -1;
+	public const int AIR = 0;
+	public const int DIRT = 1;
+	public const int GRASS = 2;
+	public const int CARROT = 3;
+	public const int TUNNEL = 4;
 
 
 	// tunnel index for position of open spot
@@ -50,15 +51,15 @@ public class WorldGen : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(Input.GetMouseButtonDown(0)){
-			world[CameraW(), CameraH()] = TUNNEL;
-		}
-		if(Input.GetMouseButtonDown(1)){
-			world[CameraW(), CameraH()] = DIRT;
-		}
-		if(Input.GetMouseButtonDown(2)){
-			world[CameraW(), CameraH()] = CARROT;
-		}
+//		if(Input.GetMouseButtonDown(0)){
+//			world[CameraW(), CameraH()] = TUNNEL;
+//		}
+//		if(Input.GetMouseButtonDown(1)){
+//			world[CameraW(), CameraH()] = DIRT;
+//		}
+//		if(Input.GetMouseButtonDown(2)){
+//			world[CameraW(), CameraH()] = CARROT;
+//		}
 		DrawGround();
 	}
 
@@ -67,7 +68,7 @@ public class WorldGen : MonoBehaviour {
 		for(int w = 0; w < width; w++){
 			for(int h = 0; h < height; h++){
 				//first check to make sure this tile is open
-				if(world[w, h] == AIR || world[w, h] == TUNNEL){
+				if(world[w, h] == AIR || world[w, h] == TUNNEL || world[w, h] == CARROT){
 					//Next check to make sure we aren't on the bottom of the world
 					if(h + 1 == height){
 						ret[w,h] = 0f;
@@ -80,7 +81,7 @@ public class WorldGen : MonoBehaviour {
 								ret[w,h] = .5f;
 								break;
 							case CARROT:
-								ret[w,h] = 0f;
+								ret[w,h] = -1f;
 								break;
 							case AIR:
 								ret[w,h] = -1f;
@@ -107,7 +108,13 @@ public class WorldGen : MonoBehaviour {
 	}
 
 	public int ClickToType(){
-		return world[CameraW(), CameraH ()];
+		if(CameraW() >= world.GetLength(0) || CameraW() < 0){
+			return OUT;
+		}
+		if(CameraH() >= world.GetLength(1) || CameraH() < 0){
+			return OUT;
+		}
+		return world[CameraW(), CameraH()];
 	}
 
 	public Vector3 VertexToVector3(Vertex v){
@@ -137,6 +144,7 @@ public class WorldGen : MonoBehaviour {
 				world[w, h] = DIRT;
 			}
 		}
+		world[8, height/2 - 1] = CARROT;
 	}
 
 	Sprite DrawDirt(int w, int h){
