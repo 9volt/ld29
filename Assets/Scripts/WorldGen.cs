@@ -102,6 +102,10 @@ public class WorldGen : MonoBehaviour {
 		return ret;
 	}
 
+	public Vector3 VertexToVector3(Vertex v){
+		return new Vector3(transform.position + v.x, transform.position - v.y, 0f);
+	}
+
 	public Vertex ClickToVertex(){
 		return new Vertex(CameraW(), CameraH());
 
@@ -120,7 +124,7 @@ public class WorldGen : MonoBehaviour {
 	public Vector3 VertexToVector3(Vertex v){
 		return new Vector3(transform.position.x + v.x, transform.position.y - v.y, 0);
 	}
-
+	
 	int CameraW(){
 		return Mathf.RoundToInt((transform.position.x - Camera.main.ScreenToWorldPoint(Input.mousePosition).x) * -1);
 	}
