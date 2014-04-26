@@ -49,7 +49,7 @@ TextureImporter:
     compressionQuality: 50
   spriteSheet:
     sprites:
-    - name: terrainB_0
+    - name: tunnels_0
       rect:
         serializedVersion: 2
         x: 0
@@ -58,7 +58,7 @@ TextureImporter:
         height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: terrainB_1
+    - name: tunnels_1
       rect:
         serializedVersion: 2
         x: 32
@@ -67,7 +67,7 @@ TextureImporter:
         height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: terrainB_2
+    - name: tunnels_2
       rect:
         serializedVersion: 2
         x: 64
@@ -76,7 +76,7 @@ TextureImporter:
         height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: terrainB_3
+    - name: tunnels_3
       rect:
         serializedVersion: 2
         x: 96
@@ -85,7 +85,7 @@ TextureImporter:
         height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: terrainB_4
+    - name: tunnels_4
       rect:
         serializedVersion: 2
         x: 128
@@ -94,7 +94,7 @@ TextureImporter:
         height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: terrainB_5
+    - name: tunnels_5
       rect:
         serializedVersion: 2
         x: 160
@@ -103,7 +103,7 @@ TextureImporter:
         height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: terrainB_6
+    - name: tunnels_6
       rect:
         serializedVersion: 2
         x: 192
@@ -112,7 +112,7 @@ TextureImporter:
         height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: terrainB_7
+    - name: tunnels_7
       rect:
         serializedVersion: 2
         x: 224
@@ -121,7 +121,7 @@ TextureImporter:
         height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: terrainB_8
+    - name: tunnels_8
       rect:
         serializedVersion: 2
         x: 256
@@ -130,7 +130,7 @@ TextureImporter:
         height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: terrainB_9
+    - name: tunnels_9
       rect:
         serializedVersion: 2
         x: 288
@@ -139,7 +139,7 @@ TextureImporter:
         height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: terrainB_10
+    - name: tunnels_10
       rect:
         serializedVersion: 2
         x: 320
@@ -148,7 +148,7 @@ TextureImporter:
         height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: terrainB_11
+    - name: tunnels_11
       rect:
         serializedVersion: 2
         x: 352
@@ -157,7 +157,7 @@ TextureImporter:
         height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: terrainB_12
+    - name: tunnels_12
       rect:
         serializedVersion: 2
         x: 384
@@ -166,7 +166,7 @@ TextureImporter:
         height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: terrainB_13
+    - name: tunnels_13
       rect:
         serializedVersion: 2
         x: 416
@@ -175,7 +175,7 @@ TextureImporter:
         height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: terrainB_14
+    - name: tunnels_14
       rect:
         serializedVersion: 2
         x: 448
@@ -184,7 +184,7 @@ TextureImporter:
         height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: terrainB_15
+    - name: tunnels_15
       rect:
         serializedVersion: 2
         x: 480
