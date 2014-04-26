@@ -1,9 +1,10 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\RabbitFinder.cs">
     <Files>
       <File FileName="Assets\Scripts\WorldGen.cs" Line="49" Column="28" />
-      <File FileName="Assets\Scripts\RabbitFinder.cs" Line="71" Column="3" />
+      <File FileName="Assets\Scripts\RabbitFinder.cs" Line="117" Column="6" />
+      <File FileName="Assets\Scripts\GUIScript.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

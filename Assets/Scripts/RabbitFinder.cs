@@ -11,6 +11,10 @@ public class Vertex {
 		y = ny;
 	}
 
+	public override string ToString (){
+		return x + ":" + y;
+	}
+
 	public override bool Equals(System.Object obj){
 		// If parameter is null return false.
 		if (obj == null)
@@ -57,18 +61,28 @@ public class RabbitFinder : MonoBehaviour {
 	public Vertex dest;
 	public Vertex current;
 	private List<Vertex> path;
+	public Texture green;
 
 	// Use this for initialization
 	void Start () {
 		wg = GameObject.FindGameObjectWithTag("world").GetComponent<WorldGen>();
-		foreach(Vertex v in FindPath(new Vertex(1, 8), new Vertex(15, 8), wg.GetPathfindingCosts())){
-			Debug.Log(v.x + ":" + v.y);
-		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+		if(Input.GetButtonDown("Jump")){
+			path = FindPath(new Vertex(1, 8), new Vertex(15, 8), wg.GetPathfindingCosts());
+		}
+	}
+
+	void OnGUI(){
+		if(path != null){
+			foreach(Vertex v in path){
+				Vector3 p = Camera.main.WorldToScreenPoint(new Vector3((wg.transform.position.x + v.x), (wg.transform.position.y - v.y), 0));
+				//Debug.Log(v + " " + p);
+				GUI.DrawTexture(new Rect(p.x, Screen.height - p.y, 6, 6), green);
+			}
+		}
 	}
 
 	Vertex GetLowestCost(List<Vertex> options, float[,] costs){
@@ -80,7 +94,7 @@ public class RabbitFinder : MonoBehaviour {
 				lowest = v;
 			}
 		}
-		return lowest;
+		return options[0];
 	}
 
 	private List<Vertex> FindPath(Vertex start, Vertex target, float[,] costs){

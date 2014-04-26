@@ -69,6 +69,8 @@ public class WorldGen : MonoBehaviour {
 								break;
 						}
 					}
+				} else {
+					ret[w,h] = -1f;
 				}
 			}
 		}
