@@ -65,31 +65,13 @@ public class RabbitFinder : MonoBehaviour {
 	public Vertex dest;
 	public Vertex current;
 	private List<Vertex> path;
-	public Texture green;
 
 	// Use this for initialization
 	void Start () {
 		wg = GameObject.FindGameObjectWithTag("world").GetComponent<WorldGen>();
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		if(Input.GetButtonDown("Jump")){
-			path = FindPath(new Vertex(5, 8), new Vertex(15, 8), wg.GetPathfindingCosts());
-		}
-	}
 
-	void OnGUI(){
-		if(path != null){
-			foreach(Vertex v in path){
-				Vector3 p = Camera.main.WorldToScreenPoint(new Vector3((wg.transform.position.x + v.x), (wg.transform.position.y - v.y), 0));
-				//Debug.Log(v + " " + p);
-				GUI.DrawTexture(new Rect(p.x, Screen.height - p.y, 6, 6), green);
-			}
-		}
-	}
-
-	Vertex GetLowestCost(List<Vertex> options, float[,] costs){
+	private Vertex GetLowestCost(List<Vertex> options, float[,] costs){
 		Vertex lowest = new Vertex(-1, -1);
 		float lowest_cost = 99999f;
 		foreach(Vertex v in options){
