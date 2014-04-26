@@ -115,6 +115,7 @@ public class WorldGen : MonoBehaviour {
 		if(v.x < world.GetLength(0) && v.x >= 0 && v.y < world.GetLength(1) && v.y >= 0){
 			return world[v.x, v.y];
 		}
+		return OUT;
 	}
 
 	public Vertex Vector3ToVertex(Vector3 v){

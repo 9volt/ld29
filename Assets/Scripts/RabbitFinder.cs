@@ -115,7 +115,7 @@ public class RabbitFinder : MonoBehaviour {
 			}
 			open_set.Remove(current);
 			closed_set.Add(current);
-			foreach(Vertex neighbor in NeighborNodes(current, costs)){
+			foreach(Vertex neighbor in NeighborNodes(current, costs, target)){
 				if(!closed_set.Contains(neighbor)){
 					float tentative_g_score = g_scores[current] + costs[neighbor.x, neighbor.y];
 
@@ -132,8 +132,11 @@ public class RabbitFinder : MonoBehaviour {
 		return null;
 	}
 
-	private List<Vertex> NeighborNodes(Vertex current, float[,] costs){
+	private List<Vertex> NeighborNodes(Vertex current, float[,] costs, Vertex target){
 		List<Vertex> ret = new List<Vertex>();
+		if(Vertex.Distance(current, target) < 2f){
+			ret.Add(target);
+		}
 		if(current.y > 0){
 			// top
 			if(costs[current.x, current.y - 1] >= 0){
