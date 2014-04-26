@@ -61,12 +61,14 @@ public class RabbitFinder : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		wg = GameObject.FindGameObjectWithTag("world").GetComponent<WorldGen>();
-		Debug.Log(FindPath(new Vertex(1, 8), new Vertex(15, 8), wg.GetPathfindingCosts()));
+		foreach(Vertex v in FindPath(new Vertex(1, 8), new Vertex(15, 8), wg.GetPathfindingCosts())){
+			Debug.Log(v.x + ":" + v.y);
+		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+		
 	}
 
 	Vertex GetLowestCost(List<Vertex> options, float[,] costs){
@@ -86,6 +88,7 @@ public class RabbitFinder : MonoBehaviour {
 		g_scores[start] = 0f;
 		List<Vertex> closed_set = new List<Vertex>();
 		List<Vertex> open_set = new List<Vertex>();
+		open_set.Add(start);
 		Dictionary<Vertex, Vertex> came_from = new Dictionary<Vertex, Vertex>();
 		while(open_set.Count > 0){
 			Vertex current = GetLowestCost(open_set, costs);

@@ -1,8 +1,9 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\WorldGen.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\RabbitFinder.cs">
     <Files>
-      <File FileName="Assets\Scripts\WorldGen.cs" Line="78" Column="17" />
+      <File FileName="Assets\Scripts\WorldGen.cs" Line="49" Column="28" />
+      <File FileName="Assets\Scripts\RabbitFinder.cs" Line="71" Column="3" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
