@@ -106,6 +106,14 @@ public class WorldGen : MonoBehaviour {
 
 	}
 
+	public int ClickToType(){
+		return world[CameraW(), CameraH ()];
+	}
+
+	public Vector3 VertexToVector3(Vertex v){
+		return new Vector3(transform.position.x + v.x, transform.position.y - v.y, 0);
+	}
+
 	int CameraW(){
 		return Mathf.RoundToInt((transform.position.x - Camera.main.ScreenToWorldPoint(Input.mousePosition).x) * -1);
 	}
