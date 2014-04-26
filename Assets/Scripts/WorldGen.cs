@@ -13,6 +13,7 @@ public class WorldGen : MonoBehaviour {
 	// 1 = dirt
 	// 2 = grass
 	// 3 = carrot
+	const int AIR = 0;
 	const int DIRT = 1;
 	const int GRASS = 2;
 	const int CARROT = 3;
@@ -38,6 +39,40 @@ public class WorldGen : MonoBehaviour {
 			world[CameraW(), CameraH()] = 3;
 		}
 		DrawGround();
+	}
+
+	public float[,] GetPathfindingCosts(){
+		float[,] ret = new float[width,height];
+		for(int w = 0; w < width; w++){
+			for(int h = 0; h < height; h++){
+				//first check to make sure this tile is open
+				if(world[w, h] == AIR){
+					//Next check to make sure we aren't on the bottom of the world
+					if(h + 1 == height){
+						ret[w,h] = 0f;
+					} else {
+						switch(world[w,h+1]){
+							case DIRT:
+								ret[w,h] = 0f;
+								break;
+							case GRASS:
+								ret[w,h] = .5f;
+								break;
+							case CARROT:
+								ret[w,h] = 0f;
+								break;
+							case AIR:
+								ret[w,h] = -1f;
+								break;
+							default:
+								ret[w,h] = -1f;
+								break;
+						}
+					}
+				}
+			}
+		}
+		return ret;
 	}
 
 	int CameraW(){
@@ -77,6 +112,7 @@ public class WorldGen : MonoBehaviour {
 						break;
 					case CARROT:
 						prefabs[w, h].GetComponent<SpriteRenderer>().sprite = carrot;
+						//Debug.Log(w + " " + h);
 						break;
 					default:
 						prefabs[w, h].GetComponent<SpriteRenderer>().sprite = null;
