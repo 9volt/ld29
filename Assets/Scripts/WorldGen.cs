@@ -5,21 +5,42 @@ public class WorldGen : MonoBehaviour {
 	public Sprite dirt;
 	public Sprite grass;
 	public Sprite carrot;
+	public Sprite[] tunnels;
 	public GameObject block;
 	public int width;
 	public int height;
 	private int[,] world;
 	private GameObject[,] prefabs;
-	// 1 = dirt
-	// 2 = grass
-	// 3 = carrot
+
 	const int AIR = 0;
 	const int DIRT = 1;
 	const int GRASS = 2;
 	const int CARROT = 3;
+	const int TUNNEL = 4;
+
+
+	// tunnel index for position of open spot
+	const int FULL = 0;
+	const int TOP = 1;
+	const int RIGHT = 2;
+	const int TOPRIGHT = 3;
+	const int BOTTOM = 4;
+	const int TOPBOTTOM = 5;
+	const int BOTTOMRIGHT = 6;
+	const int TOPRIGHTBOTTOM = 7;
+	const int LEFT = 8;
+	const int TOPLEFT = 9;
+	const int LEFTRIGHT = 10;
+	const int LEFTTOPRIGHT = 11;
+	const int LEFTBOTTOM = 12;
+	const int BOTTOMLEFTTOP = 13;
+	const int LEFTBOTTOMRIGHT = 14;
+	const int EMPTY = 15;
+
 
 	// Use this for initialization
 	void Start () {
+		tunnels = Resources.LoadAll<Sprite>("tunnels");
 		prefabs = new GameObject[width,height];
 		InstantiateWorld();
 		world = new int[width, height];
@@ -30,13 +51,13 @@ public class WorldGen : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if(Input.GetMouseButtonDown(0)){
-			world[CameraW(), CameraH()] = 0;
+			world[CameraW(), CameraH()] = TUNNEL;
 		}
 		if(Input.GetMouseButtonDown(1)){
-			world[CameraW(), CameraH()] = 1;
+			world[CameraW(), CameraH()] = DIRT;
 		}
 		if(Input.GetMouseButtonDown(2)){
-			world[CameraW(), CameraH()] = 3;
+			world[CameraW(), CameraH()] = CARROT;
 		}
 		DrawGround();
 	}
@@ -46,7 +67,7 @@ public class WorldGen : MonoBehaviour {
 		for(int w = 0; w < width; w++){
 			for(int h = 0; h < height; h++){
 				//first check to make sure this tile is open
-				if(world[w, h] == AIR){
+				if(world[w, h] == AIR || world[w, h] == TUNNEL){
 					//Next check to make sure we aren't on the bottom of the world
 					if(h + 1 == height){
 						ret[w,h] = 0f;
@@ -62,6 +83,9 @@ public class WorldGen : MonoBehaviour {
 								ret[w,h] = 0f;
 								break;
 							case AIR:
+								ret[w,h] = -1f;
+								break;
+							case TUNNEL:
 								ret[w,h] = -1f;
 								break;
 							default:
@@ -102,12 +126,106 @@ public class WorldGen : MonoBehaviour {
 		}
 	}
 
+	Sprite DrawDirt(int w, int h){
+		if(w == 0 || h == 0 || w == width - 1 || h == height - 1){
+			return dirt;
+		}
+		bool top = world[w, h - 1] == TUNNEL;
+		bool topleft = world[w - 1, h - 1] == TUNNEL;
+		bool topright = world[w + 1, h - 1] == TUNNEL;
+		bool right = world[w + 1, h] == TUNNEL;
+		bool left = world[w - 1, h] == TUNNEL;
+		bool bottomleft = world[w - 1, h + 1] == TUNNEL;
+		bool bottom = world[w, h + 1] == TUNNEL;
+		bool bottomright = world[w + 1, h + 1] == TUNNEL;
+		if(right && top){
+			return tunnels[TOPRIGHT];
+		}
+		if(right && bottom){
+			return tunnels[BOTTOMRIGHT];
+		}
+		if(left && bottom){
+			return tunnels[LEFTBOTTOM];
+		}
+		if(left && top){
+			return tunnels[TOPLEFT];
+		}
+		if(top && right){
+			return tunnels[TOPRIGHT];
+		}
+
+		return tunnels[FULL];
+	}
+
+	Sprite DrawTunnel(int w, int h){
+		if(w == 0 || h == 0 || w == width - 1 || h == height - 1){
+			return dirt;
+		}
+		bool top = world[w, h - 1] == TUNNEL;
+		bool topleft = world[w - 1, h - 1] == TUNNEL;
+		bool topright = world[w + 1, h - 1] == TUNNEL;
+		bool right = world[w + 1, h] == TUNNEL;
+		bool left = world[w - 1, h] == TUNNEL;
+		bool bottomleft = world[w - 1, h + 1] == TUNNEL;
+		bool bottom = world[w, h + 1] == TUNNEL;
+		bool bottomright = world[w + 1, h + 1] == TUNNEL;
+		if(top && topleft && topright && right && left && bottomleft && bottomright && bottom){
+			return tunnels[EMPTY];
+		}
+		if(top && !right && !left && !bottomleft && !bottomright && !bottom){
+			return tunnels[TOP];
+		}
+		if(!top && !topleft && right && !left && !bottomleft && !bottom){
+			return tunnels[RIGHT];
+		}
+		if(top && right && !left && !bottom){
+			return tunnels[TOPRIGHT];
+		}
+		if(!top && !right && !left && bottom){
+			return tunnels[BOTTOM];
+		}
+		if(top && !right && !left && bottom){
+			return tunnels[TOPBOTTOM];
+		}
+		if(!top && !topleft && right && !left && bottom){
+			return tunnels[BOTTOMRIGHT];
+		}
+		if(top && right && !left && bottom){
+			return tunnels[TOPRIGHTBOTTOM];
+		}
+		if(!top && !topright && !right && left && !bottomright && !bottom){
+			return tunnels[LEFT];
+		}
+		if(top && !right && left && !bottomright && !bottom){
+			return tunnels[TOPLEFT];
+		}
+		if(!top && right && left && !bottom){
+			return tunnels[LEFTRIGHT];
+		}
+		if(top && right && left && !bottom){
+			return tunnels[LEFTTOPRIGHT];
+		}
+		if(!top && !right && left && bottom){
+			return tunnels[LEFTBOTTOM];
+		}
+		if(top && topleft && !topright && !right && left && bottomleft && !bottomright && bottom){
+			return tunnels[BOTTOMLEFTTOP];
+		}
+		if(!top && right && left && bottom){
+			return tunnels[LEFTBOTTOMRIGHT];
+		}
+		return tunnels[EMPTY];
+	}
+
 	void DrawGround(){
 		for(int w = 0; w < width; w++){
 			for(int h = 0; h < height; h++){
 				switch (world[w, h]){
+					case TUNNEL:
+						prefabs[w, h].GetComponent<SpriteRenderer>().sprite = DrawTunnel(w, h);
+						break;
 					case DIRT:
-						prefabs[w, h].GetComponent<SpriteRenderer>().sprite = dirt;
+						prefabs[w, h].GetComponent<SpriteRenderer>().sprite = DrawDirt(w, h);
 						break;
 					case GRASS:
 						prefabs[w, h].GetComponent<SpriteRenderer>().sprite = grass;
