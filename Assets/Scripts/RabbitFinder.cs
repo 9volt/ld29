@@ -71,7 +71,7 @@ public class RabbitFinder : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if(Input.GetButtonDown("Jump")){
-			path = FindPath(new Vertex(1, 8), new Vertex(15, 8), wg.GetPathfindingCosts());
+			path = FindPath(new Vertex(5, 8), new Vertex(15, 8), wg.GetPathfindingCosts());
 		}
 	}
 
@@ -97,7 +97,7 @@ public class RabbitFinder : MonoBehaviour {
 		return options[0];
 	}
 
-	private List<Vertex> FindPath(Vertex start, Vertex target, float[,] costs){
+	public List<Vertex> FindPath(Vertex start, Vertex target, float[,] costs){
 		Dictionary<Vertex, float> g_scores = new Dictionary<Vertex, float>();
 		g_scores[start] = 0f;
 		List<Vertex> closed_set = new List<Vertex>();
