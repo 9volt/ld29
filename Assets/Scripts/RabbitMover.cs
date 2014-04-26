@@ -18,7 +18,7 @@ public class RabbitMover : MonoBehaviour {
 	// Update is called once per frame
 	void Update(){
 		if(Moving){
-			if(Vector3.Distance(transform.position, currentTarget) < .5f){
+			if(Vector3.Distance(transform.position, currentTarget) < .1f){
 				Moving = false;
 				anim.SetBool("Moving",false);
 			}else{
@@ -43,6 +43,7 @@ public class RabbitMover : MonoBehaviour {
 	}
 
 	public void Flip(){
+		facingleft = !facingleft;
 		Vector3 s = transform.localScale;
 		s.x *= -1;
 		transform.localScale = s;
