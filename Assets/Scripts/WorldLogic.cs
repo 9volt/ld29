@@ -11,7 +11,7 @@ public class WorldLogic : MonoBehaviour {
 	private Dictionary<Vertex, int> dig_counts;
 	public Texture green;
 	public Texture yellow;
-	public int dirt_strength = 100;
+	public int dirt_strength = 10;
 
 	// Use this for initialization
 	void Start () {

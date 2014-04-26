@@ -10,10 +10,12 @@ public class RabbitLogic : MonoBehaviour {
 	private WorldGen wg;
 	private WorldLogic wl;
 	private Vertex nextNode;
-	private bool working;
+	private float last_action;
+	public float speed = .5f;
 
 	// Use this for initialization
 	void Start () {
+		last_action = Time.time;
 		mySquare = new Vertex(5,8);
 		nextNode = mySquare;
 		wg = GameObject.FindGameObjectWithTag("world").GetComponent<WorldGen>();
@@ -41,6 +43,9 @@ public class RabbitLogic : MonoBehaviour {
 		} else {
 			//else pick new Destination or work
 			currentDestination = wl.GetClosestDig(mySquare);
+			if(mySquare == currentDestination && Time.time > last_action + speed){
+				wl.Dig(mySquare, 1);
+			}
 		}
 	}
 }
