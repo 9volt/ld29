@@ -15,7 +15,6 @@ public class GUIScript : MonoBehaviour {
 	public Texture emptytexture;
 	
 	
-	
 	// Use this for initialization
 	void Start () {
 		
@@ -27,6 +26,11 @@ public class GUIScript : MonoBehaviour {
 	}
 	
 	void OnGUI(){
+
+		//if (GUI.Button(new Rect(Screen.width - 200, Screen.height - 200, 200,100), "Change name")){
+		//	name = gameObject.GetComponent<NameGen>().getName();
+		//}
+
 		GUI.Box(new Rect(Screen.width - 200, Screen.height - 100, 200,100), name);
 		//profession icon
 		GUI.DrawTexture(new Rect(Screen.width - 195, Screen.height - 93, 30,30), profession);
