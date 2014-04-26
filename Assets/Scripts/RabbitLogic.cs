@@ -12,6 +12,7 @@ public class RabbitLogic : MonoBehaviour {
 	private Vertex nextNode;
 	private float last_action;
 	public float speed = .5f;
+	private Animator anim;
 
 	// Use this for initialization
 	void Start () {
@@ -24,6 +25,7 @@ public class RabbitLogic : MonoBehaviour {
 		rm = gameObject.GetComponent<RabbitMover>();
 		rm.SetPosition(wg.VertexToVector3(mySquare));
 		currentDestination = new Vertex(15, 8);
+		anim = gameObject.GetComponent<Animator>();
 	}
 	
 	// Update is called once per frame
@@ -44,6 +46,7 @@ public class RabbitLogic : MonoBehaviour {
 			//else pick new Destination or work
 			currentDestination = wl.GetClosestDig(mySquare);
 			if(mySquare == currentDestination && Time.time > last_action + speed){
+				anim.SetTrigger("Dig");
 				wl.Dig(mySquare, 1);
 			}
 		}
