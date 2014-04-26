@@ -61,7 +61,7 @@ public class Vertex {
 }
 
 public class RabbitFinder : MonoBehaviour {
-	public WorldGen wg;
+	private WorldGen wg;
 	public Vertex dest;
 	public Vertex current;
 	private List<Vertex> path;

@@ -11,6 +11,7 @@ public class WorldGen : MonoBehaviour {
 	public int height;
 	private int[,] world;
 	private GameObject[,] prefabs;
+	private WorldLogic wl;
 
 	public const int OUT = -1;
 	public const int AIR = 0;
@@ -42,11 +43,13 @@ public class WorldGen : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		tunnels = Resources.LoadAll<Sprite>("tunnels");
+		wl = gameObject.GetComponent<WorldLogic>();
 		prefabs = new GameObject[width,height];
 		InstantiateWorld();
 		world = new int[width, height];
 		BuildGround();
 		DrawGround();
+		wl.PopulateWorld();
 	}
 	
 	// Update is called once per frame
@@ -102,6 +105,18 @@ public class WorldGen : MonoBehaviour {
 		return ret;
 	}
 
+	public void SetVertex(Vertex v, int t){
+		if(v.x < world.GetLength(0) && v.x >= 0 && v.y < world.GetLength(1) && v.y >= 0){
+			world[v.x, v.y] = t;
+		}
+	}
+
+	public int VertexToType(Vertex v){
+		if(v.x < world.GetLength(0) && v.x >= 0 && v.y < world.GetLength(1) && v.y >= 0){
+			return world[v.x, v.y];
+		}
+	}
+
 	public Vertex Vector3ToVertex(Vector3 v){
 		return new Vertex(Mathf.RoundToInt(transform.position.x - v.x), Mathf.RoundToInt(transform.position.y + v.y));
 	}
@@ -148,7 +163,7 @@ public class WorldGen : MonoBehaviour {
 				world[w, h] = DIRT;
 			}
 		}
-		world[8, height/2 - 1] = CARROT;
+		//world[8, height/2 - 1] = CARROT;
 	}
 
 	Sprite DrawDirt(int w, int h){

@@ -3,10 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class WorldLogic : MonoBehaviour {
-	public WorldGen wg;
+	private WorldGen wg;
 	private List<Vertex> food_targets;
 	private List<Vertex> dig_targets;
 	private List<Vertex> attack_targets;
+	private Dictionary<Vertex, int> food_counts;
+	private Dictionary<Vertex, int> dig_counts;
 	public Texture green;
 	public Texture yellow;
 
@@ -15,7 +17,9 @@ public class WorldLogic : MonoBehaviour {
 		food_targets = new List<Vertex>();
 		dig_targets = new List<Vertex>();
 		attack_targets = new List<Vertex>();
-		wg = GameObject.FindGameObjectWithTag("world").GetComponent<WorldGen>();
+		food_counts = new Dictionary<Vertex, int>();
+		dig_counts = new Dictionary<Vertex, int>();
+		wg = gameObject.GetComponent<WorldGen>();
 	}
 	
 	// Update is called once per frame
@@ -63,6 +67,20 @@ public class WorldLogic : MonoBehaviour {
 		}
 	}
 
+	public void PopulateWorld(){
+		// Populate Dig strength
+		for(int w = 0; w < wg.width; w++){
+			for(int h = 0; h < wg.height; h++){
+				Vertex v = new Vertex(w, h);
+				int t = wg.VertexToType(v);
+				if(t == WorldGen.GRASS || t == WorldGen.DIRT){
+					dig_counts[v] = 10;
+				}
+			}
+		}
+		// Create Farm
+	}
+
 	public Vertex GetClosestEnemy(Vertex v){
 		float cur_distance = -1f;
 		Vertex closest = null;
@@ -97,5 +115,14 @@ public class WorldLogic : MonoBehaviour {
 			}
 		}
 		return closest;
+	}
+
+	public void Dig(Vertex v, int str){
+		dig_counts[v] -= str;
+		if(dig_counts[v] < 0){
+			dig_counts.Remove(v);
+			dig_targets.Remove(v);
+			wg.SetVertex(v, WorldGen.TUNNEL);
+		}
 	}
 }
