@@ -42,3 +42,11 @@ TagManager:
     userID: 0
     uniqueID: 0
     locked: 0
+  - name: Blocks
+    userID: 2
+    uniqueID: 4059874643
+    locked: 0
+  - name: Rabbits
+    userID: 1
+    uniqueID: 3399672855
+    locked: 0
