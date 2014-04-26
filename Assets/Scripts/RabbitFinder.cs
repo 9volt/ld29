@@ -11,6 +11,10 @@ public class Vertex {
 		y = ny;
 	}
 
+	public static float Distance(Vertex v, Vertex v2){
+		return Vector2.Distance(new Vector2(v.x, v.y), new Vector2(v2.x, v2.y));
+	}
+
 	public override string ToString (){
 		return x + ":" + y;
 	}
