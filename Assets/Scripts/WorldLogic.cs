@@ -26,8 +26,10 @@ public class WorldLogic : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if(Input.GetButtonDown("Fire1")){
+			Debug.Log("click");
 			// Attempt to set new target
 			int type = wg.ClickToType();
+			Debug.Log(type);
 			Vertex target = wg.ClickToVertex();
 			if(type == WorldGen.CARROT){
 				if(!food_targets.Contains(target)){
