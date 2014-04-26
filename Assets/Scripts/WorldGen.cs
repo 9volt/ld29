@@ -101,6 +101,11 @@ public class WorldGen : MonoBehaviour {
 		return ret;
 	}
 
+	public Vertex ClickToVertex(){
+		return new Vertex(CameraW(), CameraH());
+
+	}
+
 	int CameraW(){
 		return Mathf.RoundToInt((transform.position.x - Camera.main.ScreenToWorldPoint(Input.mousePosition).x) * -1);
 	}
@@ -138,21 +143,21 @@ public class WorldGen : MonoBehaviour {
 		bool bottomleft = world[w - 1, h + 1] == TUNNEL;
 		bool bottom = world[w, h + 1] == TUNNEL;
 		bool bottomright = world[w + 1, h + 1] == TUNNEL;
-		if(right && top){
-			return tunnels[TOPRIGHT];
-		}
-		if(right && bottom){
-			return tunnels[BOTTOMRIGHT];
-		}
-		if(left && bottom){
-			return tunnels[LEFTBOTTOM];
-		}
-		if(left && top){
-			return tunnels[TOPLEFT];
-		}
-		if(top && right){
-			return tunnels[TOPRIGHT];
-		}
+//		if(right && top){
+//			return tunnels[TOPRIGHT];
+//		}
+//		if(right && bottom){
+//			return tunnels[BOTTOMRIGHT];
+//		}
+//		if(left && bottom){
+//			return tunnels[LEFTBOTTOM];
+//		}
+//		if(left && top){
+//			return tunnels[TOPLEFT];
+//		}
+//		if(top && right){
+//			return tunnels[TOPRIGHT];
+//		}
 
 		return tunnels[FULL];
 	}

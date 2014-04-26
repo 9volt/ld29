@@ -27,9 +27,9 @@ public class GUIScript : MonoBehaviour {
 	
 	void OnGUI(){
 
-		//if (GUI.Button(new Rect(Screen.width - 200, Screen.height - 200, 200,100), "Change name")){
-		//	name = gameObject.GetComponent<NameGen>().getName();
-		//}
+//		if (GUI.Button(new Rect(Screen.width - 200, Screen.height - 200, 200,100), "Change name")){
+//			name = gameObject.GetComponent<NameGen>().getName();
+//		}
 
 		GUI.Box(new Rect(Screen.width - 200, Screen.height - 100, 200,100), name);
 		//profession icon
