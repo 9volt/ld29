@@ -11,6 +11,7 @@ public class WorldLogic : MonoBehaviour {
 	private Dictionary<Vertex, int> dig_counts;
 	public Texture green;
 	public Texture yellow;
+	public int dirt_strength = 100;
 
 	// Use this for initialization
 	void Start () {
@@ -74,7 +75,7 @@ public class WorldLogic : MonoBehaviour {
 				Vertex v = new Vertex(w, h);
 				int t = wg.VertexToType(v);
 				if(t == WorldGen.GRASS || t == WorldGen.DIRT){
-					dig_counts[v] = 10;
+					dig_counts[v] = dirt_strength;
 				}
 			}
 		}
