@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 5b16c3ad88c159f4cbf278c50cd032c4
+guid: 300b3c145b3cddf4884d8fcde7543a7a
 TextureImporter:
   serializedVersion: 2
   mipmaps:
@@ -30,7 +30,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -48,6 +48,24 @@ TextureImporter:
     textureFormat: -3
     compressionQuality: 50
   spriteSheet:
-    sprites: []
+    sprites:
+    - name: rabbit_spriteA_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: rabbit_spriteA_1
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
   spritePackingTag: 
   userData: 
