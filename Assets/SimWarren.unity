@@ -88,7 +88,7 @@ GameObject:
   - 81: {fileID: 1214936237}
   m_Layer: 0
   m_Name: Camera
-  m_TagString: Untagged
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -150,7 +150,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1214936236}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 19.9589653, y: -10.2946854, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -181,11 +181,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c498dc799f73224bbab6fe52a62c80e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dirt: {fileID: 100000, guid: 4f382e31492ee044f8504187a84762fa, type: 2}
-  grass: {fileID: 100000, guid: 14a96fa10ec300a4db8dce15e1be62c1, type: 2}
-  carrot: {fileID: 100000, guid: 1c81f2dfc35c3b543b91083c9e1f1e72, type: 2}
-  width: 100
-  height: 10
+  dirt: {fileID: 21300000, guid: 5b16c3ad88c159f4cbf278c50cd032c4, type: 3}
+  grass: {fileID: 21300000, guid: 41ec6717c699827468754f7a5128d2ad, type: 3}
+  carrot: {fileID: 21300000, guid: a57a2aa72d6fc9c43b4a072eca689999, type: 3}
+  block: {fileID: 100000, guid: 3bb2b1a839a888f4f8e26b49c39aa8fa, type: 2}
+  width: 20
+  height: 20
 --- !u!4 &1984020721
 Transform:
   m_ObjectHideFlags: 0
@@ -193,7 +194,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1984020719}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.195882797, y: 0, z: 0}
+  m_LocalPosition: {x: .139288902, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
