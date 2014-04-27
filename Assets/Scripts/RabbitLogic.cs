@@ -2,40 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Burrow {
-	public List<Vertex> blocks;
-	public int food;
-	public int rabbits;
-
-	public Burrow(List<Vertex> nblocks){
-		blocks = nblocks;
-	}
-
-	public int FoodCapacity(){
-		return blocks.Count * 2;
-	}
-
-	public int RabbitCapacity(){
-		return blocks.Count + 3;
-	}
-
-	public Vertex GetRandomBlock(){
-		return blocks[Random.Range(0, blocks.Count - 1)];
-	}
-
-	public bool Contains(Vertex v){
-		return blocks.Contains(v);
-	}
-
-	public void Merge(Burrow b){
-		blocks.AddRange(b.blocks);
-		food = food + b.food;
-		if(food > FoodCapacity()){
-			food = FoodCapacity();
-		}
-		rabbits = rabbits + b.rabbits;
-	}
-}
 
 public class RabbitLogic : MonoBehaviour {
 	private Vertex mySquare;
@@ -74,8 +40,6 @@ public class RabbitLogic : MonoBehaviour {
 	public const int MALE = 0;
 	public const int FEMALE = 1;
 
-	private List<Burrow> burrows;
-
 	// Use this for initialization
 	void Start () {
 		food_hold = 0;
@@ -92,7 +56,6 @@ public class RabbitLogic : MonoBehaviour {
 		currentDestination = new Vertex(15, 14);
 		anim = gameObject.GetComponent<Animator>();
 		ng = gameObject.GetComponent<NameGen>();
-		burrows = new List<Burrow>();
 		//initiate rabbit stats
 		myname = ng.getName();
 		hp = 20;

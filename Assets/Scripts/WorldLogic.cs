@@ -2,6 +2,42 @@
 using System.Collections;
 using System.Collections.Generic;
 
+public class Burrow {
+	public List<Vertex> blocks;
+	public int food;
+	public int rabbits;
+	
+	public Burrow(List<Vertex> nblocks){
+		blocks = nblocks;
+	}
+	
+	public int FoodCapacity(){
+		return blocks.Count * 2;
+	}
+	
+	public int RabbitCapacity(){
+		return blocks.Count + 3;
+	}
+	
+	public Vertex GetRandomBlock(){
+		return blocks[Random.Range(0, blocks.Count - 1)];
+	}
+	
+	public bool Contains(Vertex v){
+		return blocks.Contains(v);
+	}
+	
+	public void Merge(Burrow b){
+		blocks.AddRange(b.blocks);
+		food = food + b.food;
+		if(food > FoodCapacity()){
+			food = FoodCapacity();
+		}
+		rabbits = rabbits + b.rabbits;
+	}
+}
+
+
 public class WorldLogic : MonoBehaviour {
 	private WorldGen wg;
 	private List<Vertex> food_targets;
@@ -27,6 +63,9 @@ public class WorldLogic : MonoBehaviour {
 
 	public AudioClip[] seasons;
 	private AudioSource ass;
+	
+	private List<Burrow> burrows;
+
 
 	// Use this for initialization
 	void Start () {
@@ -41,6 +80,8 @@ public class WorldLogic : MonoBehaviour {
 		ass.clip = seasons[season];
 		ass.Play();
 		last_season = Time.time;
+		burrows = new List<Burrow>();
+
 	}
 	
 	// Update is called once per frame
