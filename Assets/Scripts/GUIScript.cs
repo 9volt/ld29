@@ -14,7 +14,12 @@ public class GUIScript : MonoBehaviour {
 	public Texture female;
 	public Texture[] season_art;
 	private WorldLogic wl;
-	
+	public Texture bunny;
+	public Texture food;
+	public Texture foodcap;
+	public Texture houses;
+
+
 	// Use this for initialization
 	void Start () {
 		profession = Guard;
@@ -33,15 +38,23 @@ public class GUIScript : MonoBehaviour {
 	}
 	
 	void OnGUI(){
-		// Draw season
+		// Draw season and Burrow Stats
+		GUI.Box(new Rect(0, 0, 400,42), "");
 		GUI.DrawTexture(new Rect(0,0,32,32), season_art[wl.season]);
+		GUI.DrawTexture(new Rect(70,0,32,32), bunny);
+		GameObject[] g = GameObject.FindGameObjectsWithTag("Rabbit");
+		GUI.Label(new Rect(100,10,100,32),"" + g.Length + " / " + wl.BurrowSleepCapacity() ); 
+		GUI.DrawTexture(new Rect(150,0,32,32), houses);
+		GUI.DrawTexture(new Rect(260,0,32,32), food);
+		GUI.Label(new Rect(290,10,100,32),"" + wl.FoodCount() + " / " + wl.FoodCapacity() ); 
+		GUI.DrawTexture(new Rect(340,2,32,32), foodcap);
 
 //		if (GUI.Button(new Rect(Screen.width - 200, Screen.height - 200, 200,100), "Change name")){
 //			name = gameObject.GetComponent<NameGen>().getName();
 //		}
 		if(currentRabbit != null){
 
-			//InfoBox
+			//Targeted Rabbit InfoBox
 			GUI.Box(new Rect(Screen.width - 200, Screen.height - 100, 200,100), currentRabbit.myname);
 			if(currentRabbit.sex == RabbitLogic.FEMALE){
 				GUI.DrawTexture(new Rect(Screen.width - 55, Screen.height - 100, 30,30), female);
