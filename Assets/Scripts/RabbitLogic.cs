@@ -12,7 +12,14 @@ public class RabbitLogic : MonoBehaviour {
 	private Vertex nextNode;
 	private float last_action;
 	public float speed = .5f;
+	public float hunger_tick = 30f;
+	private float last_hunger;
+	public float sleep_interval = 100f;
+	private float last_sleep;
 	private Animator anim;
+
+	private bool need_sleep = false;
+	private bool need_food = false;
 
 	public NameGen ng;
 	public int str;
@@ -25,9 +32,14 @@ public class RabbitLogic : MonoBehaviour {
 	public int full;
 	public int sex;
 
+	public const int MALE = 0;
+	public const int FEMALE = 1;
+
 	// Use this for initialization
 	void Start () {
+		last_hunger = Time.time;
 		last_action = Time.time;
+		last_sleep = Time.time + Random.Range(0, sleep_interval);
 		mySquare = new Vertex(5,8);
 		nextNode = mySquare;
 		wg = GameObject.FindGameObjectWithTag("world").GetComponent<WorldGen>();
@@ -51,9 +63,14 @@ public class RabbitLogic : MonoBehaviour {
 		sex = Random.Range(0,2);
 
 	}
+
+	void Die(){
+		gameObject.SetActive(false);
+	}
 	
 	// Update is called once per frame
 	void Update () {
+
 		//Checks for a path to the destination (In case it has changed), and moves to the next node if not currently transitioning between nodes
 		if(currentDestination != null && mySquare != currentDestination){
 			if(!rm.Moving){
@@ -67,12 +84,33 @@ public class RabbitLogic : MonoBehaviour {
 				}
 			}
 		} else {
+			// First check to make sure don't need sleep
+			if(need_sleep){
+				
+				
+			} else if(need_food){
+				// Next check for food
+				
+
 			//else pick new Destination or work
-			currentDestination = wl.GetClosestDig(mySquare);
-			if(mySquare == currentDestination && Time.time > last_action + speed){
-				anim.SetTrigger("Dig");
-				wl.Dig(mySquare, 1);
+			} else {
+				currentDestination = wl.GetClosestDig(mySquare);
+				if(mySquare == currentDestination && Time.time > last_action + speed){
+					anim.SetTrigger("Dig");
+					wl.Dig(mySquare, 1);
+				}
 			}
+		}
+		if(Time.time > last_hunger + hunger_tick){
+			hunger--;
+			last_hunger = Time.time;
+			if(hunger <= 0){
+				hp--;
+				hunger = 0;
+			}
+		}
+		if(hp <= 0){
+			Die();
 		}
 	}
 }

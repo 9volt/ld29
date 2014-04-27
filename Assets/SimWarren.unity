@@ -313,6 +313,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: .5
+  hunger_tick: 30
   ng: {fileID: 0}
   str: 0
   spd: 0

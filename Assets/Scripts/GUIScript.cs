@@ -36,7 +36,7 @@ public class GUIScript : MonoBehaviour {
 //		}
 
 		GUI.Box(new Rect(Screen.width - 200, Screen.height - 100, 200,100), currentRabbit.myname);
-		if(currentRabbit.sex > 0){
+		if(currentRabbit.sex == RabbitLogic.FEMALE){
 			GUI.DrawTexture(new Rect(Screen.width - 55, Screen.height - 100, 30,30), female);
 		}else{
 			GUI.DrawTexture(new Rect(Screen.width - 55, Screen.height - 100, 30,30), male);
