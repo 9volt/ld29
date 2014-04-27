@@ -197,17 +197,17 @@ public class WorldLogic : MonoBehaviour {
 		}
 
 		// Spawn Rabbits
-		for(int h = 0; h < wg.height; h++){
-			Vertex v = new Vertex(wg.width / 2, h);
-			if(wg.VertexToType(v) == WorldGen.DIRT){
-				v = new Vertex(v.x, v.y - 1);
-				for(int i = 0; i < starting_rabbits; i++){
+		for(int w = wg.width / 2; w < (wg.width / 2) + starting_rabbits; w++){
+			for(int h = 0; h < wg.height; h++){
+				Vertex v = new Vertex(w, h);
+				if(wg.VertexToType(v) == WorldGen.DIRT){
+					v = new Vertex(v.x, v.y - 1);
 					rabbit.SetActive(false);
 					GameObject r = (GameObject)Instantiate(rabbit, transform.position, transform.rotation);
 					r.GetComponent<RabbitLogic>().mySquare = v;
 					r.SetActive(true);
+					h = wg.height;
 				}
-				break;
 			}
 		}
 	}
