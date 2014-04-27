@@ -314,6 +314,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: .5
   hunger_tick: 30
+  sleep_interval: 100
   ng: {fileID: 0}
   str: 0
   spd: 0

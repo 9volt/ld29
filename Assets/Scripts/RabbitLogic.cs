@@ -65,7 +65,8 @@ public class RabbitLogic : MonoBehaviour {
 	}
 
 	void Die(){
-		gameObject.SetActive(false);
+		anim.SetTrigger("Dead");
+		StartCoroutine(DeathWait());
 	}
 	
 	// Update is called once per frame
@@ -112,5 +113,10 @@ public class RabbitLogic : MonoBehaviour {
 		if(hp <= 0){
 			Die();
 		}
+	}
+
+	IEnumerator DeathWait(){
+		yield return new WaitForSeconds(.6f);
+		gameObject.SetActive(false);
 	}
 }
