@@ -479,7 +479,7 @@ MonoBehaviour:
   scroll_speed: 5
   zoom_speed: 2
   bg: {fileID: 1296940671}
-  bg_scroll_speed: .00499999989
+  bg_scroll_speed: .00219999999
 --- !u!114 &1214936244
 MonoBehaviour:
   m_ObjectHideFlags: 0
