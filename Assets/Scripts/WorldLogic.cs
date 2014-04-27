@@ -239,6 +239,9 @@ public class WorldLogic : MonoBehaviour {
 				closest = e;
 			}
 		}
+		if(closest == null){
+			return null;
+		}
 		return closest.pos;
 	}
 
