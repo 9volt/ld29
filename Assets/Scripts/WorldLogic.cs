@@ -13,7 +13,7 @@ public class Burrow {
 		main_block = nblocks[0];
 		rabbits = 0;
 	}
-	
+
 	public int FoodCapacity(){
 		return blocks.Count * 2;
 	}
@@ -113,11 +113,11 @@ public class WorldLogic : MonoBehaviour {
 			int type = wg.ClickToType();
 			Vertex target = wg.ClickToVertex();
 			if(type == WorldGen.CARROT){
-				if(!food_targets.Contains(target)){
+				if(!food_targets.Contains(target) && target.InBounds(new Vertex(wg.width, wg.height))){
 					food_targets.Add(target);
 				}
 			} else if(type == WorldGen.DIRT || type == WorldGen.GRASS){
-				if(!dig_targets.Contains(target) && target.x > 0 && target.x < wg.width-1 && target.y > 0 && target.y < wg.height - 1){
+				if(!dig_targets.Contains(target) && target.InBounds(new Vertex(wg.width, wg.height))){
 					dig_targets.Add(target);
 				}
 			}

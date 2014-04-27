@@ -15,6 +15,10 @@ public class Vertex {
 		return Vector2.Distance(new Vector2(v.x, v.y), new Vector2(v2.x, v2.y));
 	}
 
+	public bool InBounds(Vertex wg){
+		return (x > 0 && x < wg.x-1 && y > 0 && y < wg.y - 1);
+	}
+
 	public override string ToString (){
 		return x + ":" + y;
 	}
