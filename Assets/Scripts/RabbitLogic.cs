@@ -43,7 +43,7 @@ public class RabbitLogic : MonoBehaviour {
 		last_hunger = Time.time;
 		last_action = Time.time;
 		last_sleep = Time.time + Random.Range(0, sleep_interval);
-		mySquare = new Vertex(5,8);
+		mySquare = new Vertex(5,7);
 		nextNode = mySquare;
 		wg = GameObject.FindGameObjectWithTag("world").GetComponent<WorldGen>();
 		wl = GameObject.FindGameObjectWithTag("world").GetComponent<WorldLogic>();
