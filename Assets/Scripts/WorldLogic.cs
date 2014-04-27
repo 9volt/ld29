@@ -14,6 +14,16 @@ public class WorldLogic : MonoBehaviour {
 	public Texture yellow;
 	public int dirt_strength = 10;
 
+	public const int SPRING = 0;
+	public const int SUMMER = 1;
+	public const int FALL = 2;
+	public const int WINTER = 3;
+
+	public int season = SPRING;
+
+	public AudioClip[] seasons;
+	private AudioSource ass;
+
 	// Use this for initialization
 	void Start () {
 		food_targets = new List<Vertex>();
@@ -23,6 +33,9 @@ public class WorldLogic : MonoBehaviour {
 		food_counts = new Dictionary<Vertex, int>();
 		dig_counts = new Dictionary<Vertex, int>();
 		wg = gameObject.GetComponent<WorldGen>();
+		ass = gameObject.GetComponent<AudioSource>();
+		ass.clip = seasons[season];
+		ass.Play();
 	}
 	
 	// Update is called once per frame
