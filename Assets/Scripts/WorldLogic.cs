@@ -49,7 +49,7 @@ public class WorldLogic : MonoBehaviour {
 			ass.Play();
 			last_season = Time.time;
 		}
-		if(Input.GetButtonDown("Fire1")){
+		if(Input.GetButtonDown("Fire1") && GUIUtility.hotControl == 0){
 			// Attempt to set new target
 			int type = wg.ClickToType();
 			Vertex target = wg.ClickToVertex();
@@ -63,7 +63,7 @@ public class WorldLogic : MonoBehaviour {
 				}
 			}
 		}
-		if(Input.GetButtonDown("Fire2")){
+		if(Input.GetButtonDown("Fire2") && GUIUtility.hotControl == 0){
 			// Attempt to remove target
 			int type = wg.ClickToType();
 			Vertex target = wg.ClickToVertex();
