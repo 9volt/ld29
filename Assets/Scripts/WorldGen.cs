@@ -6,6 +6,7 @@ public class WorldGen : MonoBehaviour {
 	public Sprite grass;
 	public Sprite carrot;
 	public Sprite[] tunnels;
+	public Sprite[] grasses;
 	public GameObject block;
 	public int width;
 	public int height;
@@ -233,7 +234,7 @@ public class WorldGen : MonoBehaviour {
 			return tunnels[TOPRIGHT];
 		}
 		if(is_grass){
-			return grass;
+			return grasses[wl.season];
 		}
 		return tunnels[FULL];
 	}

@@ -480,6 +480,11 @@ MonoBehaviour:
   zoom_speed: 2
   bg: {fileID: 1296940671}
   bg_scroll_speed: .00219999999
+  seasons:
+  - {fileID: 2800000, guid: 270edd5a8015dea4fbbd7c3964cee04b, type: 3}
+  - {fileID: 2800000, guid: 5c4bdb764f5d5ac4c8948c77fcbdc95e, type: 3}
+  - {fileID: 2800000, guid: 9e3048f51fed54847a13d17ffc695d7f, type: 3}
+  - {fileID: 2800000, guid: 3c9490e21de812d45b1301f256a1dc08, type: 3}
 --- !u!114 &1214936244
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -810,6 +815,11 @@ MonoBehaviour:
   carrot: {fileID: 21300000, guid: a57a2aa72d6fc9c43b4a072eca689999, type: 3}
   tunnels:
   - {fileID: 21300000, guid: 0c94b755347fe424ea4b9de83c75720f, type: 3}
+  grasses:
+  - {fileID: 21300000, guid: b4b54b3977e96944cacecabfadc235df, type: 3}
+  - {fileID: 21300002, guid: b4b54b3977e96944cacecabfadc235df, type: 3}
+  - {fileID: 21300006, guid: b4b54b3977e96944cacecabfadc235df, type: 3}
+  - {fileID: 21300004, guid: b4b54b3977e96944cacecabfadc235df, type: 3}
   block: {fileID: 100000, guid: 3bb2b1a839a888f4f8e26b49c39aa8fa, type: 2}
   width: 100
   height: 30

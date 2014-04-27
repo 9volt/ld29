@@ -7,14 +7,18 @@ public class CameraMove : MonoBehaviour {
 	public float zoom_speed = 2f;
 	public GameObject bg;
 	public float bg_scroll_speed;
+	public Texture[] seasons;
+	private WorldLogic wl;
 	// Use this for initialization
 	void Start () {
+		wl = GameObject.FindGameObjectWithTag("world").GetComponent<WorldLogic>();
 		wg = GameObject.FindGameObjectWithTag("world").GetComponent<WorldGen>();
 		transform.position = new Vector3(wg.transform.position.x + (wg.width / 2), wg.transform.position.y - (wg.height / 2), transform.position.z);
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		bg.renderer.material.mainTexture = seasons[wl.season];
 		if(Input.mousePosition.x > Screen.width * .9f && camera.ScreenToWorldPoint(new Vector3(Screen.width, 0, 0)).x < (wg.transform.position.x + wg.width)){
 			//scroll right
 			transform.Translate(Vector3.right * scroll_speed * Time.deltaTime);
