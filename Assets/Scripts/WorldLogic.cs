@@ -39,7 +39,6 @@ public class Burrow {
 			food += room;
 			return f - room;
 		}
-		return f;
 	}
 	
 	public void Merge(Burrow b){

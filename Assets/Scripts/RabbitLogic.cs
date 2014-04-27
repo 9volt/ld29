@@ -74,6 +74,29 @@ public class RabbitLogic : MonoBehaviour {
 		sex = Random.Range(0,2);
 	}
 
+	public string WhatAmIDoing(){
+		if(sleeping){
+			return "sleeping";
+		} else if(need_sleep){
+			return "looking for sleep";
+		} else if(mySquare == currentDestination){
+		switch(profession){
+			case "Burrower":
+				return "burrowing";
+			case "Forager":
+				return "foraging";
+			case "Guard":
+				return "defending";
+			default:
+				return "bumming";
+			}
+		} else if(currentDestination == null){
+			return "idling";
+		} else {
+			return "running";
+		}
+	}
+
 	void Die(){
 		anim.SetTrigger("Dead");
 		StartCoroutine(DeathWait());

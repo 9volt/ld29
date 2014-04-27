@@ -80,6 +80,9 @@ public class RabbitFinder : MonoBehaviour {
 				lowest = v;
 			}
 		}
+		if(lowest != new Vertex(-1, -1)){
+			return lowest;
+		}
 		return options[0];
 	}
 
