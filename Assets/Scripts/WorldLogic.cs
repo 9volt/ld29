@@ -20,6 +20,8 @@ public class WorldLogic : MonoBehaviour {
 	public const int WINTER = 3;
 
 	public int season = SPRING;
+	public float season_length = 150f;
+	private float last_season;
 
 	public AudioClip[] seasons;
 	private AudioSource ass;
@@ -36,10 +38,17 @@ public class WorldLogic : MonoBehaviour {
 		ass = gameObject.GetComponent<AudioSource>();
 		ass.clip = seasons[season];
 		ass.Play();
+		last_season = Time.time;
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		if(Time.time > season_length + last_season){
+			season = (season + 1) % seasons.Length;
+			ass.clip = seasons[season];
+			ass.Play();
+			last_season = Time.time;
+		}
 		if(Input.GetButtonDown("Fire1")){
 			// Attempt to set new target
 			int type = wg.ClickToType();
@@ -69,7 +78,6 @@ public class WorldLogic : MonoBehaviour {
 			} else if(type == WorldGen.TUNNEL){
 				if(!fill_targets.Contains(target)){
 					fill_targets.Add(target);
-					dig_counts.Add(target, 0);
 				}
 			}
 		}
@@ -158,7 +166,6 @@ public class WorldLogic : MonoBehaviour {
 	public void Dig(Vertex v, int str){
 		dig_counts[v] -= str;
 		if(dig_counts[v] < 0){
-			dig_counts.Remove(v);
 			dig_targets.Remove(v);
 			wg.SetVertex(v, WorldGen.TUNNEL);
 		}
@@ -167,7 +174,6 @@ public class WorldLogic : MonoBehaviour {
 	public void Fill(Vertex v, int str){
 		dig_counts[v] += str;
 		if(dig_counts[v] > dirt_strength){
-			dig_counts.Remove(v);
 			fill_targets.Remove(v);
 			wg.SetVertex(v, WorldGen.DIRT);
 		}

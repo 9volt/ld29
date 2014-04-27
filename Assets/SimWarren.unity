@@ -449,6 +449,7 @@ MonoBehaviour:
   yellow: {fileID: 2800000, guid: 21fc2a0c799e6c34eb7b242966c71020, type: 3}
   dirt_strength: 100
   season: 0
+  season_length: 150
   seasons:
   - {fileID: 8300000, guid: 1514f5a50bd00f84b86ce023d3e798c6, type: 3}
   - {fileID: 8300000, guid: d3ae7fd0d271edd4a8d7382c44ec8fe5, type: 3}
