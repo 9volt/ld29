@@ -117,7 +117,7 @@ public class WorldLogic : MonoBehaviour {
 					food_targets.Add(target);
 				}
 			} else if(type == WorldGen.DIRT || type == WorldGen.GRASS){
-				if(!dig_targets.Contains(target)){
+				if(!dig_targets.Contains(target) && target.x > 0 && target.x < wg.width-1 && target.y > 0 && target.y < wg.height - 1){
 					dig_targets.Add(target);
 				}
 			}
