@@ -75,7 +75,7 @@ public class GUIScript : MonoBehaviour {
 			}
 
 			//stats
-			GUI.Label(new Rect(Screen.width - 220 + 1.8f * profession.width, Screen.height - 80, 180,30),"I'm " + action );
+			GUI.Label(new Rect(Screen.width - 220 + 1.8f * profession.width, Screen.height - 80, 180,30),"I'm " + currentRabbit.WhatAmIDoing());
 			GUI.Label(new Rect(Screen.width - 220 + 1.8f * profession.width, Screen.height - 60, 120,20), "Str:" + currentRabbit.str + "     Spd:" + currentRabbit.spd);
 			//hunger and hp bars	
 			GUI.Label(new Rect(Screen.width - 195,Screen.height - 35, 100,20), "Hunger:");
