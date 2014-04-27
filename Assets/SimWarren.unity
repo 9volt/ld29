@@ -545,6 +545,7 @@ MonoBehaviour:
   food_amount: 10
   random_food: .0500000007
   season: 0
+  year: 1
   season_length: 150
   seasons:
   - {fileID: 8300000, guid: 1514f5a50bd00f84b86ce023d3e798c6, type: 3}
