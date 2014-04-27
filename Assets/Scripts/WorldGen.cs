@@ -137,6 +137,29 @@ public class WorldGen : MonoBehaviour {
 		return world[CameraW(), CameraH()];
 	}
 
+	public bool ValidDig(Vertex v){
+		if(v.x < world.GetLength(0) && v.x >= 0 && v.y < world.GetLength(1) && v.y >= 0){
+			bool top = world[v.x, v.y - 1] == TUNNEL;
+			bool topleft = world[v.x- 1, v.y- 1] == TUNNEL;
+			bool topright = world[v.x+ 1, v.y- 1] == TUNNEL;
+			bool right = world[v.x+ 1, v.y] == TUNNEL;
+			bool left = world[v.x- 1, v.y] == TUNNEL;
+			bool bottomleft = world[v.x- 1, v.y+ 1] == TUNNEL;
+			bool bottom = world[v.x, v.y+ 1] == TUNNEL;
+			bool bottomright = world[v.x + 1, v.y+ 1] == TUNNEL;
+			top = top || world[v.x, v.y - 1] == AIR;
+			topleft = topleft || world[v.x- 1, v.y- 1] == AIR;
+			topright = topright || world[v.x+ 1, v.y- 1] == AIR;
+			right = right || world[v.x+ 1, v.y] == AIR;
+			left = left || world[v.x- 1, v.y] == AIR;
+			bottomleft = bottomleft || world[v.x- 1, v.y+ 1] == AIR;
+			bottom = bottom || world[v.x, v.y+ 1] == AIR;
+			bottomright = bottomright || world[v.x + 1, v.y+ 1] == AIR;
+			return (top || topleft || topright || right || left || bottomleft || bottom || bottomright);
+		}
+		return false;
+	}
+
 	public Vector3 VertexToVector3(Vertex v){
 		return new Vector3(transform.position.x + v.x, transform.position.y - v.y, 0);
 	}

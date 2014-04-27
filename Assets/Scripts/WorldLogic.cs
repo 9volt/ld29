@@ -98,7 +98,7 @@ public class WorldLogic : MonoBehaviour {
 		float cur_distance = -1f;
 		Vertex closest = null;
 		foreach(Vertex t in dig_targets){
-			if(cur_distance == -1f || Vertex.Distance(v, t) < cur_distance){
+			if((cur_distance == -1f || Vertex.Distance(v, t) < cur_distance) && wg.ValidDig(t)){
 				cur_distance = Vertex.Distance(v, t);
 				closest = t;
 			}
