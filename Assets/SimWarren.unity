@@ -602,6 +602,7 @@ GameObject:
   - 4: {fileID: 1984020721}
   - 114: {fileID: 1984020720}
   - 114: {fileID: 1984020722}
+  - 82: {fileID: 1984020723}
   m_Layer: 0
   m_Name: World
   m_TagString: world
@@ -653,3 +654,68 @@ MonoBehaviour:
   green: {fileID: 2800000, guid: 6818d3ede36846341a92e22715378c0e, type: 3}
   yellow: {fileID: 2800000, guid: 21fc2a0c799e6c34eb7b242966c71020, type: 3}
   dirt_strength: 100
+  season: 0
+  season_length: 150
+  seasons:
+  - {fileID: 8300000, guid: 1514f5a50bd00f84b86ce023d3e798c6, type: 3}
+  - {fileID: 8300000, guid: d3ae7fd0d271edd4a8d7382c44ec8fe5, type: 3}
+  - {fileID: 8300000, guid: 0e0bc40e0dba5f241ae39686b0185727, type: 3}
+  - {fileID: 8300000, guid: 07db421666af8a1498a644763c41b6e4, type: 3}
+--- !u!82 &1984020723
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1984020719}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 1
+  Mute: 0
+  Priority: 128
+  DopplerLevel: 0
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 2
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2

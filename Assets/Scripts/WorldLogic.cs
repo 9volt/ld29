@@ -6,6 +6,7 @@ public class WorldLogic : MonoBehaviour {
 	private WorldGen wg;
 	private List<Vertex> food_targets;
 	private List<Vertex> dig_targets;
+	private List<Vertex> fill_targets;
 	private List<Vertex> attack_targets;
 	private Dictionary<Vertex, int> food_counts;
 	private Dictionary<Vertex, int> dig_counts;
@@ -13,18 +14,41 @@ public class WorldLogic : MonoBehaviour {
 	public Texture yellow;
 	public int dirt_strength = 10;
 
+	public const int SPRING = 0;
+	public const int SUMMER = 1;
+	public const int FALL = 2;
+	public const int WINTER = 3;
+
+	public int season = SPRING;
+	public float season_length = 150f;
+	private float last_season;
+
+	public AudioClip[] seasons;
+	private AudioSource ass;
+
 	// Use this for initialization
 	void Start () {
 		food_targets = new List<Vertex>();
 		dig_targets = new List<Vertex>();
+		fill_targets = new List<Vertex>();
 		attack_targets = new List<Vertex>();
 		food_counts = new Dictionary<Vertex, int>();
 		dig_counts = new Dictionary<Vertex, int>();
 		wg = gameObject.GetComponent<WorldGen>();
+		ass = gameObject.GetComponent<AudioSource>();
+		ass.clip = seasons[season];
+		ass.Play();
+		last_season = Time.time;
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		if(Time.time > season_length + last_season){
+			season = (season + 1) % seasons.Length;
+			ass.clip = seasons[season];
+			ass.Play();
+			last_season = Time.time;
+		}
 		if(Input.GetButtonDown("Fire1")){
 			// Attempt to set new target
 			int type = wg.ClickToType();
@@ -51,6 +75,10 @@ public class WorldLogic : MonoBehaviour {
 				if(dig_targets.Contains(target)){
 					dig_targets.Remove(target);
 				}
+			} else if(type == WorldGen.TUNNEL){
+				if(!fill_targets.Contains(target)){
+					fill_targets.Add(target);
+				}
 			}
 		}
 	}
@@ -62,6 +90,11 @@ public class WorldLogic : MonoBehaviour {
 			GUI.DrawTexture(new Rect(p.x, Screen.height - p.y, 6, 6), green);
 		}
 		foreach(Vertex v in dig_targets){
+			Vector3 p = Camera.main.WorldToScreenPoint(new Vector3((wg.transform.position.x + v.x), (wg.transform.position.y - v.y), 0));
+			//Debug.Log(v + " " + p);
+			GUI.DrawTexture(new Rect(p.x, Screen.height - p.y, 6, 6), yellow);
+		}
+		foreach(Vertex v in fill_targets){
 			Vector3 p = Camera.main.WorldToScreenPoint(new Vector3((wg.transform.position.x + v.x), (wg.transform.position.y - v.y), 0));
 			//Debug.Log(v + " " + p);
 			GUI.DrawTexture(new Rect(p.x, Screen.height - p.y, 6, 6), yellow);
@@ -106,6 +139,18 @@ public class WorldLogic : MonoBehaviour {
 		return closest;
 	}
 
+	public Vertex GetClosestFill(Vertex v){
+		float cur_distance = -1f;
+		Vertex closest = null;
+		foreach(Vertex t in fill_targets){
+			if((cur_distance == -1f || Vertex.Distance(v, t) < cur_distance) && wg.ValidDig(t)){
+				cur_distance = Vertex.Distance(v, t);
+				closest = t;
+			}
+		}
+		return closest;
+	}
+
 	public Vertex GetClosestFood(Vertex v){
 		float cur_distance = -1f;
 		Vertex closest = null;
@@ -121,9 +166,16 @@ public class WorldLogic : MonoBehaviour {
 	public void Dig(Vertex v, int str){
 		dig_counts[v] -= str;
 		if(dig_counts[v] < 0){
-			dig_counts.Remove(v);
 			dig_targets.Remove(v);
 			wg.SetVertex(v, WorldGen.TUNNEL);
+		}
+	}
+
+	public void Fill(Vertex v, int str){
+		dig_counts[v] += str;
+		if(dig_counts[v] > dirt_strength){
+			fill_targets.Remove(v);
+			wg.SetVertex(v, WorldGen.DIRT);
 		}
 	}
 }
