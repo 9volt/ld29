@@ -5,7 +5,8 @@ public class CameraMove : MonoBehaviour {
 	private WorldGen wg;
 	public float scroll_speed = 5f;
 	public float zoom_speed = 2f;
-
+	public GameObject bg;
+	public float bg_scroll_speed;
 	// Use this for initialization
 	void Start () {
 		wg = GameObject.FindGameObjectWithTag("world").GetComponent<WorldGen>();
@@ -17,10 +18,12 @@ public class CameraMove : MonoBehaviour {
 		if(Input.mousePosition.x > Screen.width * .9f && camera.ScreenToWorldPoint(new Vector3(Screen.width, 0, 0)).x < (wg.transform.position.x + wg.width)){
 			//scroll right
 			transform.Translate(Vector3.right * scroll_speed * Time.deltaTime);
+			bg.renderer.material.mainTextureOffset = new Vector2( (bg.renderer.material.mainTextureOffset.x + bg_scroll_speed)%1, 0f);
 		}
 		if(Input.mousePosition.x < Screen.width * .1f && camera.ScreenToWorldPoint(new Vector3(0, 0, 0)).x > wg.transform.position.x){
 			//scroll left
 			transform.Translate(Vector3.left * scroll_speed * Time.deltaTime);
+			bg.renderer.material.mainTextureOffset = new Vector2( (bg.renderer.material.mainTextureOffset.x + -bg_scroll_speed)%1, 0f);
 		}
 		if(Input.mousePosition.y > Screen.height * .9f && camera.ScreenToWorldPoint(new Vector3(0, 0, 0)).y > wg.transform.position.y){
 			//scroll up
