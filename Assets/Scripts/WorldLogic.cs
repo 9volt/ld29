@@ -13,6 +13,8 @@ public class WorldLogic : MonoBehaviour {
 	public Texture green;
 	public Texture yellow;
 	public int dirt_strength = 10;
+	public int food_amount = 10;
+	public float random_food = .05f;
 
 	public const int SPRING = 0;
 	public const int SUMMER = 1;
@@ -107,12 +109,26 @@ public class WorldLogic : MonoBehaviour {
 			for(int h = 0; h < wg.height; h++){
 				Vertex v = new Vertex(w, h);
 				int t = wg.VertexToType(v);
-				if(t == WorldGen.GRASS || t == WorldGen.DIRT){
+				if(t == WorldGen.DIRT){
 					dig_counts[v] = dirt_strength;
 				}
 			}
 		}
 		// Create Farm
+		for(int w = 1; w < wg.width - 1; w++){
+			for(int h = 1; h < wg.height - 1; h++){
+				Vertex v = new Vertex(w, h - 1);
+				int t = wg.VertexToType(v);
+				if(t == WorldGen.AIR){
+					v = new Vertex(w, h);
+					t = wg.VertexToType(v);
+					if(t == WorldGen.DIRT && Random.Range(0f, 1f) < random_food){
+						food_counts[v] = food_amount;
+						wg.SetVertex(v, WorldGen.CARROT);
+					}
+				}
+			}
+		}
 	}
 
 	public Vertex GetClosestEnemy(Vertex v){
@@ -169,6 +185,17 @@ public class WorldLogic : MonoBehaviour {
 			dig_targets.Remove(v);
 			wg.SetVertex(v, WorldGen.TUNNEL);
 		}
+	}
+
+	public int TakeFood(Vertex v, int str){
+		food_counts[v] -= str;
+		if(food_counts[v] < 0){
+			int ret_food = str + food_counts[v];
+			food_counts.Remove(v);
+			wg.SetVertex(v, WorldGen.DIRT);
+			return ret_food;
+		}
+		return str;
 	}
 
 	public void Fill(Vertex v, int str){

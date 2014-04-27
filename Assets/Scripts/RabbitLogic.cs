@@ -17,6 +17,7 @@ public class RabbitLogic : MonoBehaviour {
 	public float sleep_interval = 100f;
 	private float last_sleep;
 	private Animator anim;
+	private int food_hold;
 
 	private bool need_sleep = false;
 	private bool need_food = false;
@@ -40,17 +41,18 @@ public class RabbitLogic : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		food_hold = 0;
 		last_hunger = Time.time;
 		last_action = Time.time;
 		last_sleep = Time.time + Random.Range(0, sleep_interval);
-		mySquare = new Vertex(5,8);
+		mySquare = new Vertex(10,14);
 		nextNode = mySquare;
 		wg = GameObject.FindGameObjectWithTag("world").GetComponent<WorldGen>();
 		wl = GameObject.FindGameObjectWithTag("world").GetComponent<WorldLogic>();
 		rf = gameObject.GetComponent<RabbitFinder>();
 		rm = gameObject.GetComponent<RabbitMover>();
 		rm.SetPosition(wg.VertexToVector3(mySquare));
-		currentDestination = new Vertex(15, 9);
+		currentDestination = new Vertex(15, 14);
 		anim = gameObject.GetComponent<Animator>();
 		ng = gameObject.GetComponent<NameGen>();
 
@@ -90,17 +92,19 @@ public class RabbitLogic : MonoBehaviour {
 		} else {
 			// First check to make sure don't need sleep
 			if(need_sleep){
-				
+				// Find closest burrow with sleeping room
 				
 			} else if(need_food){
-				// Next check for food
+				// Find closest burrow with food
 				
 
 			//else pick new Destination or work
 			} else {
 				if(profession == "Burrower"){
+					// First try to find a square to dig
 					currentDestination = wl.GetClosestDig(mySquare);
 					if(currentDestination == null){
+						// If that fails find a square to fill in
 						currentDestination = wl.GetClosestFill(mySquare);
 						if(currentDestination != null){
 							filling = true;
@@ -117,6 +121,22 @@ public class RabbitLogic : MonoBehaviour {
 							wl.Fill(mySquare, str);
 							filling = false;
 						}
+					}
+				} else if(profession == "Forager"){
+					if(food_hold == 0){
+						currentDestination = wl.GetClosestFood(mySquare);
+						if(mySquare == currentDestination && Time.time > last_action + speed){
+							anim.SetTrigger("Dig");
+							food_hold = wl.TakeFood(mySquare, str);
+						}
+					} else {
+						//return to closest burrow with space
+					}
+				} else if(profession == "Gaurd"){
+					currentDestination = wl.GetClosestEnemy(mySquare);
+					if(mySquare == currentDestination && Time.time > last_action + speed){
+						anim.SetTrigger("Dig");
+						// Attempt to damage enemy for str
 					}
 				}
 			}
