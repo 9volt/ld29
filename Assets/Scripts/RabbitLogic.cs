@@ -83,16 +83,12 @@ public class RabbitLogic : MonoBehaviour {
 		switch(profession){
 			case "Burrower":
 				return "burrowing";
-				break;
 			case "Forager":
 				return "foraging";
-				break;
 			case "Guard":
 				return "defending";
-				break;
 			default:
 				return "bumming";
-				break;
 			}
 		} else if(currentDestination == null){
 			return "idling";

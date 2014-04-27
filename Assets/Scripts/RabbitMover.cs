@@ -4,13 +4,11 @@ using System.Collections;
 public class RabbitMover : MonoBehaviour {
 	private Vector3 currentTarget;
 	public bool Moving;
-	private WorldGen wg;
 	private Animator anim;
 	private bool facingleft = true;
 
 	// Use this for initialization
 	void Start () {
-		wg = GameObject.FindGameObjectWithTag("world").GetComponent<WorldGen>();
 		Moving = false;
 		anim = gameObject.GetComponent<Animator>();
 	}
