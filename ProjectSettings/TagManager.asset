@@ -51,3 +51,7 @@ TagManager:
     userID: 1
     uniqueID: 3399672855
     locked: 0
+  - name: RabbitSelected
+    userID: 3
+    uniqueID: 3645904091
+    locked: 0

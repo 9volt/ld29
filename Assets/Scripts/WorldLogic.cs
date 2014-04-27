@@ -18,7 +18,7 @@ public class Burrow {
 	}
 	
 	public int RabbitCapacity(){
-		return blocks.Count + 3;
+		return blocks.Count;
 	}
 	
 	public Vertex GetRandomBlock(){
@@ -80,6 +80,8 @@ public class WorldLogic : MonoBehaviour {
 	
 	private List<Burrow> burrows;
 
+	public GameObject rabbit;
+	public int starting_rabbits = 4;
 
 	// Use this for initialization
 	void Start () {
@@ -191,6 +193,21 @@ public class WorldLogic : MonoBehaviour {
 						wg.SetVertex(v, WorldGen.CARROT);
 					}
 				}
+			}
+		}
+
+		// Spawn Rabbits
+		for(int h = 0; h < wg.height; h++){
+			Vertex v = new Vertex(wg.width / 2, h);
+			if(wg.VertexToType(v) == WorldGen.DIRT){
+				v = new Vertex(v.x, v.y - 1);
+				for(int i = 0; i < starting_rabbits; i++){
+					rabbit.SetActive(false);
+					GameObject r = (GameObject)Instantiate(rabbit, transform.position, transform.rotation);
+					r.GetComponent<RabbitLogic>().mySquare = v;
+					r.SetActive(true);
+				}
+				break;
 			}
 		}
 	}
@@ -312,7 +329,7 @@ public class WorldLogic : MonoBehaviour {
 				int ret_food = str + food_counts[v];
 				food_counts.Remove(v);
 				food_targets.Remove(v);
-				wg.SetVertex(v, WorldGen.AIR);
+				wg.SetVertex(v, WorldGen.TUNNEL);
 				return ret_food;
 			}
 			return str;

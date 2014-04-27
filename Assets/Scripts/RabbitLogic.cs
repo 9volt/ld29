@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 
 public class RabbitLogic : MonoBehaviour {
-	private Vertex mySquare;
+	public Vertex mySquare;
 	private Vertex currentDestination;
 	private RabbitFinder rf;
 	private RabbitMover rm;
@@ -26,7 +26,7 @@ public class RabbitLogic : MonoBehaviour {
 	private bool digging = false;
 	private bool filling = false;
 
-	public NameGen ng;
+	private NameGen ng;
 	public int str;
 	public int spd;
 	public string profession;
@@ -46,14 +46,14 @@ public class RabbitLogic : MonoBehaviour {
 		last_hunger = Time.time;
 		last_action = Time.time;
 		last_sleep = Time.time + Random.Range(0, sleep_interval);
-		mySquare = new Vertex(10,14);
 		nextNode = mySquare;
+		currentDestination = mySquare;
 		wg = GameObject.FindGameObjectWithTag("world").GetComponent<WorldGen>();
 		wl = GameObject.FindGameObjectWithTag("world").GetComponent<WorldLogic>();
 		rf = gameObject.GetComponent<RabbitFinder>();
 		rm = gameObject.GetComponent<RabbitMover>();
+		ng = gameObject.GetComponent<NameGen>();
 		rm.SetPosition(wg.VertexToVector3(mySquare));
-		currentDestination = new Vertex(15, 14);
 		anim = gameObject.GetComponent<Animator>();
 		ng = gameObject.GetComponent<NameGen>();
 		//initiate rabbit stats
@@ -66,12 +66,19 @@ public class RabbitLogic : MonoBehaviour {
 		spd = 1;
 		profession = "Burrower";
 		sex = Random.Range(0,2);
-
 	}
 
 	void Die(){
 		anim.SetTrigger("Dead");
 		StartCoroutine(DeathWait());
+	}
+
+	bool CanGetFood(){
+		return wl.GetClosestBurrowFood(mySquare) != null;
+	}
+
+	bool CanGetSleep(){
+		return wl.GetClosestBurrowSleep(mySquare) != null;
 	}
 	
 	// Update is called once per frame
@@ -91,10 +98,10 @@ public class RabbitLogic : MonoBehaviour {
 			}
 		} else {
 			// First check to make sure don't need sleep
-			if(need_sleep){
+			if(CanGetSleep() && need_sleep){
 				// Find closest burrow with sleeping room
 				
-			} else if(need_food){
+			} else if(CanGetFood() && need_food){
 				// Find closest burrow with food
 				Burrow b = wl.GetClosestBurrowFood(mySquare);
 				if(b != null){

@@ -71,6 +71,8 @@ public class WorldGen : MonoBehaviour {
 					//Next check to make sure we aren't on the bottom of the world
 					if(h + 1 == height){
 						ret[w,h] = 0f;
+					} else if(world[w,h] == TUNNEL){
+						ret[w,h] = 0f;
 					} else {
 						switch(world[w,h+1]){
 							case DIRT:
@@ -80,13 +82,18 @@ public class WorldGen : MonoBehaviour {
 								ret[w,h] = .5f;
 								break;
 							case CARROT:
-								ret[w,h] = -1f;
+								ret[w,h] = 1f;
 								break;
 							case AIR:
-								ret[w,h] = -1f;
+								// Jump in air
+								if(h+2 < height && (world[w, h+2] == DIRT || world[w, h+2] == TUNNEL || world[w, h+2] == CARROT)){
+									ret[w, h] = 10f;
+								} else {
+									ret[w,h] = -1f;
+								}
 								break;
 							case TUNNEL:
-								ret[w,h] = -1f;
+								ret[w,h] = 1f;
 								break;
 							default:
 								ret[w,h] = -1f;
@@ -182,9 +189,18 @@ public class WorldGen : MonoBehaviour {
 				world[w, h] = AIR;
 			}
 		}
+		int curGround = height/2;
 		for(int w = 0; w < width; w++){
-			for(int h = height / 2; h < height; h++){
-				world[w, h] = DIRT;
+			curGround += Random.Range(-1, 2);
+			if(curGround > height / 2 + (height * .1f)){
+				curGround--;
+			} else if(curGround < height / 2 - (height * .1f)){
+				curGround++;
+			}
+			for(int h = 0; h < height; h++){
+				if(h > curGround){
+					world[w, h] = DIRT;
+				}
 			}
 		}
 	}
@@ -194,45 +210,9 @@ public class WorldGen : MonoBehaviour {
 			return dirt;
 		}
 
-		bool top = world[w, h - 1] == TUNNEL;
-		bool topleft = world[w - 1, h - 1] == TUNNEL;
-		bool topright = world[w + 1, h - 1] == TUNNEL;
-		bool right = world[w + 1, h] == TUNNEL;
-		bool left = world[w - 1, h] == TUNNEL;
-		bool bottomleft = world[w - 1, h + 1] == TUNNEL;
-		bool bottom = world[w, h + 1] == TUNNEL;
-		bool bottomright = world[w + 1, h + 1] == TUNNEL;
+		bool right = world[w + 1, h] == DIRT;
+		bool left = world[w - 1, h] == DIRT;
 		bool is_grass = world[w, h - 1] == AIR;
-		if(left && top && right && !topleft && !topright && !bottomleft && !bottomright){
-			return tunnels[DB];
-		}
-		if(left && top && bottom && !topleft && !topright && !bottomleft && !bottomright){
-			return tunnels[DR];
-		}
-		if(bottom && top && right && !topleft && !topright && !bottomleft && !bottomright){
-			return tunnels[DL];
-		}
-		if(left && bottom && right && !topleft && !topright && !bottomleft && !bottomright){
-			return tunnels[DT];
-		}
-		if(left && top && right && bottom && !topleft && !topright && !bottomleft && !bottomright){
-			return tunnels[EMPTY];
-		}
-		if(right && top && !topright){
-			return tunnels[TOPRIGHT];
-		}
-		if(right && bottom && !bottomright){
-			return tunnels[BOTTOMRIGHT];
-		}
-		if(left && bottom && !bottomleft){
-			return tunnels[LEFTBOTTOM];
-		}
-		if(left && top && !topleft){
-			return tunnels[TOPLEFT];
-		}
-		if(top && right && !topright){
-			return tunnels[TOPRIGHT];
-		}
 		if(is_grass){
 			return grasses[wl.season];
 		}
@@ -243,11 +223,11 @@ public class WorldGen : MonoBehaviour {
 		if(w == 0 || h == 0 || w == width - 1 || h == height - 1){
 			return dirt;
 		}
-		bool top = world[w, h - 1] == TUNNEL;
+		bool top = world[w, h - 1] == TUNNEL || world[w, h - 1] == AIR;
 		bool topleft = world[w - 1, h - 1] == TUNNEL;
 		bool topright = world[w + 1, h - 1] == TUNNEL;
-		bool right = world[w + 1, h] == TUNNEL;
-		bool left = world[w - 1, h] == TUNNEL;
+		bool right = world[w + 1, h] == TUNNEL || world[w + 1, h] == AIR;
+		bool left = world[w - 1, h] == TUNNEL || world[w - 1, h] == AIR;
 		bool bottomleft = world[w - 1, h + 1] == TUNNEL;
 		bool bottom = world[w, h + 1] == TUNNEL;
 		bool bottomright = world[w + 1, h + 1] == TUNNEL;

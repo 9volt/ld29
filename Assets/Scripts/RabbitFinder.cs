@@ -116,7 +116,12 @@ public class RabbitFinder : MonoBehaviour {
 
 	private List<Vertex> NeighborNodes(Vertex current, float[,] costs, Vertex target){
 		List<Vertex> ret = new List<Vertex>();
-		if(Vertex.Distance(current, target) < 2f){
+		// First check to see if target is within 1 distance and if so add it
+		if(new Vertex(current.x+1, current.y) == target
+		   || new Vertex(current.x-1, current.y) == target
+		   || new Vertex(current.x, current.y+1) == target
+		   || new Vertex(current.x, current.y-1) == target
+		   ){
 			ret.Add(target);
 		}
 		if(current.y > 0){
@@ -124,18 +129,18 @@ public class RabbitFinder : MonoBehaviour {
 			if(costs[current.x, current.y - 1] >= 0){
 				ret.Add(new Vertex(current.x, current.y - 1));
 			}
-			// top left
-			if(current.x > 0){
-				if(costs[current.x - 1, current.y - 1] >= 0){
-					ret.Add(new Vertex(current.x - 1, current.y - 1));
-				}
-			}
-			// top right
-			if(current.x + 1 < wg.width){
-				if(costs[current.x + 1, current.y - 1] >= 0){
-					ret.Add(new Vertex(current.x + 1, current.y - 1));
-				}
-			}
+//			// top left
+//			if(current.x > 0){
+//				if(costs[current.x - 1, current.y - 1] >= 0){
+//					ret.Add(new Vertex(current.x - 1, current.y - 1));
+//				}
+//			}
+//			// top right
+//			if(current.x + 1 < wg.width){
+//				if(costs[current.x + 1, current.y - 1] >= 0){
+//					ret.Add(new Vertex(current.x + 1, current.y - 1));
+//				}
+//			}
 		}
 		if(current.x + 1 < wg.width){
 			// right
@@ -148,18 +153,18 @@ public class RabbitFinder : MonoBehaviour {
 			if(costs[current.x, current.y + 1] >= 0){
 				ret.Add(new Vertex(current.x, current.y + 1));
 			}
-			// bottom left
-			if(current.x > 0){
-				if(costs[current.x - 1, current.y + 1] >= 0){
-					ret.Add(new Vertex(current.x - 1, current.y + 1));
-				}
-			}
-			// bottom right
-			if(current.x + 1 < wg.width){
-				if(costs[current.x + 1, current.y + 1] >= 0){
-					ret.Add(new Vertex(current.x + 1, current.y + 1));
-				}
-			}
+//			// bottom left
+//			if(current.x > 0){
+//				if(costs[current.x - 1, current.y + 1] >= 0){
+//					ret.Add(new Vertex(current.x - 1, current.y + 1));
+//				}
+//			}
+//			// bottom right
+//			if(current.x + 1 < wg.width){
+//				if(costs[current.x + 1, current.y + 1] >= 0){
+//					ret.Add(new Vertex(current.x + 1, current.y + 1));
+//				}
+//			}
 		}
 		if(current.x > 0){
 			// left

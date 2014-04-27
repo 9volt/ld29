@@ -24,6 +24,7 @@ public class GUIScript : MonoBehaviour {
 	void Start () {
 		profession = Guard;
 		wl = GameObject.FindGameObjectWithTag("world").GetComponent<WorldLogic>();
+		currentRabbit = GameObject.FindGameObjectsWithTag("Rabbit")[0].GetComponent<RabbitLogic>();
 	}
 	
 	// Update is called once per frame
