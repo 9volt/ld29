@@ -396,6 +396,7 @@ MonoBehaviour:
   food: {fileID: 2800000, guid: c6cf57063b399294681fe29cc4821214, type: 3}
   foodcap: {fileID: 2800000, guid: 9403a803ddf94394284a01d92865c3b4, type: 3}
   houses: {fileID: 2800000, guid: 10f0b9c73b3689b4b930b6e00c5458ab, type: 3}
+  action: doing something!
 --- !u!114 &1214936245
 MonoBehaviour:
   m_ObjectHideFlags: 0

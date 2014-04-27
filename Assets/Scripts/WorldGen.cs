@@ -65,8 +65,8 @@ public class WorldGen : MonoBehaviour {
 
 	public float[,] GetPathfindingCosts(){
 		float[,] ret = new float[width,height];
-		for(int w = 1; w < width - 1; w++){
-			for(int h = 1; h < height - 1; h++){
+		for(int w = 0; w < width; w++){
+			for(int h = 0; h < height; h++){
 				//first check to make sure this tile is open
 				if(world[w, h] == AIR || world[w, h] == TUNNEL || world[w, h] == CARROT){
 					//Next check to make sure we aren't on the bottom of the world
@@ -86,10 +86,12 @@ public class WorldGen : MonoBehaviour {
 								ret[w,h] = 1f;
 								break;
 							case AIR:
+								if(h+1 < height && world[w, h+1] == DIRT || world[w, h+1] == TUNNEL || world[w, h+1] == CARROT){
+									ret[w, h] = 1f;
 								// Fake Diagnal
-								if(h+2 < height && (world[w, h+2] == DIRT || world[w, h+2] == TUNNEL || world[w, h+2] == CARROT)
-							   		&& ((world[w-1, h] == DIRT || world[w-1, h] == TUNNEL || world[w-1, h] == CARROT) || 
-							   		    (world[w+1, h] == DIRT || world[w+1, h] == TUNNEL || world[w+1, h] == CARROT))){
+								} else if(h+2 < height && (world[w, h+2] == DIRT || world[w, h+2] == TUNNEL || world[w, h+2] == CARROT)
+								          && ((w-1 > 0 && (world[w-1, h+1] == DIRT || world[w-1, h+1] == TUNNEL || world[w-1, h+1] == CARROT)) || 
+								    		 (w+1 < width && (world[w+1, h+1] == DIRT || world[w+1, h+1] == TUNNEL || world[w+1, h+1] == CARROT)))){
 									ret[w, h] = 10f;
 								} else {
 									ret[w,h] = -1f;
