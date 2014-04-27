@@ -71,7 +71,9 @@ public class RabbitLogic : MonoBehaviour {
 		str = 1;
 		spd = 1;
 		profession = "Burrower";
-		sex = Random.Range(0,2);
+		if(sex == null){
+			sex = Random.Range(0,2);
+		}
 	}
 
 	public string WhatAmIDoing(){

@@ -72,6 +72,7 @@ public class WorldLogic : MonoBehaviour {
 	public const int WINTER = 3;
 
 	public int season = SPRING;
+	public int year = 1;
 	public float season_length = 150f;
 	private float last_season;
 
@@ -85,6 +86,7 @@ public class WorldLogic : MonoBehaviour {
 	public int starting_rabbits = 4;
 
 	public GameObject fox;
+
 
 	// Use this for initialization
 	void Start () {
@@ -109,13 +111,26 @@ public class WorldLogic : MonoBehaviour {
 		if(attack_targets.Count > 0 && ass.clip != oh_shit_a_fox){
 			ass.clip = oh_shit_a_fox;
 			ass.Play();
-		} else if(attack_targets.Count == 0 && ass.clip == oh_shit_a_fox) {
+		} else if(attack_targets.Count == 0 && ass.clip != seasons[season]) {
 			ass.clip = seasons[season];
 			ass.Play();
 		}
 		// Update the season
 		if(Time.time > season_length + last_season){
 			season = (season + 1) % seasons.Length;
+			if(season == FALL){
+				SpawnFoxes();
+			}
+			if(season == SUMMER){
+				SpawnHawks();
+			}
+			if(season == SPRING){
+				year++;
+				PlantCrops();
+			}
+			if(season == WINTER){
+				KillCrops();
+			}
 			last_season = Time.time;
 		}
 		if(Input.GetButtonDown("Fire1") && GUIUtility.hotControl == 0){
@@ -190,6 +205,50 @@ public class WorldLogic : MonoBehaviour {
 				}
 			}
 		}
+
+		PlantCrops();
+
+		// Spawn Rabbits
+		for(int w = wg.width / 2; w < (wg.width / 2) + starting_rabbits; w++){
+			for(int h = 0; h < wg.height; h++){
+				Vertex v = new Vertex(w, h);
+				if(wg.VertexToType(v) == WorldGen.DIRT){
+					v = new Vertex(v.x, v.y - 1);
+					rabbit.SetActive(false);
+					GameObject r = (GameObject)Instantiate(rabbit, transform.position, transform.rotation);
+					r.GetComponent<RabbitLogic>().mySquare = v;
+					r.GetComponent<RabbitLogic>().sex = w % 2;
+					r.SetActive(true);
+					h = wg.height;
+				}
+			}
+		}
+
+	}
+
+	void SpawnFoxes(){
+		// Spawn Fox
+		for(int w = wg.width - year - 1; w < wg.width - 1; w++){
+			for(int h = 0; h < wg.height; h++){
+				Vertex v = new Vertex(w, h);
+				if(wg.VertexToType(v) == WorldGen.DIRT){
+					v = new Vertex(v.x, v.y - 1);
+					fox.SetActive(false);
+					GameObject f = (GameObject)Instantiate(fox, transform.position, transform.rotation);
+					f.GetComponent<Enemy>().pos = v;
+					attack_targets.Add(f.GetComponent<Enemy>());
+					f.SetActive(true);
+					h = wg.height;
+				}
+			}
+		}
+	}
+
+	void SpawnHawks(){
+
+	}
+
+	void PlantCrops(){
 		// Create Farm
 		for(int w = 1; w < wg.width - 1; w++){
 			for(int h = 1; h < wg.height - 1; h++){
@@ -205,36 +264,12 @@ public class WorldLogic : MonoBehaviour {
 				}
 			}
 		}
+	}
 
-		// Spawn Rabbits
-		for(int w = wg.width / 2; w < (wg.width / 2) + starting_rabbits; w++){
-			for(int h = 0; h < wg.height; h++){
-				Vertex v = new Vertex(w, h);
-				if(wg.VertexToType(v) == WorldGen.DIRT){
-					v = new Vertex(v.x, v.y - 1);
-					rabbit.SetActive(false);
-					GameObject r = (GameObject)Instantiate(rabbit, transform.position, transform.rotation);
-					r.GetComponent<RabbitLogic>().mySquare = v;
-					r.SetActive(true);
-					h = wg.height;
-				}
-			}
-		}
-
-		// Spawn Fox
-		for(int w = (wg.width / 2) + 6; w < (wg.width / 2) + 7; w++){
-			for(int h = 0; h < wg.height; h++){
-				Vertex v = new Vertex(w, h);
-				if(wg.VertexToType(v) == WorldGen.DIRT){
-					v = new Vertex(v.x, v.y - 1);
-					fox.SetActive(false);
-					GameObject f = (GameObject)Instantiate(fox, transform.position, transform.rotation);
-					f.GetComponent<Enemy>().pos = v;
-					attack_targets.Add(f.GetComponent<Enemy>());
-					f.SetActive(true);
-					h = wg.height;
-				}
-			}
+	void KillCrops(){
+		foreach(Vertex crop in food_counts.Keys){
+			wg.SetVertex(crop, WorldGen.TUNNEL);
+			food_counts.Remove(crop);
 		}
 	}
 
