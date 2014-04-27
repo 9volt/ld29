@@ -98,23 +98,25 @@ public class RabbitLogic : MonoBehaviour {
 
 			//else pick new Destination or work
 			} else {
-				currentDestination = wl.GetClosestDig(mySquare);
-				if(currentDestination == null){
-					currentDestination = wl.GetClosestFill(mySquare);
-					if(currentDestination != null){
-						filling = true;
+				if(profession == "Burrower"){
+					currentDestination = wl.GetClosestDig(mySquare);
+					if(currentDestination == null){
+						currentDestination = wl.GetClosestFill(mySquare);
+						if(currentDestination != null){
+							filling = true;
+						}
+					} else {
+						digging = true;
 					}
-				} else {
-					digging = true;
-				}
-				if(mySquare == currentDestination && Time.time > last_action + speed){
-					anim.SetTrigger("Dig");
-					if(digging){
-						wl.Dig(mySquare, str);
-						digging = false;
-					}else if(filling){
-						wl.Fill(mySquare, str);
-						filling = false;
+					if(mySquare == currentDestination && Time.time > last_action + speed){
+						anim.SetTrigger("Dig");
+						if(digging){
+							wl.Dig(mySquare, str);
+							digging = false;
+						}else if(filling){
+							wl.Fill(mySquare, str);
+							filling = false;
+						}
 					}
 				}
 			}
