@@ -83,6 +83,8 @@ public class WorldLogic : MonoBehaviour {
 	public GameObject rabbit;
 	public int starting_rabbits = 4;
 
+	public GameObject fox;
+
 	// Use this for initialization
 	void Start () {
 		food_targets = new List<Vertex>();
@@ -210,18 +212,45 @@ public class WorldLogic : MonoBehaviour {
 				}
 			}
 		}
+
+		// Spawn Fox
+		for(int w = (wg.width / 2) + 6; w < (wg.width / 2) + 7; w++){
+			for(int h = 0; h < wg.height; h++){
+				Vertex v = new Vertex(w, h);
+				if(wg.VertexToType(v) == WorldGen.DIRT){
+					v = new Vertex(v.x, v.y - 1);
+					fox.SetActive(false);
+					GameObject f = (GameObject)Instantiate(fox, transform.position, transform.rotation);
+					f.GetComponent<Enemy>().pos = v;
+					attack_targets.Add(f.GetComponent<Enemy>());
+					f.SetActive(true);
+					h = wg.height;
+				}
+			}
+		}
 	}
 
 	public Vertex GetClosestEnemy(Vertex v){
 		float cur_distance = -1f;
 		Enemy closest = null;
 		foreach(Enemy e in attack_targets){
-			if(cur_distance == -1f || Vertex.Distance(v, e.vertex) < cur_distance){
-				cur_distance = Vertex.Distance(v, e.vertex);
+			if(cur_distance == -1f || Vertex.Distance(v, e.pos) < cur_distance){
+				cur_distance = Vertex.Distance(v, e.pos);
 				closest = e;
 			}
 		}
-		return closest.vertex;
+		return closest.pos;
+	}
+
+	public void DamageEnemy(Vertex v, int d){
+		foreach(Enemy e in attack_targets){
+			if(e.pos == v){
+				bool k = e.Damage(d);
+				if(k){
+					attack_targets.Remove(e);
+				}
+			}
+		}
 	}
 
 	public Vertex GetClosestDig(Vertex v){

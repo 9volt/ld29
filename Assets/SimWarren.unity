@@ -550,6 +550,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 07db421666af8a1498a644763c41b6e4, type: 3}
   rabbit: {fileID: 100000, guid: 25c1fbcedcd0ea04fb9cb8cf0c8c2888, type: 2}
   starting_rabbits: 4
+  fox: {fileID: 100000, guid: d321a340db6f6b145ac9d50c58a93775, type: 2}
 --- !u!82 &1984020723
 AudioSource:
   m_ObjectHideFlags: 0

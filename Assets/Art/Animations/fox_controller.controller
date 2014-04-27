@@ -14,7 +14,7 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-  - m_Name: Run
+  - m_Name: Moving
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -62,7 +62,7 @@ Transition:
   m_TransitionOffset: 0
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: Run
+    m_ConditionEvent: Moving
     m_EventTreshold: 0
     m_ExitTime: 1
   m_Atomic: 1
@@ -80,7 +80,7 @@ Transition:
   m_TransitionOffset: 0
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: Run
+    m_ConditionEvent: Moving
     m_EventTreshold: 0
     m_ExitTime: 1
   m_Atomic: 1
@@ -183,18 +183,18 @@ StateMachine:
   m_ChildStateMachinePosition: []
   m_OrderedTransitions:
     data:
-      first: {fileID: 110250960}
+      first: {fileID: 110200000}
       second:
-      - {fileID: 110112169}
+      - {fileID: 110100000}
+      - {fileID: 110110117}
     data:
       first: {fileID: 110256539}
       second:
       - {fileID: 110196464}
     data:
-      first: {fileID: 110200000}
+      first: {fileID: 110250960}
       second:
-      - {fileID: 110100000}
-      - {fileID: 110110117}
+      - {fileID: 110112169}
   m_MotionSetCount: 1
   m_AnyStatePosition: {x: 72, y: -84, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
