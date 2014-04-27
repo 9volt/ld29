@@ -114,14 +114,99 @@ public class RabbitLogic : MonoBehaviour {
 	bool CanGetSleep(){
 		return wl.GetClosestBurrowSleep(mySquare) != null;
 	}
-	
+
+	void PickDestination(){
+		if(CanGetSleep() && need_sleep){
+			// Find closest burrow with sleeping room
+			Burrow b = wl.GetClosestBurrowSleep(mySquare);
+			if(b != null){
+				currentDestination = b.GetRandomBlock(rrand);
+				if(mySquare == currentDestination && Time.time > last_action + speed){
+					anim.SetBool("Sleep", true);
+					if(wl.StartSleep(mySquare)){
+						sleeping = true;
+						last_sleep = Time.time;
+					}
+				}
+			}
+		} else if(CanGetFood() && need_food){
+			// Find closest burrow with food
+			Burrow b = wl.GetClosestBurrowFood(mySquare);
+			if(b != null){
+				currentDestination = b.GetRandomBlock(rrand);
+				if(mySquare == currentDestination && Time.time > last_action + speed){
+					anim.SetTrigger("Dig");
+					if(wl.EatFood(mySquare)){
+						hunger = full;
+						need_food = false;
+					}
+				}
+			}
+			
+			//else pick new Destination or work
+		} else {
+			if(profession == "Burrower"){
+				// First try to find a square to dig
+				currentDestination = wl.GetClosestDig(mySquare);
+				if(currentDestination == null){
+					// If that fails find a square to fill in
+					currentDestination = wl.GetClosestFill(mySquare);
+					if(currentDestination != null){
+						filling = true;
+					}
+				} else {
+					digging = true;
+				}
+				if(mySquare == currentDestination && Time.time > last_action + speed){
+					anim.SetTrigger("Dig");
+					if(digging){
+						wl.Dig(mySquare, str);
+						digging = false;
+					}else if(filling){
+						wl.Fill(mySquare, str);
+						filling = false;
+					}
+				}
+			} else if(profession == "Forager"){
+				if(food_hold == 0){
+					currentDestination = wl.GetClosestFood(mySquare);
+					if(mySquare == currentDestination && Time.time > last_action + speed){
+						anim.SetTrigger("Dig");
+						food_hold = wl.TakeFood(mySquare, str);
+					}
+				} else {
+					//return to closest burrow with space
+					Burrow b = wl.GetClosestBurrowDepositFood(mySquare);
+					if(b != null){
+						currentDestination = b.main_block;
+						if(mySquare == currentDestination && Time.time > last_action + speed){
+							anim.SetTrigger("Dig");
+							food_hold = wl.DepositFood(mySquare, food_hold);
+						}
+					}
+				}
+			} else if(profession == "Guard"){
+				Burrow b = wl.GetClosestBurrowSleep(mySquare);
+				if(b != null){
+					currentDestination = b.GetRandomBlock(rrand);
+					if(mySquare == currentDestination){
+//						if(wl.StartSleep(mySquare)){
+//							sleeping = true;
+//							last_sleep = Time.time - sleep_length;
+//						}
+					}
+				}
+			}
+		}
+	}
+
 	// Update is called once per frame
 	void Update () {
-
 		//Checks for a path to the destination (In case it has changed), and moves to the next node if not currently transitioning between nodes
 		if(currentDestination != null && mySquare != currentDestination){
 			if(!rm.Moving){
 				mySquare = nextNode;
+				PickDestination();
 				List<Vertex> p = rf.FindPath(mySquare, currentDestination, wg.GetPathfindingCosts());
 				if (p != null && p.Count > 1){
 					nextNode = p[1];
@@ -140,87 +225,8 @@ public class RabbitLogic : MonoBehaviour {
 					anim.SetBool("Sleep", false);
 				}
 			// First check to make sure don't need sleep
-			} else if(CanGetSleep() && need_sleep){
-				// Find closest burrow with sleeping room
-				Burrow b = wl.GetClosestBurrowSleep(mySquare);
-				if(b != null){
-					currentDestination = b.GetRandomBlock(rrand);
-					if(mySquare == currentDestination && Time.time > last_action + speed){
-						anim.SetBool("Sleep", true);
-						if(wl.StartSleep(mySquare)){
-							sleeping = true;
-							last_sleep = Time.time;
-						}
-					}
-				}
-			} else if(CanGetFood() && need_food){
-				// Find closest burrow with food
-				Burrow b = wl.GetClosestBurrowFood(mySquare);
-				if(b != null){
-					currentDestination = b.GetRandomBlock(rrand);
-					if(mySquare == currentDestination && Time.time > last_action + speed){
-						anim.SetTrigger("Dig");
-						if(wl.EatFood(mySquare)){
-							hunger = full;
-							need_food = false;
-						}
-					}
-				}
-				
-				//else pick new Destination or work
 			} else {
-				if(profession == "Burrower"){
-					// First try to find a square to dig
-					currentDestination = wl.GetClosestDig(mySquare);
-					if(currentDestination == null){
-						// If that fails find a square to fill in
-						currentDestination = wl.GetClosestFill(mySquare);
-						if(currentDestination != null){
-							filling = true;
-						}
-					} else {
-						digging = true;
-					}
-					if(mySquare == currentDestination && Time.time > last_action + speed){
-						anim.SetTrigger("Dig");
-						if(digging){
-							wl.Dig(mySquare, str);
-							digging = false;
-						}else if(filling){
-							wl.Fill(mySquare, str);
-							filling = false;
-						}
-					}
-				} else if(profession == "Forager"){
-					if(food_hold == 0){
-						currentDestination = wl.GetClosestFood(mySquare);
-						if(mySquare == currentDestination && Time.time > last_action + speed){
-							anim.SetTrigger("Dig");
-							food_hold = wl.TakeFood(mySquare, str);
-						}
-					} else {
-						//return to closest burrow with space
-						Burrow b = wl.GetClosestBurrowDepositFood(mySquare);
-						if(b != null){
-							currentDestination = b.main_block;
-							if(mySquare == currentDestination && Time.time > last_action + speed){
-								anim.SetTrigger("Dig");
-								food_hold = wl.DepositFood(mySquare, food_hold);
-							}
-						}
-					}
-				} else if(profession == "Guard"){
-					Burrow b = wl.GetClosestBurrowSleep(mySquare);
-					if(b != null){
-						currentDestination = b.GetRandomBlock(rrand);
-						if(mySquare == currentDestination){
-							if(wl.StartSleep(mySquare)){
-								sleeping = true;
-								last_sleep = Time.time - sleep_length;
-							}
-						}
-					}
-				}
+				PickDestination();
 			}
 		}
 		if(Time.time > last_hunger + hunger_tick){
