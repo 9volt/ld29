@@ -551,6 +551,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: d3ae7fd0d271edd4a8d7382c44ec8fe5, type: 3}
   - {fileID: 8300000, guid: 0e0bc40e0dba5f241ae39686b0185727, type: 3}
   - {fileID: 8300000, guid: 07db421666af8a1498a644763c41b6e4, type: 3}
+  oh_shit_a_fox: {fileID: 8300000, guid: b63b8df88b25b7b4baaebb2e970c85b6, type: 3}
   rabbit: {fileID: 100000, guid: 25c1fbcedcd0ea04fb9cb8cf0c8c2888, type: 2}
   starting_rabbits: 4
   fox: {fileID: 100000, guid: d321a340db6f6b145ac9d50c58a93775, type: 2}

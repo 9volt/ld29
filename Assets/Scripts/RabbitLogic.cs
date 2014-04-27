@@ -241,6 +241,7 @@ public class RabbitLogic : MonoBehaviour {
 
 	public bool Damage(int d){
 		hp -= d;
+		profession = "Guard";
 		return hp <= 0;
 	}
 

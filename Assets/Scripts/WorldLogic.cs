@@ -76,6 +76,7 @@ public class WorldLogic : MonoBehaviour {
 	private float last_season;
 
 	public AudioClip[] seasons;
+	public AudioClip oh_shit_a_fox;
 	private AudioSource ass;
 	
 	private List<Burrow> burrows;
@@ -104,10 +105,17 @@ public class WorldLogic : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(Time.time > season_length + last_season){
-			season = (season + 1) % seasons.Length;
+		// Check the music
+		if(attack_targets.Count > 0 && ass.clip != oh_shit_a_fox){
+			ass.clip = oh_shit_a_fox;
+			ass.Play();
+		} else if(attack_targets.Count == 0 && ass.clip == oh_shit_a_fox) {
 			ass.clip = seasons[season];
 			ass.Play();
+		}
+		// Update the season
+		if(Time.time > season_length + last_season){
+			season = (season + 1) % seasons.Length;
 			last_season = Time.time;
 		}
 		if(Input.GetButtonDown("Fire1") && GUIUtility.hotControl == 0){
