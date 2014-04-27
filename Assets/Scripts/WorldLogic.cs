@@ -187,6 +187,17 @@ public class WorldLogic : MonoBehaviour {
 		}
 	}
 
+	public int TakeFood(Vertex v, int str){
+		food_counts[v] -= str;
+		if(food_counts[v] < 0){
+			int ret_food = str + food_counts[v];
+			food_counts.Remove(v);
+			wg.SetVertex(v, WorldGen.DIRT);
+			return ret_food;
+		}
+		return str;
+	}
+
 	public void Fill(Vertex v, int str){
 		dig_counts[v] += str;
 		if(dig_counts[v] > dirt_strength){
