@@ -19,9 +19,13 @@ public class GUIScript : MonoBehaviour {
 	public Texture foodcap;
 	public Texture houses;
 	public string action = "doing something!";
-	private static  RabbitLogic[] myPastRabbits;
-	private static bool game_over = false;
-	private static bool reload = false;
+	private RabbitLogic[] myPastRabbits;
+	private bool game_over = false;
+	private bool reload = false;
+	private float scroll;
+	public GameObject bg;
+	public GameObject bg2;
+	public Texture black;
 
 	// Use this for initialization
 	void Start () {
@@ -30,6 +34,7 @@ public class GUIScript : MonoBehaviour {
 			reload = false;
 		}
 		if(!game_over){
+			scroll = Screen.height - 300;
 			myPastRabbits = null;
 			profession = Guard;
 			wl = GameObject.FindGameObjectWithTag("world").GetComponent<WorldLogic>();
@@ -110,17 +115,46 @@ public class GUIScript : MonoBehaviour {
 				currentRabbit.gameObject.GetComponent<SpriteRenderer>().color = Color.gray;
 			}
 		}else{
-			if(GUI.Button(new Rect(Screen.width - 215, Screen.height - 93, 150, 150), "Play Again?")){
+
+			//play again button
+			if(GUI.Button(new Rect(Screen.width - 215, Screen.height - 160, 150, 150), "Play Again?")){
 				reload = true;
 				Application.LoadLevel("SimWarren");
 			}
-		}
+
+			//credits
+			int i;
+			for(i=0; i < myPastRabbits.Length-1; i++){ // -1 becuase the bunnyhop prefab is also caught by FindObjectsOfTypeAll
+				currentRabbit = myPastRabbits[i];
+				if(!currentRabbit.gameObject.activeSelf){
+					GUI.Label(new Rect(Screen.width/2 - 120, scroll + ((i+1)* 130), 300, 40 ), "Gone, but not forgotten");
+				}else{
+					GUI.Label(new Rect(Screen.width/2 - 120, scroll + ((i+1)* 130), 300,40), "The great survivor");
+				}
+				GUI.Label(new Rect(Screen.width/2 - 120, scroll + 20 + ((i+1)* 130), 300,40), currentRabbit.myname);
+				GUI.DrawTexture(new Rect(Screen.width/2 - 120,  scroll + 40 + ((i+1)* 130), bunny.width, bunny.height), bunny);
+				GUI.Label(new Rect(Screen.width/2 - 120 + bunny.width + 10,  scroll + 40 + ((i+1)* 130), 300, 40), "Str:" + currentRabbit.str + "     Spd:" + currentRabbit.spd);
+
+			}
+
+			GUI.Label(new Rect(Screen.width/2 - 120, scroll + 40 + ((i+1)* 130), 500, 40), "Game created by Joseph and Sonya Utecht.");
+			GUI.Label(new Rect(Screen.width/2 - 120, scroll + 60 + ((i+1)* 130), 300, 40), "Music by Jeff Craft.");
+			GUI.Label(new Rect(Screen.width/2 - 120, scroll + 100 + ((i+1)* 130), 300, 40), "Thank you for playing!");
+
+			scroll= scroll -.5f;
+
+		}						
 	}
 
 	void gameOver(){
 		game_over = true;
-		RabbitLogic[] myPastRabbits = (RabbitLogic[])Resources.FindObjectsOfTypeAll(typeof(RabbitLogic));
-		Application.LoadLevel("game_over_level");
+		myPastRabbits = (RabbitLogic[])Resources.FindObjectsOfTypeAll(typeof(RabbitLogic));
+		gameObject.GetComponent<Camera>().cullingMask = 0;
+		Destroy(gameObject.GetComponent<WorldGen>());
+		Destroy(gameObject.GetComponent<WorldLogic>());
+		Destroy(gameObject.GetComponent<CameraMove>());
+		bg.renderer.material.mainTexture = black;
+		bg2.renderer.material.mainTexture = black;
 
 	}
 }

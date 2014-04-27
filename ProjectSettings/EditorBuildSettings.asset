@@ -7,5 +7,3 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 1
     path: Assets/SimWarren.unity
-  - enabled: 1
-    path: Assets/game_over_level.unity
