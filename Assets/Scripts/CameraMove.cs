@@ -19,7 +19,7 @@ public class CameraMove : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		bg.renderer.material.mainTexture = seasons[wl.season];
-		if(Input.mousePosition.x > Screen.width * .95f && camera.ScreenToWorldPoint(new Vector3(Screen.width, 0, 0)).x < (wg.transform.position.x + wg.width)){
+		if(Input.mousePosition.x > Screen.width * .95f && camera.ScreenToWorldPoint(new Vector3(Screen.width, 0, 0)).x < (wg.transform.position.x + wg.width - 1)){
 			//scroll right
 			transform.Translate(Vector3.right * scroll_speed);
 			bg.renderer.material.mainTextureOffset = new Vector2( (bg.renderer.material.mainTextureOffset.x + bg_scroll_speed)%1, 0f);

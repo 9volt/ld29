@@ -130,7 +130,78 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1296940675}
+  - {fileID: 225550147}
   m_Father: {fileID: 0}
+--- !u!1 &225550143
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 225550147}
+  - 33: {fileID: 225550146}
+  - 64: {fileID: 225550145}
+  - 23: {fileID: 225550144}
+  m_Layer: 0
+  m_Name: Quad
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!23 &225550144
+Renderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 225550143}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_LightmapIndex: 255
+  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_Materials:
+  - {fileID: 2100000, guid: 7e1d193520521b347ba3b39a6ad64bfe, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_LightProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
+--- !u!64 &225550145
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 225550143}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_SmoothSphereCollisions: 0
+  m_Convex: 0
+  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!33 &225550146
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 225550143}
+  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &225550147
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 225550143}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -.439563751, y: .904384613, z: 8.14999962}
+  m_LocalScale: {x: 20, y: 20, z: 0}
+  m_Children: []
+  m_Father: {fileID: 206908151}
 --- !u!1 &1103847439
 GameObject:
   m_ObjectHideFlags: 0
@@ -439,13 +510,6 @@ MonoBehaviour:
   dirt: {fileID: 21300000, guid: 5b16c3ad88c159f4cbf278c50cd032c4, type: 3}
   grass: {fileID: 21300000, guid: c495b51ee5dedd0419120f65bbf35d22, type: 3}
   carrot: {fileID: 21300000, guid: 3b5f188b64d8a054385dba49d0b71d1d, type: 3}
-  tunnels:
-  - {fileID: 21300000, guid: 0c94b755347fe424ea4b9de83c75720f, type: 3}
-  grasses:
-  - {fileID: 21300000, guid: b4b54b3977e96944cacecabfadc235df, type: 3}
-  - {fileID: 21300002, guid: b4b54b3977e96944cacecabfadc235df, type: 3}
-  - {fileID: 21300006, guid: b4b54b3977e96944cacecabfadc235df, type: 3}
-  - {fileID: 21300004, guid: b4b54b3977e96944cacecabfadc235df, type: 3}
   block: {fileID: 100000, guid: 3bb2b1a839a888f4f8e26b49c39aa8fa, type: 2}
   width: 100
   height: 30

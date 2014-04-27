@@ -23,7 +23,7 @@ public class Bunny_Targeter : MonoBehaviour {
 			g.currentRabbit = null;
 		}else{
 			if(Input.GetKeyDown(KeyCode.Tab)){
-				g.currentRabbit.gameObject.GetComponent<SpriteRenderer>().sortingLayerName = "Rabbit";
+				g.currentRabbit.gameObject.GetComponent<SpriteRenderer>().sortingLayerName = "Rabbits";
 				g.currentRabbit.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
 				if (pos + 1 <= bunnies.Length - 1){
 					pos++;

@@ -18,7 +18,7 @@ public class Burrow {
 	}
 	
 	public int RabbitCapacity(){
-		return blocks.Count;
+		return blocks.Count / 2;
 	}
 	
 	public Vertex GetRandomBlock(){
@@ -392,16 +392,19 @@ public class WorldLogic : MonoBehaviour {
 		Vertex start_of_burrow = null;
 		List<Vertex> vertex_in_burrow = new List<Vertex>();
 		Vertex one_above = null;
+		Vertex two_above = null;
 		Vertex one_below = null;
 		Burrow growing = null;
-		for(int h = 1; h < wg.height - 1; h++){
+		for(int h = 2; h < wg.height - 1; h++){
 			for(int w = 1; w < wg.width - 1; w++){
 				cur_point = new Vertex(w, h);
 				one_above = new Vertex(w, h - 1);
+				two_above = new Vertex(w, h - 2);
 				one_below = new Vertex(w, h + 1);
 				if(start_of_burrow == null
 				   && wg.VertexToType(cur_point) == WorldGen.TUNNEL
 				   && wg.VertexToType(one_above) == WorldGen.TUNNEL
+				   && wg.VertexToType(two_above) == WorldGen.DIRT
 				   && wg.VertexToType(one_below) == WorldGen.DIRT){
 					// We have found the start of a burrow
 					growing = VertexInBurrow(cur_point);
@@ -410,12 +413,14 @@ public class WorldLogic : MonoBehaviour {
 					vertex_in_burrow.Add(one_above);
 				} else if(wg.VertexToType(cur_point) == WorldGen.TUNNEL
 				          && wg.VertexToType(one_above) == WorldGen.TUNNEL
+				          && wg.VertexToType(two_above) == WorldGen.DIRT
 				          && wg.VertexToType(one_below) == WorldGen.DIRT){
 					vertex_in_burrow.Add(cur_point);
 					vertex_in_burrow.Add(one_above);
 				} else if(start_of_burrow != null
 				          && (wg.VertexToType(cur_point) != WorldGen.TUNNEL
 				          || wg.VertexToType(one_above) != WorldGen.TUNNEL
+				    	  || wg.VertexToType(two_above) != WorldGen.DIRT
 				          || wg.VertexToType(one_below) != WorldGen.DIRT)){
 					// We have found the end
 					if(vertex_in_burrow.Count < 4){

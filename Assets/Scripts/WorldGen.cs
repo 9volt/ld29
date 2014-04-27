@@ -5,8 +5,8 @@ public class WorldGen : MonoBehaviour {
 	public Sprite dirt;
 	public Sprite grass;
 	public Sprite carrot;
-	public Sprite[] tunnels;
-	public Sprite[] grasses;
+	private Sprite[] tunnels;
+	private Sprite[] grasses;
 	public GameObject block;
 	public int width;
 	public int height;
@@ -39,15 +39,16 @@ public class WorldGen : MonoBehaviour {
 	const int BOTTOMLEFTTOP = 13;
 	const int LEFTBOTTOMRIGHT = 14;
 	const int EMPTY = 15;
-	const int DB = 16;
-	const int DR = 17;
-	const int DL = 18;
-	const int DT = 19;
-	const int DC = 20;
+
+	const int GFULL = 0;
+	const int GLEFT = 1;
+	const int GRIGHT = 2;
+	const int GBUMB = 3;
 
 	// Use this for initialization
 	void Start () {
 		tunnels = Resources.LoadAll<Sprite>("tunnels");
+		grasses = Resources.LoadAll<Sprite>("grasses");
 		wl = gameObject.GetComponent<WorldLogic>();
 		prefabs = new GameObject[width,height];
 		InstantiateWorld();
@@ -78,9 +79,9 @@ public class WorldGen : MonoBehaviour {
 							case DIRT:
 								ret[w,h] = 0f;
 								break;
-							case GRASS:
-								ret[w,h] = .5f;
-								break;
+//							case GRASS:
+//								ret[w,h] = .5f;
+//								break;
 							case CARROT:
 								ret[w,h] = 1f;
 								break;
@@ -210,11 +211,23 @@ public class WorldGen : MonoBehaviour {
 			return dirt;
 		}
 
-		bool right = world[w + 1, h] == DIRT;
-		bool left = world[w - 1, h] == DIRT;
+		bool right = world[w + 1, h] == DIRT || world[w + 1, h] == TUNNEL || world[w + 1, h] == CARROT;
+		bool left = world[w - 1, h] == DIRT || world[w - 1, h] == TUNNEL || world[w - 1, h] == CARROT;
 		bool is_grass = world[w, h - 1] == AIR;
+		int season = wl.season * 4;
 		if(is_grass){
-			return grasses[wl.season];
+			if(left && right){
+				return grasses[season + GFULL];
+			}
+			if(!left && right){
+				return grasses[season + GRIGHT];
+			}
+			if(!right && left){
+				return grasses[season + GLEFT];
+			}
+			if(!right && !left){
+				return grasses[season + GBUMB];
+			}
 		}
 		return tunnels[FULL];
 	}
