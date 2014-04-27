@@ -72,13 +72,16 @@ public class RabbitFinder : MonoBehaviour {
 	}
 
 	private Vertex GetLowestCost(List<Vertex> options, float[,] costs){
-		Vertex lowest;
+		Vertex lowest = new Vertex(-1, -1);
 		float lowest_cost = 99999f;
 		foreach(Vertex v in options){
 			if(costs[v.x, v.y] > 0f && costs[v.x, v.y] < lowest_cost){
 				lowest_cost = costs[v.x, v.y];
 				lowest = v;
 			}
+		}
+		if(lowest != new Vertex(-1, -1)){
+			return lowest;
 		}
 		return options[0];
 	}

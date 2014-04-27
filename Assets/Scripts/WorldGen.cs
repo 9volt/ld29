@@ -208,6 +208,18 @@ public class WorldGen : MonoBehaviour {
 				}
 			}
 		}
+		// Smooth world
+		for(int w = 1; w < width - 1; w++){
+			for(int h = 1; h < height - 1; h++){
+				if(world[w, h] == DIRT && world[w+1, h] == AIR && world[w-1, h] == AIR){
+					world[w, h] = AIR;
+				}
+				if(world[w, h] == CARROT && world[w+1, h] == AIR && world[w-1, h] == AIR){
+					world[w, h] = AIR;
+					world[w, h+1] = CARROT;
+				}
+			}
+		}
 	}
 
 	Sprite DrawDirt(int w, int h){
