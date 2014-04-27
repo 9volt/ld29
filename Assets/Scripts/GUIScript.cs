@@ -12,10 +12,13 @@ public class GUIScript : MonoBehaviour {
 	public Texture emptytexture;
 	public Texture male;
 	public Texture female;
+	public Texture[] season_art;
+	private WorldLogic wl;
 	
 	// Use this for initialization
 	void Start () {
-		profession = Guard; 
+		profession = Guard;
+		wl = GameObject.FindGameObjectWithTag("world").GetComponent<WorldLogic>();
 	}
 	
 	// Update is called once per frame
@@ -30,6 +33,8 @@ public class GUIScript : MonoBehaviour {
 	}
 	
 	void OnGUI(){
+		// Draw season
+		GUI.DrawTexture(new Rect(0,0,32,32), season_art[wl.season]);
 
 //		if (GUI.Button(new Rect(Screen.width - 200, Screen.height - 200, 200,100), "Change name")){
 //			name = gameObject.GetComponent<NameGen>().getName();

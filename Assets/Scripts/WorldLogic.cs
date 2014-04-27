@@ -6,9 +6,11 @@ public class Burrow {
 	public List<Vertex> blocks;
 	public int food;
 	public int rabbits;
+	public Vertex main_block;
 	
 	public Burrow(List<Vertex> nblocks){
 		blocks = nblocks;
+		main_block = nblocks[0];
 	}
 	
 	public int FoodCapacity(){
@@ -220,6 +222,42 @@ public class WorldLogic : MonoBehaviour {
 		return closest;
 	}
 
+	public Burrow GetClosestBurrowFood(Vertex v){
+		float cur_distance = -1f;
+		Burrow closest = null;
+		foreach(Burrow b in burrows){
+			if((cur_distance == -1f || Vertex.Distance(b.main_block, v) < cur_distance) && b.food > 0){
+				cur_distance = Vertex.Distance(b.main_block, v);
+				closest = b;
+			}
+		}
+		return closest;
+	}
+
+	public Burrow GetClosestBurrowDepositFood(Vertex v){
+		float cur_distance = -1f;
+		Burrow closest = null;
+		foreach(Burrow b in burrows){
+			if((cur_distance == -1f || Vertex.Distance(b.main_block, v) < cur_distance) && b.food > b.FoodCapacity()){
+				cur_distance = Vertex.Distance(b.main_block, v);
+				closest = b;
+			}
+		}
+		return closest;
+	}
+
+	public Burrow GetClosestBurrowSleep(Vertex v){
+		float cur_distance = -1f;
+		Burrow closest = null;
+		foreach(Burrow b in burrows){
+			if((cur_distance == -1f || Vertex.Distance(b.main_block, v) < cur_distance) && b.rabbits < b.RabbitCapacity()){
+				cur_distance = Vertex.Distance(b.main_block, v);
+				closest = b;
+			}
+		}
+		return closest;
+	}
+
 	public void Dig(Vertex v, int str){
 		dig_counts[v] -= str;
 		if(dig_counts[v] < 0){
@@ -245,5 +283,33 @@ public class WorldLogic : MonoBehaviour {
 			fill_targets.Remove(v);
 			wg.SetVertex(v, WorldGen.DIRT);
 		}
+	}
+
+	public int FoodCount(){
+		int total = 0;
+		foreach(Burrow b in burrows){
+			total += b.food;
+		}
+		return total;
+	}
+
+	public int FoodCapacity(){
+		int total = 0;
+		foreach(Burrow b in burrows){
+			total += b.FoodCapacity();
+		}
+		return total;
+	}
+	
+	public int BurrowSleepCapacity(){
+		int total = 0;
+		foreach(Burrow b in burrows){
+			total += b.RabbitCapacity();
+		}
+		return total;
+	}
+
+	public int BurrowCount(){
+		return burrows.Count;
 	}
 }
