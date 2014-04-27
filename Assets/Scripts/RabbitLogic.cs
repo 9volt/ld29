@@ -50,7 +50,7 @@ public class RabbitLogic : MonoBehaviour {
 		rf = gameObject.GetComponent<RabbitFinder>();
 		rm = gameObject.GetComponent<RabbitMover>();
 		rm.SetPosition(wg.VertexToVector3(mySquare));
-		currentDestination = new Vertex(15, 8);
+		currentDestination = new Vertex(15, 9);
 		anim = gameObject.GetComponent<Animator>();
 		ng = gameObject.GetComponent<NameGen>();
 
@@ -98,23 +98,25 @@ public class RabbitLogic : MonoBehaviour {
 
 			//else pick new Destination or work
 			} else {
-				currentDestination = wl.GetClosestDig(mySquare);
-				if(currentDestination == null){
-					currentDestination = wl.GetClosestFill(mySquare);
-					if(currentDestination != null){
-						filling = true;
+				if(profession == "Burrower"){
+					currentDestination = wl.GetClosestDig(mySquare);
+					if(currentDestination == null){
+						currentDestination = wl.GetClosestFill(mySquare);
+						if(currentDestination != null){
+							filling = true;
+						}
+					} else {
+						digging = true;
 					}
-				} else {
-					digging = true;
-				}
-				if(mySquare == currentDestination && Time.time > last_action + speed){
-					anim.SetTrigger("Dig");
-					if(digging){
-						wl.Dig(mySquare, str);
-						digging = false;
-					}else if(filling){
-						wl.Fill(mySquare, str);
-						filling = false;
+					if(mySquare == currentDestination && Time.time > last_action + speed){
+						anim.SetTrigger("Dig");
+						if(digging){
+							wl.Dig(mySquare, str);
+							digging = false;
+						}else if(filling){
+							wl.Fill(mySquare, str);
+							filling = false;
+						}
 					}
 				}
 			}
