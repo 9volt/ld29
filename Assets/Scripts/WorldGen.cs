@@ -38,7 +38,11 @@ public class WorldGen : MonoBehaviour {
 	const int BOTTOMLEFTTOP = 13;
 	const int LEFTBOTTOMRIGHT = 14;
 	const int EMPTY = 15;
-
+	const int DB = 16;
+	const int DR = 17;
+	const int DL = 18;
+	const int DT = 19;
+	const int DC = 20;
 
 	// Use this for initialization
 	void Start () {
@@ -54,15 +58,6 @@ public class WorldGen : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-//		if(Input.GetMouseButtonDown(0)){
-//			world[CameraW(), CameraH()] = TUNNEL;
-//		}
-//		if(Input.GetMouseButtonDown(1)){
-//			world[CameraW(), CameraH()] = DIRT;
-//		}
-//		if(Input.GetMouseButtonDown(2)){
-//			world[CameraW(), CameraH()] = CARROT;
-//		}
 		DrawGround();
 	}
 
@@ -182,18 +177,22 @@ public class WorldGen : MonoBehaviour {
 
 	void BuildGround(){
 		for(int w = 0; w < width; w++){
-			world[w, height/2 - 1] = GRASS;
+			for(int h = 0; h < height; h++){
+				world[w, h] = AIR;
+			}
+		}
+		for(int w = 0; w < width; w++){
 			for(int h = height / 2; h < height; h++){
 				world[w, h] = DIRT;
 			}
 		}
-		//world[8, height/2 - 1] = CARROT;
 	}
 
 	Sprite DrawDirt(int w, int h){
 		if(w == 0 || h == 0 || w == width - 1 || h == height - 1){
 			return dirt;
 		}
+
 		bool top = world[w, h - 1] == TUNNEL;
 		bool topleft = world[w - 1, h - 1] == TUNNEL;
 		bool topright = world[w + 1, h - 1] == TUNNEL;
@@ -202,22 +201,40 @@ public class WorldGen : MonoBehaviour {
 		bool bottomleft = world[w - 1, h + 1] == TUNNEL;
 		bool bottom = world[w, h + 1] == TUNNEL;
 		bool bottomright = world[w + 1, h + 1] == TUNNEL;
-//		if(right && top){
-//			return tunnels[TOPRIGHT];
-//		}
-//		if(right && bottom){
-//			return tunnels[BOTTOMRIGHT];
-//		}
-//		if(left && bottom){
-//			return tunnels[LEFTBOTTOM];
-//		}
-//		if(left && top){
-//			return tunnels[TOPLEFT];
-//		}
-//		if(top && right){
-//			return tunnels[TOPRIGHT];
-//		}
-
+		bool is_grass = world[w, h - 1] == AIR;
+		if(left && top && right && !topleft && !topright && !bottomleft && !bottomright){
+			return tunnels[DB];
+		}
+		if(left && top && bottom && !topleft && !topright && !bottomleft && !bottomright){
+			return tunnels[DR];
+		}
+		if(bottom && top && right && !topleft && !topright && !bottomleft && !bottomright){
+			return tunnels[DL];
+		}
+		if(left && bottom && right && !topleft && !topright && !bottomleft && !bottomright){
+			return tunnels[DT];
+		}
+		if(left && top && right && bottom && !topleft && !topright && !bottomleft && !bottomright){
+			return tunnels[EMPTY];
+		}
+		if(right && top && !topright){
+			return tunnels[TOPRIGHT];
+		}
+		if(right && bottom && !bottomright){
+			return tunnels[BOTTOMRIGHT];
+		}
+		if(left && bottom && !bottomleft){
+			return tunnels[LEFTBOTTOM];
+		}
+		if(left && top && !topleft){
+			return tunnels[TOPLEFT];
+		}
+		if(top && right && !topright){
+			return tunnels[TOPRIGHT];
+		}
+		if(is_grass){
+			return grass;
+		}
 		return tunnels[FULL];
 	}
 
@@ -236,7 +253,7 @@ public class WorldGen : MonoBehaviour {
 		if(top && topleft && topright && right && left && bottomleft && bottomright && bottom){
 			return tunnels[EMPTY];
 		}
-		if(top && !right && !left && !bottomleft && !bottomright && !bottom){
+		if(top && !right && !left && !bottom){
 			return tunnels[TOP];
 		}
 		if(!top && !topleft && right && !left && !bottomleft && !bottom){
@@ -251,7 +268,7 @@ public class WorldGen : MonoBehaviour {
 		if(top && !right && !left && bottom){
 			return tunnels[TOPBOTTOM];
 		}
-		if(!top && !topleft && right && !left && bottom){
+		if(!top && right && !left && bottom){
 			return tunnels[BOTTOMRIGHT];
 		}
 		if(top && right && !left && bottom){
@@ -291,8 +308,8 @@ public class WorldGen : MonoBehaviour {
 					case DIRT:
 						prefabs[w, h].GetComponent<SpriteRenderer>().sprite = DrawDirt(w, h);
 						break;
-					case GRASS:
-						prefabs[w, h].GetComponent<SpriteRenderer>().sprite = grass;
+					case AIR:
+						prefabs[w, h].GetComponent<SpriteRenderer>().sprite = null;
 						break;
 					case CARROT:
 						prefabs[w, h].GetComponent<SpriteRenderer>().sprite = carrot;
