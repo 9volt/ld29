@@ -135,6 +135,8 @@ public class WorldLogic : MonoBehaviour {
 			} else if(type == WorldGen.TUNNEL){
 				if(!fill_targets.Contains(target)){
 					fill_targets.Add(target);
+				} else {
+					fill_targets.Remove(target);
 				}
 			}
 		}
@@ -273,6 +275,15 @@ public class WorldLogic : MonoBehaviour {
 		return food;
 	}
 
+	public bool EatFood(Vertex v){
+		Burrow b = VertexInBurrow(v);
+		if(b != null && b.food > 0){
+			b.food--;
+			return true;
+		}
+		return false;
+	}
+
 	public Burrow GetClosestBurrowSleep(Vertex v){
 		float cur_distance = -1f;
 		Burrow closest = null;
@@ -295,14 +306,18 @@ public class WorldLogic : MonoBehaviour {
 	}
 
 	public int TakeFood(Vertex v, int str){
-		food_counts[v] -= str;
-		if(food_counts[v] < 0){
-			int ret_food = str + food_counts[v];
-			food_counts.Remove(v);
-			wg.SetVertex(v, WorldGen.DIRT);
-			return ret_food;
+		if(food_counts.ContainsKey(v)){
+			food_counts[v] -= str;
+			if(food_counts[v] < 0){
+				int ret_food = str + food_counts[v];
+				food_counts.Remove(v);
+				food_targets.Remove(v);
+				wg.SetVertex(v, WorldGen.AIR);
+				return ret_food;
+			}
+			return str;
 		}
-		return str;
+		return 0;
 	}
 
 	public void Fill(Vertex v, int str){
