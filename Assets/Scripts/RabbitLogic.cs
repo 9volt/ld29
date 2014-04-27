@@ -96,9 +96,19 @@ public class RabbitLogic : MonoBehaviour {
 				
 			} else if(need_food){
 				// Find closest burrow with food
+				Burrow b = wl.GetClosestBurrowFood(mySquare);
+				if(b != null){
+					currentDestination = b.main_block;
+					if(mySquare == currentDestination && Time.time > last_action + speed){
+						anim.SetTrigger("Dig");
+						if(wl.EatFood(mySquare)){
+							hunger = full;
+							need_food = false;
+						}
+					}
+				}
 				
-
-			//else pick new Destination or work
+				//else pick new Destination or work
 			} else {
 				if(profession == "Burrower"){
 					// First try to find a square to dig
@@ -152,6 +162,9 @@ public class RabbitLogic : MonoBehaviour {
 		if(Time.time > last_hunger + hunger_tick){
 			hunger--;
 			last_hunger = Time.time;
+			if(hunger < (full * .25f)){
+				need_food = true;
+			}
 			if(hunger <= 0){
 				hp--;
 				hunger = 0;
