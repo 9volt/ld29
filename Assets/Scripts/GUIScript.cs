@@ -21,16 +21,19 @@ public class GUIScript : MonoBehaviour {
 	public string action = "doing something!";
 	private static  RabbitLogic[] myPastRabbits;
 	private static bool game_over = false;
+	private static bool reload = false;
 
 	// Use this for initialization
 	void Start () {
+		if(reload){
+			game_over = false;
+			reload = false;
+		}
 		if(!game_over){
 			myPastRabbits = null;
 			profession = Guard;
 			wl = GameObject.FindGameObjectWithTag("world").GetComponent<WorldLogic>();
 			currentRabbit = GameObject.FindGameObjectsWithTag("Rabbit")[0].GetComponent<RabbitLogic>();
-		}else{
-
 		}
 
 	}
@@ -108,7 +111,7 @@ public class GUIScript : MonoBehaviour {
 			}
 		}else{
 			if(GUI.Button(new Rect(Screen.width - 215, Screen.height - 93, 150, 150), "Play Again?")){
-				game_over = false;
+				reload = true;
 				Application.LoadLevel("SimWarren");
 			}
 		}
