@@ -500,6 +500,11 @@ MonoBehaviour:
   emptytexture: {fileID: 2800000, guid: 4b94450b09045e44fa67be1a94637c2d, type: 3}
   male: {fileID: 2800000, guid: faa34842fd0ffdc4ca3cc69d549e56ba, type: 3}
   female: {fileID: 2800000, guid: e9c0f9434aa44e6468ba6f455fc30a5a, type: 3}
+  season_art:
+  - {fileID: 2800000, guid: 9483b1621d3e5ca4881b0885b5ff03d7, type: 3}
+  - {fileID: 2800000, guid: b2cc9138f19d21c4188fe283c78d4efc, type: 3}
+  - {fileID: 2800000, guid: 6cb9e3b911e4590499ab1a1cb2146cde, type: 3}
+  - {fileID: 2800000, guid: 9cd09e8231235a64387a79d20170c72a, type: 3}
 --- !u!114 &1214936245
 MonoBehaviour:
   m_ObjectHideFlags: 0
