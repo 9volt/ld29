@@ -269,8 +269,8 @@ public class WorldLogic : MonoBehaviour {
 	void KillCrops(){
 		foreach(Vertex crop in food_counts.Keys){
 			wg.SetVertex(crop, WorldGen.TUNNEL);
-			food_counts.Remove(crop);
 		}
+		food_counts = new Dictionary<Vertex, int>();
 	}
 
 	public Vertex GetClosestEnemy(Vertex v){
@@ -357,6 +357,10 @@ public class WorldLogic : MonoBehaviour {
 			}
 		}
 		return closest;
+	}
+
+	public void RemoveEnemy(Enemy e){
+		attack_targets.Remove(e);
 	}
 
 	public bool StartSleep(Vertex v){

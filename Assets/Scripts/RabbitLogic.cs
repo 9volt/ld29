@@ -68,8 +68,9 @@ public class RabbitLogic : MonoBehaviour {
 		maxhp = 20;
 		hunger = 7;
 		full = 10;
-		str = 1;
-		spd = 1;
+		str = Random.Range(1,4);
+		spd = Random.Range(1,4);
+		speed = 1 / (float)spd;
 		profession = "Burrower";
 		if(sex == null){
 			sex = Random.Range(0,2);
@@ -77,7 +78,9 @@ public class RabbitLogic : MonoBehaviour {
 	}
 
 	public string WhatAmIDoing(){
-		if(sleeping){
+		if(!rm.Moving && profession == "Guard"){
+			return "cowering";
+		} else if(sleeping){
 			return "sleeping";
 		} else if(need_sleep){
 			return "looking for sleep";
@@ -88,7 +91,7 @@ public class RabbitLogic : MonoBehaviour {
 			case "Forager":
 				return "foraging";
 			case "Guard":
-				return "defending";
+				return "fleeing";
 			default:
 				return "bumming";
 			}
@@ -207,11 +210,15 @@ public class RabbitLogic : MonoBehaviour {
 						}
 					}
 				} else if(profession == "Guard"){
-					currentDestination = wl.GetClosestEnemy(mySquare);
-					if(mySquare == currentDestination && Time.time > last_action + speed){
-						anim.SetTrigger("Dig");
-						// Attempt to damage enemy for str
-						wl.DamageEnemy(mySquare, str);
+					Burrow b = wl.GetClosestBurrowSleep(mySquare);
+					if(b != null){
+						currentDestination = b.GetRandomBlock(rrand);
+						if(mySquare == currentDestination){
+							if(wl.StartSleep(mySquare)){
+								sleeping = true;
+								last_sleep = Time.time - sleep_length;
+							}
+						}
 					}
 				}
 			}

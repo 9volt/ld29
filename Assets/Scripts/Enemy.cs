@@ -17,6 +17,7 @@ public class Enemy : MonoBehaviour {
 	private float last_action;
 	private float speed = 1f;
 	public int str = 5;
+	public int spd = 3;
 
 	// Use this for initialization
 	void Start () {
@@ -51,6 +52,15 @@ public class Enemy : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if(hp <= 0){
+			for(int h = 0; h < wg.height; h++){
+				if(wg.VertexToType(new Vertex(wg.width - 1, h)) == WorldGen.DIRT){
+					currentDestination = new Vertex(wg.width - 1, h);
+					wl.RemoveEnemy(this);
+					h = wg.height;
+				}
+			}
+		}
+		if(hp <= 0 && currentDestination == pos){
 			gameObject.SetActive(false);
 		}
 		// Move towards current target
@@ -73,6 +83,7 @@ public class Enemy : MonoBehaviour {
 					last_action = Time.time;
 					bool b = target.Damage(str);
 					if(b){
+						hp -= str;
 						target = null;
 					}
 				} else {

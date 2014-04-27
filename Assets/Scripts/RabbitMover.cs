@@ -6,11 +6,17 @@ public class RabbitMover : MonoBehaviour {
 	public bool Moving;
 	private Animator anim;
 	private bool facingleft = true;
+	private int speed;
 
 	// Use this for initialization
 	void Start () {
 		Moving = false;
 		anim = gameObject.GetComponent<Animator>();
+		if(gameObject.GetComponent<RabbitLogic>() != null){
+			speed = gameObject.GetComponent<RabbitLogic>().spd;
+		} else {
+			speed = gameObject.GetComponent<Enemy>().spd;
+		}
 	}
 	
 	// Update is called once per frame
@@ -20,7 +26,7 @@ public class RabbitMover : MonoBehaviour {
 				Moving = false;
 				anim.SetBool("Moving",false);
 			}else{
-				transform.position = Vector3.MoveTowards(transform.position, currentTarget, 5 * Time.deltaTime);
+				transform.position = Vector3.MoveTowards(transform.position, currentTarget, speed * 2 * Time.deltaTime);
 			}
 		}
 	}
