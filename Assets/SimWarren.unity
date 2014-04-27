@@ -198,7 +198,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: .5
-  hunger_tick: 30
+  hunger_tick: 10
   sleep_interval: 100
   ng: {fileID: 0}
   str: 0
@@ -712,7 +712,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: .5
-  hunger_tick: 30
+  hunger_tick: 10
   sleep_interval: 100
   ng: {fileID: 0}
   str: 0
@@ -816,7 +816,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dirt: {fileID: 21300000, guid: 5b16c3ad88c159f4cbf278c50cd032c4, type: 3}
   grass: {fileID: 21300000, guid: c495b51ee5dedd0419120f65bbf35d22, type: 3}
-  carrot: {fileID: 21300000, guid: a57a2aa72d6fc9c43b4a072eca689999, type: 3}
+  carrot: {fileID: 21300000, guid: 3b5f188b64d8a054385dba49d0b71d1d, type: 3}
   tunnels:
   - {fileID: 21300000, guid: 0c94b755347fe424ea4b9de83c75720f, type: 3}
   grasses:

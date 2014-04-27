@@ -13,7 +13,7 @@ public class RabbitLogic : MonoBehaviour {
 	private Vertex nextNode;
 	private float last_action;
 	public float speed = .5f;
-	public float hunger_tick = 30f;
+	public float hunger_tick = 10f;
 	private float last_hunger;
 	public float sleep_interval = 100f;
 	private float last_sleep;
