@@ -57,7 +57,7 @@ public class WorldLogic : MonoBehaviour {
 	private List<Vertex> food_targets;
 	private List<Vertex> dig_targets;
 	private List<Vertex> fill_targets;
-	private List<Vertex> attack_targets;
+	private List<Enemy> attack_targets;
 	private Dictionary<Vertex, int> food_counts;
 	private Dictionary<Vertex, int> dig_counts;
 	public Texture green;
@@ -88,7 +88,7 @@ public class WorldLogic : MonoBehaviour {
 		food_targets = new List<Vertex>();
 		dig_targets = new List<Vertex>();
 		fill_targets = new List<Vertex>();
-		attack_targets = new List<Vertex>();
+		attack_targets = new List<Enemy>();
 		food_counts = new Dictionary<Vertex, int>();
 		dig_counts = new Dictionary<Vertex, int>();
 		wg = gameObject.GetComponent<WorldGen>();
@@ -214,14 +214,14 @@ public class WorldLogic : MonoBehaviour {
 
 	public Vertex GetClosestEnemy(Vertex v){
 		float cur_distance = -1f;
-		Vertex closest = null;
-		foreach(Vertex t in attack_targets){
-			if(cur_distance == -1f || Vertex.Distance(v, t) < cur_distance){
-				cur_distance = Vertex.Distance(v, t);
-				closest = t;
+		Enemy closest = null;
+		foreach(Enemy e in attack_targets){
+			if(cur_distance == -1f || Vertex.Distance(v, e.vertex) < cur_distance){
+				cur_distance = Vertex.Distance(v, e.vertex);
+				closest = e;
 			}
 		}
-		return closest;
+		return closest.vertex;
 	}
 
 	public Vertex GetClosestDig(Vertex v){
