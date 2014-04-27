@@ -28,6 +28,18 @@ public class Burrow {
 	public bool Contains(Vertex v){
 		return blocks.Contains(v);
 	}
+
+	public int DepositFood(int f){
+		if(food + f < FoodCapacity()){
+			food += f;
+			return 0;
+		} else {
+			int room = FoodCapacity() - food;
+			food += room;
+			return f - room;
+		}
+		return f;
+	}
 	
 	public void Merge(Burrow b){
 		blocks.AddRange(b.blocks);
@@ -144,6 +156,13 @@ public class WorldLogic : MonoBehaviour {
 			//Debug.Log(v + " " + p);
 			GUI.DrawTexture(new Rect(p.x, Screen.height - p.y, 6, 6), yellow);
 		}
+		foreach(Burrow b in burrows){
+			foreach(Vertex v in b.blocks){
+				Vector3 p = Camera.main.WorldToScreenPoint(new Vector3((wg.transform.position.x + v.x), (wg.transform.position.y - v.y), 0));
+				//Debug.Log(v + " " + p);
+				GUI.DrawTexture(new Rect(p.x, Screen.height - p.y, 3, 3), green);
+			}
+		}
 	}
 
 	public void PopulateWorld(){
@@ -238,12 +257,20 @@ public class WorldLogic : MonoBehaviour {
 		float cur_distance = -1f;
 		Burrow closest = null;
 		foreach(Burrow b in burrows){
-			if((cur_distance == -1f || Vertex.Distance(b.main_block, v) < cur_distance) && b.food > b.FoodCapacity()){
+			if((cur_distance == -1f || Vertex.Distance(b.main_block, v) < cur_distance) && b.food < b.FoodCapacity()){
 				cur_distance = Vertex.Distance(b.main_block, v);
 				closest = b;
 			}
 		}
 		return closest;
+	}
+
+	public int DepositFood(Vertex v, int food){
+		Burrow b = VertexInBurrow(v);
+		if(b != null){
+			return b.DepositFood(food);
+		}
+		return food;
 	}
 
 	public Burrow GetClosestBurrowSleep(Vertex v){
@@ -263,6 +290,7 @@ public class WorldLogic : MonoBehaviour {
 		if(dig_counts[v] < 0){
 			dig_targets.Remove(v);
 			wg.SetVertex(v, WorldGen.TUNNEL);
+			PopulateBurrows();
 		}
 	}
 
@@ -282,6 +310,7 @@ public class WorldLogic : MonoBehaviour {
 		if(dig_counts[v] > dirt_strength){
 			fill_targets.Remove(v);
 			wg.SetVertex(v, WorldGen.DIRT);
+			PopulateBurrows();
 		}
 	}
 
@@ -311,5 +340,70 @@ public class WorldLogic : MonoBehaviour {
 
 	public int BurrowCount(){
 		return burrows.Count;
+	}
+
+	// Burrow logic
+	private Burrow VertexInBurrow(Vertex v){
+		foreach(Burrow b in burrows){
+			if(b.Contains(v)){
+				return b;
+			}
+		}
+		return null;
+	}
+
+	// How to find burrows
+	// Walk map looking for a tunnel with a tunnel over it and dirt bellow it, then continue right until either one of those stops being true
+	// Check each vertex to make sure it doesn't belong to a burrow, if it does make a new burrow out of what has been found and then merge
+	private void PopulateBurrows(){
+		Vertex cur_point = null;
+		Vertex start_of_burrow = null;
+		List<Vertex> vertex_in_burrow = new List<Vertex>();
+		Vertex one_above = null;
+		Vertex one_below = null;
+		Burrow growing = null;
+		for(int h = 1; h < wg.height - 1; h++){
+			for(int w = 1; w < wg.width - 1; w++){
+				cur_point = new Vertex(w, h);
+				one_above = new Vertex(w, h - 1);
+				one_below = new Vertex(w, h + 1);
+				if(start_of_burrow == null
+				   && wg.VertexToType(cur_point) == WorldGen.TUNNEL
+				   && wg.VertexToType(one_above) == WorldGen.TUNNEL
+				   && wg.VertexToType(one_below) == WorldGen.DIRT){
+					// We have found the start of a burrow
+					growing = VertexInBurrow(cur_point);
+					start_of_burrow = cur_point;
+					vertex_in_burrow.Add(cur_point);
+					vertex_in_burrow.Add(one_above);
+				} else if(wg.VertexToType(cur_point) == WorldGen.TUNNEL
+				          && wg.VertexToType(one_above) == WorldGen.TUNNEL
+				          && wg.VertexToType(one_below) == WorldGen.DIRT){
+					vertex_in_burrow.Add(cur_point);
+					vertex_in_burrow.Add(one_above);
+				} else if(start_of_burrow != null
+				          && (wg.VertexToType(cur_point) != WorldGen.TUNNEL
+				          || wg.VertexToType(one_above) != WorldGen.TUNNEL
+				          || wg.VertexToType(one_below) != WorldGen.DIRT)){
+					// We have found the end
+					if(vertex_in_burrow.Count < 4){
+						// burrow was too small
+						if(growing != null){
+							burrows.Remove(growing);
+						}
+					} else {
+						if(growing != null){
+							growing.blocks = vertex_in_burrow;
+						} else {
+							growing = new Burrow(vertex_in_burrow);
+							burrows.Add(growing);
+						}
+					}
+					growing = null;
+					start_of_burrow = null;
+					vertex_in_burrow = new List<Vertex>();
+				}
+			}
+		}
 	}
 }

@@ -131,6 +131,14 @@ public class RabbitLogic : MonoBehaviour {
 						}
 					} else {
 						//return to closest burrow with space
+						Burrow b = wl.GetClosestBurrowDepositFood(mySquare);
+						if(b != null){
+							currentDestination = b.main_block;
+							if(mySquare == currentDestination && Time.time > last_action + speed){
+								anim.SetTrigger("Dig");
+								food_hold = wl.DepositFood(mySquare, food_hold);
+							}
+						}
 					}
 				} else if(profession == "Gaurd"){
 					currentDestination = wl.GetClosestEnemy(mySquare);
