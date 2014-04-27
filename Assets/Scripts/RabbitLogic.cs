@@ -204,11 +204,12 @@ public class RabbitLogic : MonoBehaviour {
 							}
 						}
 					}
-				} else if(profession == "Gaurd"){
+				} else if(profession == "Guard"){
 					currentDestination = wl.GetClosestEnemy(mySquare);
 					if(mySquare == currentDestination && Time.time > last_action + speed){
 						anim.SetTrigger("Dig");
 						// Attempt to damage enemy for str
+						wl.DamageEnemy(mySquare, str);
 					}
 				}
 			}
@@ -236,6 +237,11 @@ public class RabbitLogic : MonoBehaviour {
 		if(Time.time > last_sleep + sleep_interval){
 			need_sleep = true;
 		}
+	}
+
+	public bool Damage(int d){
+		hp -= d;
+		return hp <= 0;
 	}
 
 	IEnumerator DeathWait(){

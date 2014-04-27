@@ -13,7 +13,7 @@ public class Burrow {
 		main_block = nblocks[0];
 		rabbits = 0;
 	}
-	
+
 	public int FoodCapacity(){
 		return blocks.Count * 2;
 	}
@@ -57,7 +57,7 @@ public class WorldLogic : MonoBehaviour {
 	private List<Vertex> food_targets;
 	private List<Vertex> dig_targets;
 	private List<Vertex> fill_targets;
-	private List<Vertex> attack_targets;
+	private List<Enemy> attack_targets;
 	private Dictionary<Vertex, int> food_counts;
 	private Dictionary<Vertex, int> dig_counts;
 	public Texture green;
@@ -83,12 +83,14 @@ public class WorldLogic : MonoBehaviour {
 	public GameObject rabbit;
 	public int starting_rabbits = 4;
 
+	public GameObject fox;
+
 	// Use this for initialization
 	void Start () {
 		food_targets = new List<Vertex>();
 		dig_targets = new List<Vertex>();
 		fill_targets = new List<Vertex>();
-		attack_targets = new List<Vertex>();
+		attack_targets = new List<Enemy>();
 		food_counts = new Dictionary<Vertex, int>();
 		dig_counts = new Dictionary<Vertex, int>();
 		wg = gameObject.GetComponent<WorldGen>();
@@ -113,11 +115,11 @@ public class WorldLogic : MonoBehaviour {
 			int type = wg.ClickToType();
 			Vertex target = wg.ClickToVertex();
 			if(type == WorldGen.CARROT){
-				if(!food_targets.Contains(target)){
+				if(!food_targets.Contains(target) && target.InBounds(new Vertex(wg.width, wg.height))){
 					food_targets.Add(target);
 				}
 			} else if(type == WorldGen.DIRT || type == WorldGen.GRASS){
-				if(!dig_targets.Contains(target)){
+				if(!dig_targets.Contains(target) && target.InBounds(new Vertex(wg.width, wg.height))){
 					dig_targets.Add(target);
 				}
 			}
@@ -210,18 +212,48 @@ public class WorldLogic : MonoBehaviour {
 				}
 			}
 		}
+
+		// Spawn Fox
+		for(int w = (wg.width / 2) + 6; w < (wg.width / 2) + 7; w++){
+			for(int h = 0; h < wg.height; h++){
+				Vertex v = new Vertex(w, h);
+				if(wg.VertexToType(v) == WorldGen.DIRT){
+					v = new Vertex(v.x, v.y - 1);
+					fox.SetActive(false);
+					GameObject f = (GameObject)Instantiate(fox, transform.position, transform.rotation);
+					f.GetComponent<Enemy>().pos = v;
+					attack_targets.Add(f.GetComponent<Enemy>());
+					f.SetActive(true);
+					h = wg.height;
+				}
+			}
+		}
 	}
 
 	public Vertex GetClosestEnemy(Vertex v){
 		float cur_distance = -1f;
-		Vertex closest = null;
-		foreach(Vertex t in attack_targets){
-			if(cur_distance == -1f || Vertex.Distance(v, t) < cur_distance){
-				cur_distance = Vertex.Distance(v, t);
-				closest = t;
+		Enemy closest = null;
+		foreach(Enemy e in attack_targets){
+			if(cur_distance == -1f || Vertex.Distance(v, e.pos) < cur_distance){
+				cur_distance = Vertex.Distance(v, e.pos);
+				closest = e;
 			}
 		}
-		return closest;
+		if(closest == null){
+			return null;
+		}
+		return closest.pos;
+	}
+
+	public void DamageEnemy(Vertex v, int d){
+		foreach(Enemy e in attack_targets){
+			if(e.pos == v){
+				bool k = e.Damage(d);
+				if(k){
+					attack_targets.Remove(e);
+				}
+			}
+		}
 	}
 
 	public Vertex GetClosestDig(Vertex v){

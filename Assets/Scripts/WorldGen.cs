@@ -146,7 +146,7 @@ public class WorldGen : MonoBehaviour {
 	}
 
 	public bool ValidDig(Vertex v){
-		if(v.x < world.GetLength(0) && v.x >= 0 && v.y < world.GetLength(1) && v.y >= 0){
+		if(v.x < world.GetLength(0) - 1 && v.x >= 0 && v.y < world.GetLength(1) - 1 && v.y >= 0){
 			bool top = world[v.x, v.y - 1] == TUNNEL;
 			bool topleft = world[v.x- 1, v.y- 1] == TUNNEL;
 			bool topright = world[v.x+ 1, v.y- 1] == TUNNEL;
