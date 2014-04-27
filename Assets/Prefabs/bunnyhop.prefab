@@ -71,6 +71,7 @@ MonoBehaviour:
   speed: .5
   hunger_tick: 10
   sleep_interval: 100
+  sleep_length: 30
   str: 1
   spd: 1
   profession: 

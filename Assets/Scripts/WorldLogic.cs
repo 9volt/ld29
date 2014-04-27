@@ -11,6 +11,7 @@ public class Burrow {
 	public Burrow(List<Vertex> nblocks){
 		blocks = nblocks;
 		main_block = nblocks[0];
+		rabbits = 0;
 	}
 	
 	public int FoodCapacity(){
@@ -21,8 +22,8 @@ public class Burrow {
 		return blocks.Count / 2;
 	}
 	
-	public Vertex GetRandomBlock(){
-		return blocks[Random.Range(0, blocks.Count - 1)];
+	public Vertex GetRandomBlock(int seed){
+		return blocks[seed % blocks.Count];
 	}
 	
 	public bool Contains(Vertex v){
@@ -282,6 +283,22 @@ public class WorldLogic : MonoBehaviour {
 			}
 		}
 		return closest;
+	}
+
+	public bool StartSleep(Vertex v){
+		Burrow b = VertexInBurrow(v);
+		if(b != null && b.rabbits < b.RabbitCapacity()){
+			b.rabbits++;
+			return true;
+		}
+		return false;
+	}
+
+	public void EndSleep(Vertex v){
+		Burrow b = VertexInBurrow(v);
+		if(b != null && b.rabbits > 0){
+			b.rabbits--;
+		}
 	}
 
 	public int DepositFood(Vertex v, int food){

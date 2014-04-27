@@ -16,6 +16,7 @@ public class RabbitLogic : MonoBehaviour {
 	public float hunger_tick = 10f;
 	private float last_hunger;
 	public float sleep_interval = 100f;
+	public float sleep_length = 30f;
 	private float last_sleep;
 	private Animator anim;
 	private int food_hold;
@@ -25,6 +26,10 @@ public class RabbitLogic : MonoBehaviour {
 
 	private bool digging = false;
 	private bool filling = false;
+	private bool sleeping = false;
+
+	// used for getting random vertex in burrow
+	private int rrand;
 
 	private NameGen ng;
 	public int str;
@@ -42,6 +47,7 @@ public class RabbitLogic : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		rrand = Random.Range(0, 100);
 		food_hold = 0;
 		last_hunger = Time.time;
 		last_action = Time.time;
@@ -97,15 +103,33 @@ public class RabbitLogic : MonoBehaviour {
 				}
 			}
 		} else {
+			if(sleeping){
+				if(Time.time > last_sleep + sleep_length){
+					sleeping = false;
+					need_sleep = false;
+					last_sleep = Time.time;
+					wl.EndSleep(mySquare);
+					anim.SetBool("Sleep", false);
+				}
 			// First check to make sure don't need sleep
-			if(CanGetSleep() && need_sleep){
+			} else if(CanGetSleep() && need_sleep){
 				// Find closest burrow with sleeping room
-				
+				Burrow b = wl.GetClosestBurrowSleep(mySquare);
+				if(b != null){
+					currentDestination = b.GetRandomBlock(rrand);
+					if(mySquare == currentDestination && Time.time > last_action + speed){
+						anim.SetBool("Sleep", true);
+						if(wl.StartSleep(mySquare)){
+							sleeping = true;
+							last_sleep = Time.time;
+						}
+					}
+				}
 			} else if(CanGetFood() && need_food){
 				// Find closest burrow with food
 				Burrow b = wl.GetClosestBurrowFood(mySquare);
 				if(b != null){
-					currentDestination = b.main_block;
+					currentDestination = b.GetRandomBlock(rrand);
 					if(mySquare == currentDestination && Time.time > last_action + speed){
 						anim.SetTrigger("Dig");
 						if(wl.EatFood(mySquare)){
@@ -172,13 +196,22 @@ public class RabbitLogic : MonoBehaviour {
 			if(hunger < (full * .25f)){
 				need_food = true;
 			}
-			if(hunger <= 0){
+			if(hunger < (full * .50f)){
+				if(hp < maxhp) hp++;
+			}
+			if(need_sleep && !sleeping){
+				hp -= 5;
+			}
+			if(hunger <= 0 && !sleeping){
 				hp--;
 				hunger = 0;
 			}
 		}
 		if(hp <= 0){
 			Die();
+		}
+		if(Time.time > last_sleep + sleep_interval){
+			need_sleep = true;
 		}
 	}
 
