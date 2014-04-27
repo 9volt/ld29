@@ -21,6 +21,9 @@ public class RabbitLogic : MonoBehaviour {
 	private bool need_sleep = false;
 	private bool need_food = false;
 
+	private bool digging = false;
+	private bool filling = false;
+
 	public NameGen ng;
 	public int str;
 	public int spd;
@@ -96,9 +99,23 @@ public class RabbitLogic : MonoBehaviour {
 			//else pick new Destination or work
 			} else {
 				currentDestination = wl.GetClosestDig(mySquare);
+				if(currentDestination == null){
+					currentDestination = wl.GetClosestFill(mySquare);
+					if(currentDestination != null){
+						filling = true;
+					}
+				} else {
+					digging = true;
+				}
 				if(mySquare == currentDestination && Time.time > last_action + speed){
 					anim.SetTrigger("Dig");
-					wl.Dig(mySquare, 1);
+					if(digging){
+						wl.Dig(mySquare, str);
+						digging = false;
+					}else if(filling){
+						wl.Fill(mySquare, str);
+						filling = false;
+					}
 				}
 			}
 		}
