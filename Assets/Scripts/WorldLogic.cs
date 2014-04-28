@@ -135,6 +135,7 @@ public class WorldLogic : MonoBehaviour {
 			if(season == SPRING){
 				year++;
 				DespawnFerrets();
+				DespawnFarmer();
 				PlantCrops();
 			}
 			if(season == WINTER){
@@ -250,6 +251,12 @@ public class WorldLogic : MonoBehaviour {
 	void DespawnFox(){
 		foreach(GameObject go in GameObject.FindGameObjectsWithTag("fox")){
 			go.GetComponent<Enemy>().GoHome();
+		}
+	}
+
+	void DespawnFarmer(){
+		foreach(GameObject go in GameObject.FindGameObjectsWithTag("farmer")){
+			go.GetComponent<Farmer>().GoHome();
 		}
 	}
 
