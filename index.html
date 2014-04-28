@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<title>Unity Web Player | ldtemp</title>
+		<title>Ludum Dare 29 | SimWarren</title>
 		<script type='text/javascript' src='https://ssl-webplayer.unity3d.com/download_webplayer-3.x/3.0/uo/jquery.min.js'></script>
 		<script type="text/javascript">
 		<!--
@@ -69,6 +69,9 @@
 			color: black;
 			text-align: center;
 		}
+        .manual{
+            text-align: left;
+        }
 		a:link, a:visited {
 			color: #000;
 		}
@@ -117,7 +120,8 @@
 		</style>
 	</head>
 	<body>
-		<p class="header"><span>Ludum Dare 29 | </span>SimWarren</p>
+		
+        
 		<div class="content">
 			<div id="unityPlayer">
 				<div class="missing">
@@ -128,5 +132,49 @@
 			</div>
 		</div>
 		<p class="footer">&laquo; created with <a href="http://unity3d.com/unity/" title="Go to unity3d.com">Unity</a> &raquo;</p>
+        <img src="images/logo.png">
+        <div class="manual">
+            <h1>How to Play</h1>
+
+            <p> You play a group of rabbits trying to survive. You decide to build your warren near a nice farm, but beware, it's not as safe here as it looks.</p>
+            <p>
+                You begin with 4 rabbits. 
+            </p>
+
+            <h2>Building Burrows</h2>
+            <p> 
+                To set a dirt square for digging left click. A yellow dot appears indicating that this square is set to be dug up. You can also right click to fill in a square. Rabbits that are set to burrow(see Rabbits) will look for squares marked for digging and dig them up.
+                Rabbits sleep, store food, eat, and mate in burrows. A burrow is a tunnel area that is <b>exactly</b> 2 squares high and at least 2 squares long. Green dots will appear to indicate that a tunnel area is an active burrow.
+            </p>
+            <img src="images/dig_selected.png">
+            <img src="images/burrow.png">
+           
+
+            <h2>Getting Food</h2>
+            <p>Similar to selecting a square for digging, you can left click a carrot to set it for foraging.  A green dot appears indicating that this square is set to be foraged. Each carrot square has multiple carrots. Rabbits set to forage will go the the square and grab a number of carrots equal to their strength, then store it in a burrow to eat later. Rabbits cannot eat food that is not stored in a burrow. Once a carrot square is out of carrots it becomes a tunnel. The upper left shows how many carrots your rabbits have stored and how much room you have in burrows to store food.</p>
+            <img src="images/carrot_selected.png">
+            
+            
+            <h2>Rabbits</h2>
+            <p>If you look in the bottom right you can see an information box telling you about the rabbit you have selected.</p>
+            <img src="images/info.png">
+            <p>
+            Some things you can see here:</p>
+            <ul>
+            <li>Rabbit's Name</li>
+            <li>Set Action. There are three actions. Burrow, Forage, and Guard. Click to switch between them.</li>
+            <li>Current Action. What the rabbit is doing right now. e.g. idling, foraging, looking for mate, etc.</li>
+            <li>Stats. Spd determines how quick the rabbit is. Str determines how much dirt it can dig and how many carrots it can carry.</li>
+            <li>Hunger Bar. Rabbits will go to a food storing burrow to eat when they are hungry. If a rabbit is unable to eat its hunger will decrease to 0, at which point its health will begin to decrease.</li>
+            <li>HP Bar. This is the rabbit's health. If it runs out it dies.</li>
+            </ul>
+            
+            <p>Use the Tab key to switch between your rabbits. The currently selected rabbit will appear darker. Use the button to switch the rabbit's current action between burrowing, foraging, and guarding. Burrowers will dig up squares marked for digging. Foragers will fetch food from carrot squares marked for foraging. Rabbits set to guard will run to the safety of the burrow and hide. Rabbits that cannot reach a selected square will give up on it. If your rabbits are not digging or foraging make sure they have the right action selected and that they have a path to the square. Rabbits can die from starvation, being eaten, or not getting enough sleep. Make sure the rabbits have burrows or they will not be able to store food, eat, sleep, or mate. The upper left shows you how many rabbits you have and how much room is available in your burrows to house them.</p>
+            <img src="images/upper.png">
+            <h2>Seasons</h2>
+            
+            <p>The upper left has an image indicating the current season. As the seasons change sometimes enemies will appear to eat your rabbits.</p>
+        </div>
+
 	</body>
 </html>
