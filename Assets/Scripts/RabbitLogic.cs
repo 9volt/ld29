@@ -48,7 +48,7 @@ public class RabbitLogic : MonoBehaviour {
 	public const int MALE = 0;
 	public const int FEMALE = 1;
 
-	private bool horney = false;
+	private bool horny = false;
 	public float mating_cooldown = 30f;
 	private float last_mating;
 	public bool ready_for_mate = false;
@@ -133,7 +133,7 @@ public class RabbitLogic : MonoBehaviour {
 	void Mate(RabbitLogic male){
 		sexing = true;
 		sex_start = Time.time;
-		horney = false;
+		horny = false;
 		last_mating = Time.time;
 		ready_for_mate = false;
 		father = male;
@@ -183,7 +183,7 @@ public class RabbitLogic : MonoBehaviour {
 			// animation???
 			anim.SetBool("Mating", true);
 			current_action = "waiting for mate";
-		} else if(horney && sex == FEMALE && CanGetSleep()){
+		} else if(horny && sex == FEMALE && CanGetSleep()){
 			Burrow b = wl.GetClosestBurrowSleep(mySquare);
 			if(b != null){
 				currentDestination = b.main_block;
@@ -193,7 +193,7 @@ public class RabbitLogic : MonoBehaviour {
 					current_action = "finding mating burrow";
 				}
 			}
-		} else if(horney && sex == MALE && CanGetFemale() != null){
+		} else if(horny && sex == MALE && CanGetFemale() != null){
 			RabbitLogic female = CanGetFemale();
 			if(female.mySquare == mySquare){
 				anim.SetBool("Hump", true);
@@ -201,7 +201,6 @@ public class RabbitLogic : MonoBehaviour {
 				sexing = true;
 				sex_start = Time.time;
 				female.Mate(this);
-				horney = false;
 				last_mating = Time.time;
 			} else {
 				currentDestination = female.mySquare;
@@ -259,7 +258,7 @@ public class RabbitLogic : MonoBehaviour {
 							food_hold = wl.DepositFood(mySquare, food_hold);
 						}
 					} else {
-						current_action = "need burrow to store food";
+						current_action = "looking for burrow to store food";
 					}
 				}
 			} else if(profession == "Guard"){
@@ -354,9 +353,10 @@ public class RabbitLogic : MonoBehaviour {
 			need_sleep = true;
 		}
 		if(Time.time > last_mating + mating_cooldown) {
-			horney = true;
-		} else if(sex == MALE){
-			horney = true;
+			horny = true;
+		}
+		if(sex == MALE){
+			horny = true;
 		}
 	}
 
