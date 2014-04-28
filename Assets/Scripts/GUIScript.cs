@@ -67,10 +67,11 @@ public class GUIScript : MonoBehaviour {
 
 			if (g.Length <= 0){
 				gameOver();
-			}else if(wl.year == 4){
+			}
+			/*else if(wl.year == 4){
 				won = true;
 				gameOver();
-			}
+			}*/
 
 			GUI.Label(new Rect(100,10,100,32),"" + g.Length + " / " + wl.BurrowSleepCapacity() ); 
 			GUI.DrawTexture(new Rect(150,0,32,32), houses);
@@ -124,17 +125,19 @@ public class GUIScript : MonoBehaviour {
 
 			//credits
 			int i;
-			if(won){
-				GUI.Label(new Rect(Screen.width/2 - 120, scroll + 100, 500, 40), "Congratulations! Your warren has survived!");
-			}
-			for(i=0; i < myPastRabbits.Length-1; i++){ // -1 becuase the bunnyhop prefab is also caught by FindObjectsOfTypeAll
+ 
+			GUI.Label(new Rect(Screen.width/2 - 160, scroll + 50, 500, 40), "Your warren survived " + (((wl.year - 1) * 4) + (wl.season)) + " seasons and had a total of " + (myPastRabbits.Length -1) + " rabbits.");
+
+
+			GUI.Label(new Rect(Screen.width/2 - 120, scroll +  120, 300, 40 ), "Gone, but not forgotten:");
+			for(i = 0; i < myPastRabbits.Length-1; i++){ // -1 becuase the bunnyhop prefab is also caught by FindObjectsOfTypeAll
 				currentRabbit = myPastRabbits[i];
-				if(!(currentRabbit.hp > 0)){
-					GUI.Label(new Rect(Screen.width/2 - 120, scroll + ((i+1)* 130), 300, 40 ), "Gone, but not forgotten");
-				}else{
-					currentRabbit.gameObject.SetActive(false);
-					GUI.Label(new Rect(Screen.width/2 - 120, scroll + ((i+1)* 130), 300,40), "The Great Survivor");
-				}
+				//if(!(currentRabbit.hp > 0)){
+					
+				//}else{
+				//	currentRabbit.gameObject.SetActive(false);
+				//	GUI.Label(new Rect(Screen.width/2 - 120, scroll + ((i+1)* 130), 300,40), "The Great Survivor");
+				//}
 				GUI.Label(new Rect(Screen.width/2 - 120, scroll + 20 + ((i+1)* 130), 300,40), currentRabbit.myname);
 				GUI.DrawTexture(new Rect(Screen.width/2 - 120,  scroll + 40 + ((i+1)* 130), bunny.width, bunny.height), bunny);
 				GUI.Label(new Rect(Screen.width/2 - 120 + bunny.width + 10,  scroll + 40 + ((i+1)* 130), 300, 40), currentRabbit.cause_of_death);
