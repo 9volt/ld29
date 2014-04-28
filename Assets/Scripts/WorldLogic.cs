@@ -245,7 +245,17 @@ public class WorldLogic : MonoBehaviour {
 	}
 
 	void SpawnHawks(){
-
+	/*	for(int w = wg.width - year - 1; w < wg.width - 1; w++){ //havent gotten to test yet
+			for(int h = 0; h < wg.height; h++){
+				Vertex v = new Vertex(w, h);
+				if(wg.VertexToType(v) == WorldGen.AIR){
+					v = new Vertex(v.x, v.y - 1);
+					GameObject f = (GameObject)Instantiate(hawk, transform.position, transform.rotation);
+					f.SetActive(true);
+					h = wg.height;
+				}
+			}
+		}*/
 	}
 
 	void PlantCrops(){
