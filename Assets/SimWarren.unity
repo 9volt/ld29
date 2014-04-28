@@ -612,6 +612,7 @@ MonoBehaviour:
   fox: {fileID: 100000, guid: d321a340db6f6b145ac9d50c58a93775, type: 2}
   hawk: {fileID: 100000, guid: bb06a8e70e0f61f4ba150a3a5dd32dfd, type: 2}
   farmer: {fileID: 100000, guid: 03bc7ebe6b36f614eaba8863cd421b00, type: 2}
+  annual_carrots: 5
 --- !u!82 &1984020723
 AudioSource:
   m_ObjectHideFlags: 0
