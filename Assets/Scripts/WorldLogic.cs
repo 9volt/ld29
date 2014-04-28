@@ -88,8 +88,11 @@ public class WorldLogic : MonoBehaviour {
 	public GameObject fox;
 	public GameObject hawk;
 	public GameObject farmer;
+	public GameObject ferret;
 
 	public int annual_carrots = 5;
+
+	private List<Burrow> ferreted_burrows;
 
 
 	// Use this for initialization
@@ -99,6 +102,7 @@ public class WorldLogic : MonoBehaviour {
 		fill_targets = new List<Vertex>();
 		food_counts = new Dictionary<Vertex, int>();
 		dig_counts = new Dictionary<Vertex, int>();
+		ferreted_burrows = new List<Burrow>();
 		wg = gameObject.GetComponent<WorldGen>();
 		ass = gameObject.GetComponent<AudioSource>();
 		ass2 = Camera.main.gameObject.GetComponent<AudioSource>();
@@ -372,6 +376,27 @@ public class WorldLogic : MonoBehaviour {
 			}
 		}
 		return closest;
+	}
+
+	public Burrow GetClosestBurrowOccupy(Vertex v){
+		float cur_distance = -1f;
+		Burrow closest = null;
+		foreach(Burrow b in burrows){
+			if((cur_distance == -1f || Vertex.Distance(b.main_block, v) < cur_distance) && !ferreted_burrows.Contains(b)){
+				cur_distance = Vertex.Distance(b.main_block, v);
+				closest = b;
+			}
+		}
+		return closest;
+	}
+
+	public Burrow OccupyBurrow(Vertex v){
+		Burrow b = VertexInBurrow(v);
+		if(b != null && !ferreted_burrows.Contains(b)){
+			ferreted_burrows.Add(b);
+			return b;
+		}
+		return null;
 	}
 
 	public Burrow GetClosestBurrowDepositFood(Vertex v){
