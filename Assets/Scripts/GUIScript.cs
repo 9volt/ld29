@@ -26,6 +26,7 @@ public class GUIScript : MonoBehaviour {
 	public GameObject bg;
 	public GameObject bg2;
 	public Texture black;
+	public bool won = false;
 
 	// Use this for initialization
 	void Start () {
@@ -65,6 +66,9 @@ public class GUIScript : MonoBehaviour {
 			GameObject[] g = GameObject.FindGameObjectsWithTag("Rabbit");
 
 			if (g.Length <= 0){
+				gameOver();
+			}else if(wl.year == 4){
+				won = true;
 				gameOver();
 			}
 
@@ -115,17 +119,21 @@ public class GUIScript : MonoBehaviour {
 			//play again button
 			if(GUI.Button(new Rect(Screen.width - 215, Screen.height - 160, 150, 150), "Play Again?")){
 				reload = true;
-				Application.LoadLevel("SimWarren");//change to start scene
+				Application.LoadLevel("opening");//change to start scene
 			}
 
 			//credits
 			int i;
+			if(won){
+				GUI.Label(new Rect(Screen.width/2 - 120, scroll + 100, 500, 40), "Congratulations! Your warren has survived!");
+			}
 			for(i=0; i < myPastRabbits.Length-1; i++){ // -1 becuase the bunnyhop prefab is also caught by FindObjectsOfTypeAll
 				currentRabbit = myPastRabbits[i];
-				if(!currentRabbit.gameObject.activeSelf){
+				if(!(currentRabbit.hp > 0)){
 					GUI.Label(new Rect(Screen.width/2 - 120, scroll + ((i+1)* 130), 300, 40 ), "Gone, but not forgotten");
 				}else{
-					GUI.Label(new Rect(Screen.width/2 - 120, scroll + ((i+1)* 130), 300,40), "The great survivor");
+					currentRabbit.gameObject.SetActive(false);
+					GUI.Label(new Rect(Screen.width/2 - 120, scroll + ((i+1)* 130), 300,40), "The Great Survivor");
 				}
 				GUI.Label(new Rect(Screen.width/2 - 120, scroll + 20 + ((i+1)* 130), 300,40), currentRabbit.myname);
 				GUI.DrawTexture(new Rect(Screen.width/2 - 120,  scroll + 40 + ((i+1)* 130), bunny.width, bunny.height), bunny);
