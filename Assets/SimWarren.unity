@@ -401,6 +401,7 @@ MonoBehaviour:
   bg: {fileID: 1296940671}
   bg2: {fileID: 225550143}
   black: {fileID: 2800000, guid: f44aecaf5be3d4547a8acc9fddb6ea2e, type: 3}
+  won: 0
 --- !u!114 &1214936245
 MonoBehaviour:
   m_ObjectHideFlags: 0

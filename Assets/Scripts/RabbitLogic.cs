@@ -84,9 +84,7 @@ public class RabbitLogic : MonoBehaviour {
 		str = Random.Range(1,4);
 		spd = Random.Range(1,4);
 		speed = 1 / (float)spd;
-		if(profession == null){
-			profession = "Burrower";
-		}
+		profession = "Burrower";
 		if(sex == null){
 			sex = Random.Range(0,2);
 		}
