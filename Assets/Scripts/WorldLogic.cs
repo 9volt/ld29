@@ -128,6 +128,7 @@ public class WorldLogic : MonoBehaviour {
 			}
 			if(season == SPRING){
 				year++;
+				DespawnFerrets();
 				PlantCrops();
 			}
 			if(season == WINTER){
@@ -231,6 +232,13 @@ public class WorldLogic : MonoBehaviour {
 
 	}
 
+	void DespawnFerrets(){
+		foreach(GameObject go in GameObject.FindGameObjectsWithTag("ferret")){
+			go.GetComponent<Enemy>().GoHome();
+		}
+		ferreted_burrows = new List<Burrow>();
+	}
+
 	void DespawnFox(){
 		foreach(GameObject go in GameObject.FindGameObjectsWithTag("fox")){
 			go.GetComponent<Enemy>().GoHome();
@@ -293,6 +301,13 @@ public class WorldLogic : MonoBehaviour {
 		ass2.Play();
 	}
 
+	public void SpawnFerret(Vertex v){
+		ferret.SetActive(false);
+		GameObject f = (GameObject)Instantiate(ferret,wg.VertexToVector3(v), transform.rotation);//wg.VertexToVector3(v)
+		f.GetComponent<Ferret>().pos = v;
+		f.SetActive(true);
+	}
+	
 	void PlantCrops(){
 		// Create Farm
 		while(food_counts.Keys.Count < annual_carrots){
@@ -370,7 +385,7 @@ public class WorldLogic : MonoBehaviour {
 		float cur_distance = -1f;
 		Burrow closest = null;
 		foreach(Burrow b in burrows){
-			if((cur_distance == -1f || Vertex.Distance(b.main_block, v) < cur_distance) && b.food > 0){
+			if((cur_distance == -1f || Vertex.Distance(b.main_block, v) < cur_distance) && b.food > 0 && !ferreted_burrows.Contains(b)){
 				cur_distance = Vertex.Distance(b.main_block, v);
 				closest = b;
 			}
@@ -403,7 +418,7 @@ public class WorldLogic : MonoBehaviour {
 		float cur_distance = -1f;
 		Burrow closest = null;
 		foreach(Burrow b in burrows){
-			if((cur_distance == -1f || Vertex.Distance(b.main_block, v) < cur_distance) && b.food < b.FoodCapacity()){
+			if((cur_distance == -1f || Vertex.Distance(b.main_block, v) < cur_distance) && b.food < b.FoodCapacity() && !ferreted_burrows.Contains(b)){
 				cur_distance = Vertex.Distance(b.main_block, v);
 				closest = b;
 			}
@@ -449,7 +464,7 @@ public class WorldLogic : MonoBehaviour {
 		float cur_distance = -1f;
 		Burrow closest = null;
 		foreach(Burrow b in burrows){
-			if((cur_distance == -1f || Vertex.Distance(b.main_block, v) < cur_distance) && b.rabbits < b.RabbitCapacity()){
+			if((cur_distance == -1f || Vertex.Distance(b.main_block, v) < cur_distance) && b.rabbits < b.RabbitCapacity() && !ferreted_burrows.Contains(b)){
 				cur_distance = Vertex.Distance(b.main_block, v);
 				closest = b;
 			}

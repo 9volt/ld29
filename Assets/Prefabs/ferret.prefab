@@ -9,13 +9,13 @@ GameObject:
   m_Component:
   - 4: {fileID: 400000}
   - 212: {fileID: 21200000}
-  - 95: {fileID: 0}
+  - 95: {fileID: 9500000}
   - 114: {fileID: 11400002}
   - 114: {fileID: 11400004}
   - 114: {fileID: 11400000}
   m_Layer: 0
   m_Name: ferret
-  m_TagString: fox
+  m_TagString: ferret
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -40,26 +40,26 @@ Animator:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 16555b503ed7c7146b08a2fdceedffcb, type: 2}
+  m_Controller: {fileID: 9100000, guid: 2e5ff7c247460cd4ca1df0c718d428ae, type: 2}
   m_CullingMode: 0
   m_ApplyRootMotion: 1
   m_AnimatePhysics: 0
   m_HasTransformHierarchy: 1
 --- !u!114 &11400000
 MonoBehaviour:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3edf40bbc98d4f14ba8c0cd371d60928, type: 3}
+  m_Script: {fileID: 11500000, guid: d7a8acb40bb925d4daab979409671384, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxhp: 200
-  str: 50
+  maxhp: 10
+  str: 1
   spd: 3
-  type: fox
+  type: ferret
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1

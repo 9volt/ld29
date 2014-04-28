@@ -19,6 +19,7 @@ public class Ferret : MonoBehaviour {
 	public int str = 5;
 	public int spd = 3;
 	public string type;
+	private bool occupying = false;
 
 	// Use this for initialization
 	void Start () {
@@ -48,26 +49,22 @@ public class Ferret : MonoBehaviour {
 	}
 	
 	void UpdateTarget(){
-		if(hp <= 0){
-			gameObject.SetActive(false);
-		} else if(target != null){
+		if(target != null){
 			if(Time.time > last_action + speed){
-				//anim.SetTrigger("Pounce");
-				last_action = Time.time;
-				bool b = target.Damage(type, str);
-				if(b){
-					hp -= str;
-					target = null;
+				foreach(GameObject go in GameObject.FindGameObjectsWithTag("Rabbit")){
+					RabbitLogic r = go.GetComponent<RabbitLogic>();
+					if(target.Contains(r.mySquare)){
+						r.Damage("ferret", str);
+					}
 				}
-			} else {
-				currentDestination = target.mySquare;
+				last_action = Time.time;
 			}
 		}
 	}
 
 	public void GoHome(){
 		Debug.Log("leaving");
-		hp = 0;
+		gameObject.SetActive(false);
 	}
 
 	// Update is called once per frame
@@ -76,7 +73,9 @@ public class Ferret : MonoBehaviour {
 		if(currentDestination != null && pos != currentDestination){
 			if(!rm.Moving){
 				pos = next_node;
-				UpdateTarget();
+				if(!occupying){
+					FindTarget();
+				}
 				List<Vertex> p = rf.FindPath(pos, currentDestination, wg.GetPathfindingCosts());
 				if(p != null && p.Count > 1){
 					next_node = p[1];
@@ -85,9 +84,17 @@ public class Ferret : MonoBehaviour {
 					currentDestination = pos;
 				}
 			}
+		} else if(currentDestination != null && target != null && pos == currentDestination && !occupying){
+			target = wl.OccupyBurrow(pos);
+			if(target != null){
+				occupying = true;
+			}
 		} else {
-			FindTarget();
-			UpdateTarget();
+			if(!occupying){
+				FindTarget();
+			}else{
+				UpdateTarget();
+			}
 		}
 	}
 }
