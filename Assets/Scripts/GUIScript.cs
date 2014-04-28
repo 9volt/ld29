@@ -162,6 +162,15 @@ public class GUIScript : MonoBehaviour {
 		Destroy(gameObject.GetComponent<CameraMove>());
 		bg.renderer.material.mainTexture = black;
 		bg2.renderer.material.mainTexture = black;
+		Debug.Log(PlayerPrefs.GetInt("Most Rabbits", 0));
 
+		if (PlayerPrefs.GetInt("Most Rabbits", 0) < (myPastRabbits.Length-1)){
+			Debug.Log("trying to save rabbits");
+			PlayerPrefs.SetInt("Most Rabbits", myPastRabbits.Length-1);
+		}
+		if (PlayerPrefs.GetInt("Most Seasons", 0) < ((((wl.year - 1) * 4) + (wl.season)) )){
+			PlayerPrefs.SetInt("Most Seasons", ((wl.year - 1) * 4) + (wl.season));
+		}
+		PlayerPrefs.Save();
 	}
 }
