@@ -61,16 +61,17 @@ public class GUIScript : MonoBehaviour {
 		 if(!game_over){
 			// Draw season and Burrow Stats
 			GUI.Box(new Rect(0, 0, 400,42), "");
-			GUI.DrawTexture(new Rect(0,0,32,32), season_art[wl.season]);
+			GUI.DrawTexture(new Rect(5,5,32,32), season_art[wl.season]);
 			GUI.DrawTexture(new Rect(70,0,32,32), bunny);
 			GameObject[] g = GameObject.FindGameObjectsWithTag("Rabbit");
 
 			if (g.Length <= 0){
 				gameOver();
-			}else if(wl.year == 4){
+			}
+			/*else if(wl.year == 4){
 				won = true;
 				gameOver();
-			}
+			}*/
 
 			GUI.Label(new Rect(100,10,100,32),"" + g.Length + " / " + wl.BurrowSleepCapacity() ); 
 			GUI.DrawTexture(new Rect(150,0,32,32), houses);
@@ -124,17 +125,19 @@ public class GUIScript : MonoBehaviour {
 
 			//credits
 			int i;
-			if(won){
-				GUI.Label(new Rect(Screen.width/2 - 120, scroll + 100, 500, 40), "Congratulations! Your warren has survived!");
-			}
-			for(i=0; i < myPastRabbits.Length-1; i++){ // -1 becuase the bunnyhop prefab is also caught by FindObjectsOfTypeAll
+ 
+			GUI.Label(new Rect(Screen.width/2 - 160, scroll + 50, 500, 40), "Your warren survived " + (((wl.year - 1) * 4) + (wl.season)) + " seasons and had a total of " + (myPastRabbits.Length -1) + " rabbits.");
+
+
+			GUI.Label(new Rect(Screen.width/2 - 120, scroll +  120, 300, 40 ), "Gone, but not forgotten:");
+			for(i = 0; i < myPastRabbits.Length-1; i++){ // -1 becuase the bunnyhop prefab is also caught by FindObjectsOfTypeAll
 				currentRabbit = myPastRabbits[i];
-				if(!(currentRabbit.hp > 0)){
-					GUI.Label(new Rect(Screen.width/2 - 120, scroll + ((i+1)* 130), 300, 40 ), "Gone, but not forgotten");
-				}else{
-					currentRabbit.gameObject.SetActive(false);
-					GUI.Label(new Rect(Screen.width/2 - 120, scroll + ((i+1)* 130), 300,40), "The Great Survivor");
-				}
+				//if(!(currentRabbit.hp > 0)){
+					
+				//}else{
+				//	currentRabbit.gameObject.SetActive(false);
+				//	GUI.Label(new Rect(Screen.width/2 - 120, scroll + ((i+1)* 130), 300,40), "The Great Survivor");
+				//}
 				GUI.Label(new Rect(Screen.width/2 - 120, scroll + 20 + ((i+1)* 130), 300,40), currentRabbit.myname);
 				GUI.DrawTexture(new Rect(Screen.width/2 - 120,  scroll + 40 + ((i+1)* 130), bunny.width, bunny.height), bunny);
 				GUI.Label(new Rect(Screen.width/2 - 120 + bunny.width + 10,  scroll + 40 + ((i+1)* 130), 300, 40), currentRabbit.cause_of_death);
@@ -159,6 +162,15 @@ public class GUIScript : MonoBehaviour {
 		Destroy(gameObject.GetComponent<CameraMove>());
 		bg.renderer.material.mainTexture = black;
 		bg2.renderer.material.mainTexture = black;
+		Debug.Log(PlayerPrefs.GetInt("Most Rabbits", 0));
 
+		if (PlayerPrefs.GetInt("Most Rabbits", 0) < (myPastRabbits.Length-1)){
+			Debug.Log("trying to save rabbits");
+			PlayerPrefs.SetInt("Most Rabbits", myPastRabbits.Length-1);
+		}
+		if (PlayerPrefs.GetInt("Most Seasons", 0) < ((((wl.year - 1) * 4) + (wl.season)) )){
+			PlayerPrefs.SetInt("Most Seasons", ((wl.year - 1) * 4) + (wl.season));
+		}
+		PlayerPrefs.Save();
 	}
 }
