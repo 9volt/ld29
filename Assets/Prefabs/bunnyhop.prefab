@@ -69,7 +69,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: .5
-  hunger_tick: 5
+  hunger_tick: 7.5
   sleep_interval: 45
   sleep_length: 20
   str: 1
@@ -84,6 +84,8 @@ MonoBehaviour:
   sex_length: 1
   mating_cooldown: 90
   ready_for_mate: 0
+  cause_of_death: 
+  starting_rabbit: 0
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1
