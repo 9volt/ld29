@@ -87,6 +87,7 @@ public class WorldLogic : MonoBehaviour {
 
 	public GameObject fox;
 	public GameObject hawk;
+	public GameObject farmer;
 
 
 	// Use this for initialization
@@ -130,6 +131,7 @@ public class WorldLogic : MonoBehaviour {
 			if(season == WINTER){
 				DespawnFox();
 				DespawnHawk();
+				SpawnFarmer();
 				KillCrops();
 			}
 			last_season = Time.time;
@@ -228,8 +230,8 @@ public class WorldLogic : MonoBehaviour {
 	}
 
 	void DespawnFox(){
-		foreach(Enemy e in attack_targets){
-			e.GoHome();
+		foreach(GameObject go in GameObject.FindGameObjectsWithTag("fox")){
+			go.GetComponent<Enemy>().GoHome();
 		}
 		attack_targets = new List<Enemy>();
 	}
@@ -242,7 +244,7 @@ public class WorldLogic : MonoBehaviour {
 
 	void SpawnFoxes(){
 		// Spawn Fox
-		for(int w = wg.width - year - 1; w < wg.width - 1; w++){
+		for(int w = wg.width - year - 6; w < wg.width - 6; w++){
 			for(int h = 0; h < wg.height; h++){
 				Vertex v = new Vertex(w, h);
 				if(wg.VertexToType(v) == WorldGen.DIRT){
@@ -262,7 +264,7 @@ public class WorldLogic : MonoBehaviour {
 	}
 
 	void SpawnHawks(){
-		for(int w = wg.width - year - 1; w < wg.width - 1; w++){ //havent gotten to test yet
+		for(int w = wg.width - year - 1; w < wg.width - 1; w++){ 
 			for(int h = 0; h < wg.height; h++){
 				Vertex v = new Vertex(w, h);
 				if(wg.VertexToType(v) == WorldGen.AIR){
@@ -273,6 +275,26 @@ public class WorldLogic : MonoBehaviour {
 				}
 			}
 		}
+	}
+
+	void SpawnFarmer(){
+		// Spawn Farmer
+		int w = 5;
+		for(int h = 0; h < wg.height; h++){
+			Vertex v = new Vertex(w, h);
+			if(wg.VertexToType(v) == WorldGen.DIRT){
+				v = new Vertex(v.x, v.y - 1);
+				//farmer.SetActive(false);
+				GameObject f = (GameObject)Instantiate(farmer,wg.VertexToVector3(v), transform.rotation);
+				//f.GetComponent<Enemy>().pos = v;
+				//attack_targets.Add(f.GetComponent<Enemy>());
+				//f.SetActive(true);
+				h = wg.height;
+			}
+		}
+		ass.clip = oh_shit_a_fox;
+		ass.loop = false;
+		ass.Play();
 	}
 
 	void PlantCrops(){

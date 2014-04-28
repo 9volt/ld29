@@ -67,6 +67,7 @@ public class Enemy : MonoBehaviour {
 	}
 
 	public void GoHome(){
+		Debug.Log("leaving");
 		hp = 0;
 	}
 
