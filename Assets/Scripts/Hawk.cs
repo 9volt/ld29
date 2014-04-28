@@ -15,7 +15,6 @@ public class Hawk : MonoBehaviour {
 	void Start () {
 		wg = GameObject.FindGameObjectWithTag("world").GetComponent<WorldGen>();
 		speed = Random.Range(5,12);
-		Camera.main.gameObject.GetComponent<CameraMove>().SetPosition(wg.Vector3ToVertex(transform.position));
 	}
 	
 	// Update is called once per frame
