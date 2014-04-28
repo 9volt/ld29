@@ -39,7 +39,7 @@ public class Hawk : MonoBehaviour {
 				}else{
 
 					//make sure this rabbit hasn't gone back underground
-					if(wg.VertexToType(my_rabbit.GetComponent<RabbitLogic>().mySquare)  == WorldGen.AIR){
+					if(wg.VertexToType(my_rabbit.GetComponent<RabbitLogic>().mySquare) == WorldGen.AIR && my_rabbit.GetComponent<RabbitLogic>().hp > 0){
 
 						//face the rabbit
 						if( (facingleft && my_rabbit.transform.position.x > transform.position.x) || (!facingleft && my_rabbit.transform.position.x < transform.position.x)){
