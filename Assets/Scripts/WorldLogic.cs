@@ -89,6 +89,8 @@ public class WorldLogic : MonoBehaviour {
 	public GameObject hawk;
 	public GameObject farmer;
 
+	public int annual_carrots = 5;
+
 
 	// Use this for initialization
 	void Start () {
@@ -289,16 +291,18 @@ public class WorldLogic : MonoBehaviour {
 
 	void PlantCrops(){
 		// Create Farm
-		for(int w = 1; w < wg.width - 1; w++){
-			for(int h = 1; h < wg.height - 1; h++){
-				Vertex v = new Vertex(w, h - 1);
-				int t = wg.VertexToType(v);
-				if(t == WorldGen.AIR){
-					v = new Vertex(w, h);
-					t = wg.VertexToType(v);
-					if(t == WorldGen.DIRT && Random.Range(0f, 1f) < random_food){
-						food_counts[v] = food_amount;
-						wg.SetVertex(v, WorldGen.CARROT);
+		while(food_counts.Keys.Count < annual_carrots){
+			for(int w = 1; w < wg.width - 1; w++){
+				for(int h = 1; h < wg.height - 1; h++){
+					Vertex v = new Vertex(w, h - 1);
+					int t = wg.VertexToType(v);
+					if(t == WorldGen.AIR && food_counts.Keys.Count < annual_carrots){
+						v = new Vertex(w, h);
+						t = wg.VertexToType(v);
+						if(t == WorldGen.DIRT && Random.Range(0f, 1f) < random_food){
+							food_counts[v] = food_amount;
+							wg.SetVertex(v, WorldGen.CARROT);
+						}
 					}
 				}
 			}
@@ -420,7 +424,7 @@ public class WorldLogic : MonoBehaviour {
 		float cur_distance = -1f;
 		Burrow closest = null;
 		foreach(Burrow b in burrows){
-			if((cur_distance == -1f || (Vertex.Distance(b.main_block, v) < cur_distance) && b.rabbits < b.RabbitCapacity())){
+			if((cur_distance == -1f || Vertex.Distance(b.main_block, v) < cur_distance) && b.rabbits < b.RabbitCapacity()){
 				cur_distance = Vertex.Distance(b.main_block, v);
 				closest = b;
 			}
