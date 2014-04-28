@@ -57,7 +57,6 @@ public class WorldLogic : MonoBehaviour {
 	private List<Vertex> food_targets;
 	private List<Vertex> dig_targets;
 	private List<Vertex> fill_targets;
-	private List<Enemy> attack_targets;
 	private Dictionary<Vertex, int> food_counts;
 	private Dictionary<Vertex, int> dig_counts;
 	public Texture green;
@@ -79,6 +78,7 @@ public class WorldLogic : MonoBehaviour {
 	public AudioClip[] seasons;
 	public AudioClip oh_shit_a_fox;
 	private AudioSource ass;
+	private AudioSource ass2;
 	
 	private List<Burrow> burrows;
 
@@ -95,11 +95,11 @@ public class WorldLogic : MonoBehaviour {
 		food_targets = new List<Vertex>();
 		dig_targets = new List<Vertex>();
 		fill_targets = new List<Vertex>();
-		attack_targets = new List<Enemy>();
 		food_counts = new Dictionary<Vertex, int>();
 		dig_counts = new Dictionary<Vertex, int>();
 		wg = gameObject.GetComponent<WorldGen>();
 		ass = gameObject.GetComponent<AudioSource>();
+		ass2 = Camera.main.gameObject.GetComponent<AudioSource>();
 		ass.clip = seasons[season];
 		ass.Play();
 		last_season = Time.time;
@@ -109,15 +109,11 @@ public class WorldLogic : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		// Check the music
-		if(!ass.isPlaying && ass.clip != seasons[season]) {
-			ass.loop = true;
-			ass.clip = seasons[season];
-			ass.Play();
-		}
 		// Update the season
 		if(Time.time > season_length + last_season){
 			season = (season + 1) % seasons.Length;
+			ass.clip = seasons[season];
+			ass.Play();
 			if(season == FALL){
 				SpawnFoxes();
 			}
@@ -233,7 +229,6 @@ public class WorldLogic : MonoBehaviour {
 		foreach(GameObject go in GameObject.FindGameObjectsWithTag("fox")){
 			go.GetComponent<Enemy>().GoHome();
 		}
-		attack_targets = new List<Enemy>();
 	}
 
 	void DespawnHawk(){
@@ -252,15 +247,11 @@ public class WorldLogic : MonoBehaviour {
 					fox.SetActive(false);
 					GameObject f = (GameObject)Instantiate(fox, transform.position, transform.rotation);
 					f.GetComponent<Enemy>().pos = v;
-					attack_targets.Add(f.GetComponent<Enemy>());
 					f.SetActive(true);
 					h = wg.height;
 				}
 			}
 		}
-		ass.clip = oh_shit_a_fox;
-		ass.loop = false;
-		ass.Play();
 	}
 
 	void SpawnHawks(){
@@ -287,14 +278,13 @@ public class WorldLogic : MonoBehaviour {
 				//farmer.SetActive(false);
 				GameObject f = (GameObject)Instantiate(farmer,wg.VertexToVector3(v), transform.rotation);
 				//f.GetComponent<Enemy>().pos = v;
-				//attack_targets.Add(f.GetComponent<Enemy>());
 				//f.SetActive(true);
 				h = wg.height;
 			}
 		}
-		ass.clip = oh_shit_a_fox;
-		ass.loop = false;
-		ass.Play();
+		ass2.clip = oh_shit_a_fox;
+		ass2.loop = false;
+		ass2.Play();
 	}
 
 	void PlantCrops(){
@@ -330,31 +320,6 @@ public class WorldLogic : MonoBehaviour {
 		r.SetActive(true);
 	}
 
-	public Vertex GetClosestEnemy(Vertex v){
-		float cur_distance = -1f;
-		Enemy closest = null;
-		foreach(Enemy e in attack_targets){
-			if(cur_distance == -1f || Vertex.Distance(v, e.pos) < cur_distance){
-				cur_distance = Vertex.Distance(v, e.pos);
-				closest = e;
-			}
-		}
-		if(closest == null){
-			return null;
-		}
-		return closest.pos;
-	}
-
-	public void DamageEnemy(Vertex v, int d){
-		foreach(Enemy e in attack_targets){
-			if(e.pos == v){
-				bool k = e.Damage(d);
-				if(k){
-					attack_targets.Remove(e);
-				}
-			}
-		}
-	}
 
 	public Vertex GetClosestDig(Vertex v){
 		float cur_distance = -1f;
@@ -416,9 +381,6 @@ public class WorldLogic : MonoBehaviour {
 		return closest;
 	}
 
-	public void RemoveEnemy(Enemy e){
-		attack_targets.Remove(e);
-	}
 
 	public bool StartSleep(Vertex v){
 		Burrow b = VertexInBurrow(v);

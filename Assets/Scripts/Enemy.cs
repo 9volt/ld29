@@ -31,6 +31,7 @@ public class Enemy : MonoBehaviour {
 		rm = gameObject.GetComponent<RabbitMover>();
 		anim = gameObject.GetComponent<Animator>();
 		rm.SetPosition(wg.VertexToVector3(pos));
+		Camera.main.gameObject.GetComponent<CameraMove>().SetPosition(pos);
 	}
 
 	public bool Damage(int d){
@@ -51,7 +52,16 @@ public class Enemy : MonoBehaviour {
 	}
 	
 	void UpdateTarget(){
-		if(target != null){
+		if(hp <= 0 && currentDestination == pos){
+			gameObject.SetActive(false);
+		} else if(hp <= 0){
+			for(int h = 0; h < wg.height; h++){
+				if(wg.VertexToType(new Vertex(wg.width - 1, h)) == WorldGen.DIRT){
+					currentDestination = new Vertex(wg.width - 1, h);
+					h = wg.height;
+				}
+			}
+		} else if(target != null){
 			if(pos == target.mySquare && Time.time > last_action + speed){
 				anim.SetTrigger("Pounce");
 				last_action = Time.time;
@@ -73,18 +83,6 @@ public class Enemy : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		if(hp <= 0){
-			for(int h = 0; h < wg.height; h++){
-				if(wg.VertexToType(new Vertex(wg.width - 1, h)) == WorldGen.DIRT){
-					currentDestination = new Vertex(wg.width - 1, h);
-					wl.RemoveEnemy(this);
-					h = wg.height;
-				}
-			}
-		}
-		if(hp <= 0 && currentDestination == pos){
-			gameObject.SetActive(false);
-		}
 		// Move towards current target
 		if(currentDestination != null && pos != currentDestination){
 			if(!rm.Moving){
