@@ -19,7 +19,7 @@ public class Burrow {
 	}
 	
 	public int RabbitCapacity(){
-		return blocks.Count / 2;
+		return 1;
 	}
 	
 	public Vertex GetRandomBlock(int seed){
@@ -109,10 +109,8 @@ public class WorldLogic : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		// Check the music
-		if(attack_targets.Count > 0 && ass.clip != oh_shit_a_fox){
-			ass.clip = oh_shit_a_fox;
-			ass.Play();
-		} else if(attack_targets.Count == 0 && ass.clip != seasons[season]) {
+		if(!ass.isPlaying && ass.clip != seasons[season]) {
+			ass.loop = true;
 			ass.clip = seasons[season];
 			ass.Play();
 		}
@@ -130,6 +128,8 @@ public class WorldLogic : MonoBehaviour {
 				PlantCrops();
 			}
 			if(season == WINTER){
+				DespawnFox();
+				DespawnHawk();
 				KillCrops();
 			}
 			last_season = Time.time;
@@ -227,6 +227,19 @@ public class WorldLogic : MonoBehaviour {
 
 	}
 
+	void DespawnFox(){
+		foreach(Enemy e in attack_targets){
+			e.GoHome();
+		}
+		attack_targets = new List<Enemy>();
+	}
+
+	void DespawnHawk(){
+		foreach(GameObject go in GameObject.FindGameObjectsWithTag("hawk")){
+			go.GetComponent<Hawk>().leaving = true;
+		}
+	}
+
 	void SpawnFoxes(){
 		// Spawn Fox
 		for(int w = wg.width - year - 1; w < wg.width - 1; w++){
@@ -243,6 +256,9 @@ public class WorldLogic : MonoBehaviour {
 				}
 			}
 		}
+		ass.clip = oh_shit_a_fox;
+		ass.loop = false;
+		ass.Play();
 	}
 
 	void SpawnHawks(){

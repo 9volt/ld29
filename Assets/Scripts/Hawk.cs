@@ -6,7 +6,7 @@ public class Hawk : MonoBehaviour {
 	private bool seeking_rabbit = true;
 	private GameObject my_rabbit;
 	public WorldGen wg;
-	private bool leaving = false;
+	public bool leaving = false;
 	private Vector3 gone = new Vector3(20, 0 ,0);
 	private bool facingleft = true;
 	private int speed;
@@ -53,7 +53,7 @@ public class Hawk : MonoBehaviour {
 
 						//eat it
 						if(Vector3.Distance(transform.position, my_rabbit.transform.position) < .1f){
-							my_rabbit.GetComponent<RabbitLogic>().hp = 0;
+							my_rabbit.GetComponent<RabbitLogic>().Damage("hawk",my_rabbit.GetComponent<RabbitLogic>().hp);
 							leaving = true;
 						}
 					}else{

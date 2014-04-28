@@ -133,7 +133,7 @@ public class GUIScript : MonoBehaviour {
 				}
 				GUI.Label(new Rect(Screen.width/2 - 120, scroll + 20 + ((i+1)* 130), 300,40), currentRabbit.myname);
 				GUI.DrawTexture(new Rect(Screen.width/2 - 120,  scroll + 40 + ((i+1)* 130), bunny.width, bunny.height), bunny);
-				GUI.Label(new Rect(Screen.width/2 - 120 + bunny.width + 10,  scroll + 40 + ((i+1)* 130), 300, 40), "Str:" + currentRabbit.str + "     Spd:" + currentRabbit.spd);
+				GUI.Label(new Rect(Screen.width/2 - 120 + bunny.width + 10,  scroll + 40 + ((i+1)* 130), 300, 40), currentRabbit.cause_of_death);
 
 			}
 

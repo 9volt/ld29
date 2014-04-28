@@ -18,6 +18,7 @@ public class Enemy : MonoBehaviour {
 	private float speed = 1f;
 	public int str = 5;
 	public int spd = 3;
+	public string type;
 
 	// Use this for initialization
 	void Start () {
@@ -49,6 +50,25 @@ public class Enemy : MonoBehaviour {
 		}
 	}
 	
+	void UpdateTarget(){
+		if(target != null){
+			if(pos == target.mySquare && Time.time > last_action + speed){
+				anim.SetTrigger("Pounce");
+				last_action = Time.time;
+				bool b = target.Damage(type, str);
+				if(b){
+					hp -= str;
+					target = null;
+				}
+			} else {
+				currentDestination = target.mySquare;
+			}
+		}
+	}
+
+	public void GoHome(){
+		hp = 0;
+	}
 
 	// Update is called once per frame
 	void Update () {
@@ -68,6 +88,7 @@ public class Enemy : MonoBehaviour {
 		if(currentDestination != null && pos != currentDestination){
 			if(!rm.Moving){
 				pos = next_node;
+				UpdateTarget();
 				List<Vertex> p = rf.FindPath(pos, currentDestination, wg.GetPathfindingCosts());
 				if(p != null && p.Count > 1){
 					next_node = p[1];
@@ -77,22 +98,8 @@ public class Enemy : MonoBehaviour {
 				}
 			}
 		} else {
-			// Find Rabbit and attack
-			if(target != null){
-				if(pos == target.mySquare && Time.time > last_action + speed){
-					anim.SetTrigger("Pounce");
-					last_action = Time.time;
-					bool b = target.Damage(str);
-					if(b){
-						hp -= str;
-						target = null;
-					}
-				} else {
-					currentDestination = target.mySquare;
-				}
-			} else {
-				FindTarget();
-			}
+			FindTarget();
+			UpdateTarget();
 		}
 	}
 }

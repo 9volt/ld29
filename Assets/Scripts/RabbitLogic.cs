@@ -54,6 +54,7 @@ public class RabbitLogic : MonoBehaviour {
 	public bool ready_for_mate = false;
 	private RabbitLogic father;
 
+	public string cause_of_death;
 
 	// Use this for initialization
 	void Start () {
@@ -324,10 +325,16 @@ public class RabbitLogic : MonoBehaviour {
 			}
 			if(need_sleep && !sleeping){
 				hp -= 5;
+				if(hp <= 0){
+					cause_of_death = "Lack of sleep";
+				}
 			}
 			if(hunger <= 0 && !sleeping){
 				hp -= 4;
 				hunger = 0;
+				if(hp <= 0){
+					cause_of_death = "Starved";
+				}
 			}
 			if(hunger < 0) hunger = 0;
 		}
@@ -342,9 +349,12 @@ public class RabbitLogic : MonoBehaviour {
 		}
 	}
 
-	public bool Damage(int d){
+	public bool Damage(string who, int d){
 		hp -= d;
 		profession = "Guard";
+		if(hp <= 0){
+			cause_of_death = "Eaten by " + who;
+		}
 		return hp <= 0;
 	}
 

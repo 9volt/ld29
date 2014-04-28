@@ -59,6 +59,7 @@ MonoBehaviour:
   maxhp: 200
   str: 50
   spd: 3
+  type: fox
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
