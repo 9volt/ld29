@@ -118,6 +118,9 @@ public class WorldLogic : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		// Check for mute
+		ass.mute = (PlayerPrefs.GetInt("Mute", 0) == 1);
+		ass2.mute = (PlayerPrefs.GetInt("Mute", 0) == 1);
 		// Update the season
 		if(Time.time > season_length + last_season){
 			season = (season + 1) % seasons.Length;
