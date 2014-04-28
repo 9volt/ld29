@@ -11,7 +11,6 @@ public class Enemy : MonoBehaviour {
 	private int hp;
 	private RabbitMover rm;
 	private WorldGen wg;
-	private WorldLogic wl;
 	private RabbitFinder rf;
 	private Animator anim;
 	private float last_action;
@@ -26,7 +25,6 @@ public class Enemy : MonoBehaviour {
 		hp = maxhp;
 		last_action = Time.time;
 		wg = GameObject.FindGameObjectWithTag("world").GetComponent<WorldGen>();
-		wl = GameObject.FindGameObjectWithTag("world").GetComponent<WorldLogic>();
 		rf = gameObject.GetComponent<RabbitFinder>();
 		rm = gameObject.GetComponent<RabbitMover>();
 		anim = gameObject.GetComponent<Animator>();
