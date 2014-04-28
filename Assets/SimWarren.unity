@@ -402,6 +402,8 @@ MonoBehaviour:
   bg2: {fileID: 225550143}
   black: {fileID: 2800000, guid: f44aecaf5be3d4547a8acc9fddb6ea2e, type: 3}
   won: 0
+  mute: {fileID: 2800000, guid: 854b640eb2dba844c8225a1fe07aebe4, type: 3}
+  unmute: {fileID: 2800000, guid: d70b15e4172615449ae0111d46ff7d11, type: 3}
 --- !u!114 &1214936245
 MonoBehaviour:
   m_ObjectHideFlags: 0

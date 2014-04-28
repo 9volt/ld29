@@ -27,6 +27,8 @@ public class GUIScript : MonoBehaviour {
 	public GameObject bg2;
 	public Texture black;
 	public bool won = false;
+	public Texture mute;
+	public Texture unmute;
 
 	// Use this for initialization
 	void Start () {
@@ -58,6 +60,17 @@ public class GUIScript : MonoBehaviour {
 	}
 	
 	void OnGUI(){
+		 if(PlayerPrefs.GetInt("Mute", 0) == 0){	
+			 if(GUI.Button(new Rect(Screen.width - 42, 0, 42, 42), mute)){
+				PlayerPrefs.SetInt("Mute", 1);	
+				PlayerPrefs.Save();
+			 }
+		}else{
+			if(GUI.Button(new Rect(Screen.width - 42, 0, 42, 42), unmute)){
+				PlayerPrefs.SetInt("Mute", 0);	
+				PlayerPrefs.Save();
+			}
+		}
 		 if(!game_over){
 			// Draw season and Burrow Stats
 			GUI.Box(new Rect(0, 0, 400,42), "");
@@ -162,10 +175,8 @@ public class GUIScript : MonoBehaviour {
 		Destroy(gameObject.GetComponent<CameraMove>());
 		bg.renderer.material.mainTexture = black;
 		bg2.renderer.material.mainTexture = black;
-		Debug.Log(PlayerPrefs.GetInt("Most Rabbits", 0));
 
 		if (PlayerPrefs.GetInt("Most Rabbits", 0) < (myPastRabbits.Length-1)){
-			Debug.Log("trying to save rabbits");
 			PlayerPrefs.SetInt("Most Rabbits", myPastRabbits.Length-1);
 		}
 		if (PlayerPrefs.GetInt("Most Seasons", 0) < ((((wl.year - 1) * 4) + (wl.season)) )){
