@@ -19,10 +19,11 @@ public class Farmer : MonoBehaviour {
 	private int num_spawn = 3; //max number of ferrets to spawn
 	private bool releasing = false;
 	public int spd = 3;
-
+	private Vertex start;
 	// Use this for initialization
 	void Start () {
 		next_node = pos;
+		start = pos;
 		hp = maxhp;
 		//last_action = Time.time;
 		wg = GameObject.FindGameObjectWithTag("world").GetComponent<WorldGen>();
@@ -45,9 +46,11 @@ public class Farmer : MonoBehaviour {
 			for(int h = 1; h < wg.height -1; h++){
 				Vertex v = new Vertex(w, h);
 				if(wg.VertexToType(v) == WorldGen.TUNNEL){
-					Vertex v2 = new Vertex(w+1, h);
-					Vertex v3 = new Vertex(w, h+1);
-					if (wg.VertexToType(v2) == WorldGen.TUNNEL || wg.VertexToType(v3) == WorldGen.TUNNEL){
+					Vertex right = new Vertex(w+1, h);
+					Vertex below = new Vertex(w, h+1);
+					Vertex above = new Vertex(w, h-1);
+					Vertex left = new Vertex(w-1, h+1);
+					if((wg.VertexToType(below) == WorldGen.TUNNEL || wg.VertexToType(left) == WorldGen.TUNNEL || wg.VertexToType(right) == WorldGen.TUNNEL) && wg.VertexToType(above) == WorldGen.AIR){
 						List<Vertex> p = rf.FindPath(pos, v, wg.GetPathfindingCosts());
 						if(p != null && p.Count > 1){
 							currentDestination = v;
@@ -77,6 +80,7 @@ public class Farmer : MonoBehaviour {
 	
 	public void GoHome(){
 		Debug.Log("leaving");
+		currentDestination = start;
 		hp = 0;
 	}
 	
@@ -99,6 +103,8 @@ public class Farmer : MonoBehaviour {
 			releasing = true;
 			anim.SetBool("Releasing", true);
 			StartCoroutine(ReleaseFerrets());
+		} else if(currentDestination == pos && hp == 0){
+			gameObject.SetActive(false);
 		}
 		//else currently releasing
 	}
