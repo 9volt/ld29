@@ -287,7 +287,7 @@ public class WorldGen : MonoBehaviour {
 		if(!top && !topright && !right && left && !bottomright && !bottom){
 			return tunnels[LEFT];
 		}
-		if(top && !right && left && !bottomright && !bottom){
+		if(top && !right && left && !bottom){
 			return tunnels[TOPLEFT];
 		}
 		if(!top && right && left && !bottom){
