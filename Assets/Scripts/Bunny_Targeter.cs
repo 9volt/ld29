@@ -31,9 +31,10 @@ public class Bunny_Targeter : MonoBehaviour {
 					pos = 0;
 				}
 				cm.SetPosition(bunnies[pos].GetComponent<RabbitLogic>().mySquare);
+				g.currentRabbit = bunnies[pos].GetComponent<RabbitLogic>();
+				g.currentRabbit.gameObject.GetComponent<SpriteRenderer>().sortingLayerName = "RabbitSelected";
 			}
-			g.currentRabbit = bunnies[pos].GetComponent<RabbitLogic>();
-			g.currentRabbit.gameObject.GetComponent<SpriteRenderer>().sortingLayerName = "RabbitSelected";
+
 		}
 
 	}
