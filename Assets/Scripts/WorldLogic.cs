@@ -88,8 +88,11 @@ public class WorldLogic : MonoBehaviour {
 	public GameObject fox;
 	public GameObject hawk;
 	public GameObject farmer;
+	public GameObject ferret;
 
 	public int annual_carrots = 5;
+
+	private List<Burrow> ferreted_burrows;
 
 
 	// Use this for initialization
@@ -99,6 +102,7 @@ public class WorldLogic : MonoBehaviour {
 		fill_targets = new List<Vertex>();
 		food_counts = new Dictionary<Vertex, int>();
 		dig_counts = new Dictionary<Vertex, int>();
+		ferreted_burrows = new List<Burrow>();
 		wg = gameObject.GetComponent<WorldGen>();
 		ass = gameObject.GetComponent<AudioSource>();
 		ass2 = Camera.main.gameObject.GetComponent<AudioSource>();
@@ -124,6 +128,7 @@ public class WorldLogic : MonoBehaviour {
 			}
 			if(season == SPRING){
 				year++;
+				DespawnFerrets();
 				PlantCrops();
 			}
 			if(season == WINTER){
@@ -227,6 +232,13 @@ public class WorldLogic : MonoBehaviour {
 
 	}
 
+	void DespawnFerrets(){
+		foreach(GameObject go in GameObject.FindGameObjectsWithTag("ferret")){
+			go.GetComponent<Enemy>().GoHome();
+		}
+		ferreted_burrows = new List<Burrow>();
+	}
+
 	void DespawnFox(){
 		foreach(GameObject go in GameObject.FindGameObjectsWithTag("fox")){
 			go.GetComponent<Enemy>().GoHome();
@@ -289,6 +301,13 @@ public class WorldLogic : MonoBehaviour {
 		ass2.Play();
 	}
 
+	public void SpawnFerret(Vertex v){
+		ferret.SetActive(false);
+		GameObject f = (GameObject)Instantiate(ferret,wg.VertexToVector3(v), transform.rotation);//wg.VertexToVector3(v)
+		f.GetComponent<Ferret>().pos = v;
+		f.SetActive(true);
+	}
+	
 	void PlantCrops(){
 		// Create Farm
 		while(food_counts.Keys.Count < annual_carrots){
@@ -366,7 +385,7 @@ public class WorldLogic : MonoBehaviour {
 		float cur_distance = -1f;
 		Burrow closest = null;
 		foreach(Burrow b in burrows){
-			if((cur_distance == -1f || Vertex.Distance(b.main_block, v) < cur_distance) && b.food > 0){
+			if((cur_distance == -1f || Vertex.Distance(b.main_block, v) < cur_distance) && b.food > 0 && !ferreted_burrows.Contains(b)){
 				cur_distance = Vertex.Distance(b.main_block, v);
 				closest = b;
 			}
@@ -374,11 +393,32 @@ public class WorldLogic : MonoBehaviour {
 		return closest;
 	}
 
+	public Burrow GetClosestBurrowOccupy(Vertex v){
+		float cur_distance = -1f;
+		Burrow closest = null;
+		foreach(Burrow b in burrows){
+			if((cur_distance == -1f || Vertex.Distance(b.main_block, v) < cur_distance) && !ferreted_burrows.Contains(b)){
+				cur_distance = Vertex.Distance(b.main_block, v);
+				closest = b;
+			}
+		}
+		return closest;
+	}
+
+	public Burrow OccupyBurrow(Vertex v){
+		Burrow b = VertexInBurrow(v);
+		if(b != null && !ferreted_burrows.Contains(b)){
+			ferreted_burrows.Add(b);
+			return b;
+		}
+		return null;
+	}
+
 	public Burrow GetClosestBurrowDepositFood(Vertex v){
 		float cur_distance = -1f;
 		Burrow closest = null;
 		foreach(Burrow b in burrows){
-			if((cur_distance == -1f || Vertex.Distance(b.main_block, v) < cur_distance) && b.food < b.FoodCapacity()){
+			if((cur_distance == -1f || Vertex.Distance(b.main_block, v) < cur_distance) && b.food < b.FoodCapacity() && !ferreted_burrows.Contains(b)){
 				cur_distance = Vertex.Distance(b.main_block, v);
 				closest = b;
 			}
@@ -424,7 +464,7 @@ public class WorldLogic : MonoBehaviour {
 		float cur_distance = -1f;
 		Burrow closest = null;
 		foreach(Burrow b in burrows){
-			if((cur_distance == -1f || Vertex.Distance(b.main_block, v) < cur_distance) && b.rabbits < b.RabbitCapacity()){
+			if((cur_distance == -1f || Vertex.Distance(b.main_block, v) < cur_distance) && b.rabbits < b.RabbitCapacity() && !ferreted_burrows.Contains(b)){
 				cur_distance = Vertex.Distance(b.main_block, v);
 				closest = b;
 			}

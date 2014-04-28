@@ -110,10 +110,9 @@ public class Farmer : MonoBehaviour {
 	}
 
 	IEnumerator ReleaseFerrets(){
-		//wl.spawnFerret();
-		Debug.Log("Spawn a Ferret");
+		wl.SpawnFerret(pos);
 		i++;
-		if (i < num_spawn){
+		if (i < num_spawn * wl.year){
 			yield return new WaitForSeconds(3);
 			StartCoroutine(ReleaseFerrets());
 		}else{

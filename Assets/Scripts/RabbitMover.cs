@@ -18,6 +18,8 @@ public class RabbitMover : MonoBehaviour {
 			speed = gameObject.GetComponent<Enemy>().spd;
 		} else if(gameObject.GetComponent<Farmer>() != null){
 			speed = gameObject.GetComponent<Farmer>().spd;
+		} else if(gameObject.GetComponent<Ferret>() != null){
+			speed = gameObject.GetComponent<Ferret>().spd;
 		}
 	}
 	
