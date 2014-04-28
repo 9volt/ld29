@@ -28,9 +28,11 @@ public class Hawk : MonoBehaviour {
 					rabbits = GameObject.FindGameObjectsWithTag("Rabbit");
 					for(int i = 0; i < rabbits.Length; i++){
 						if(wg.VertexToType(rabbits[i].GetComponent<RabbitLogic>().mySquare)  == WorldGen.AIR){//look for a rabbit that is above ground
-							my_rabbit = rabbits[i];
-							seeking_rabbit = false;
-							break;
+							if(rabbits[i].GetComponent<RabbitLogic>().hp > 0)
+								my_rabbit = rabbits[i];
+								seeking_rabbit = false;
+								break;
+							}
 						}
 
 					}

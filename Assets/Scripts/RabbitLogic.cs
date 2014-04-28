@@ -204,6 +204,7 @@ public class RabbitLogic : MonoBehaviour {
 				if(mySquare == currentDestination && Time.time > last_action + speed){
 					//anim.SetBool("Sleep", true);
 					ready_for_mate = true;
+					anim.SetBool("Mating", true);
 				}
 			}
 		} else if(horney && sex == MALE && CanGetFemale() != null){
