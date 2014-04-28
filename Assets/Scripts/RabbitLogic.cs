@@ -41,6 +41,9 @@ public class RabbitLogic : MonoBehaviour {
 	public int hunger;
 	public int full;
 	public int sex;
+	public float sex_length = 1f;
+	private float sex_start;
+	private bool sexing = false;
 
 	public const int MALE = 0;
 	public const int FEMALE = 1;
@@ -49,6 +52,7 @@ public class RabbitLogic : MonoBehaviour {
 	public float mating_cooldown = 30f;
 	private float last_mating;
 	public bool ready_for_mate = false;
+	private RabbitLogic father;
 
 
 	// Use this for initialization
@@ -93,9 +97,9 @@ public class RabbitLogic : MonoBehaviour {
 			return "looking for sleep";
 		} else if(ready_for_mate){
 			return "waiting for mate";
-		} else if(horney && sex == FEMALE){
+		} else if(horney && sex == FEMALE && CanGetSleep()){
 			return "looking for burrow to mate";
-		} else if(horney && sex == MALE){
+		} else if(horney && sex == MALE && CanGetFemale() != null){
 			return "looking for female";
 		} else if(mySquare == currentDestination){
 		switch(profession){
@@ -142,7 +146,7 @@ public class RabbitLogic : MonoBehaviour {
 		int lowest = -1;
 		RabbitLogic lucky_lady = null;
 		foreach(RabbitLogic rl in ladies.Keys){
-			if(lowest != -1 && ladies[rl] < lowest){
+			if(lowest == -1 || ladies[rl] < lowest){
 				lucky_lady = rl;
 				lowest = ladies[rl];
 			}
@@ -151,18 +155,24 @@ public class RabbitLogic : MonoBehaviour {
 	}
 
 	void Mate(RabbitLogic male){
-		Debug.Log("Rabbit sex");
+		sexing = true;
+		sex_start = Time.time;
 		horney = false;
 		last_mating = Time.time;
 		ready_for_mate = false;
+		father = male;
+	}
+
+	void Birth(){
+		wl.BirthRabbit(father, this);
 	}
 
 	void PickDestination(){
-		if(CanGetSleep() && need_sleep){
+		if(need_sleep && CanGetSleep()){
 			// Find closest burrow with sleeping room
 			Burrow b = wl.GetClosestBurrowSleep(mySquare);
 			if(b != null){
-				currentDestination = b.GetRandomBlock(rrand);
+				currentDestination = b.main_block;
 				if(mySquare == currentDestination && Time.time > last_action + speed){
 					anim.SetBool("Sleep", true);
 					if(wl.StartSleep(mySquare)){
@@ -171,7 +181,7 @@ public class RabbitLogic : MonoBehaviour {
 					}
 				}
 			}
-		} else if(CanGetFood() && need_food){
+		} else if(need_food && CanGetFood()){
 			// Find closest burrow with food
 			Burrow b = wl.GetClosestBurrowFood(mySquare);
 			if(b != null){
@@ -185,26 +195,27 @@ public class RabbitLogic : MonoBehaviour {
 				}
 			}
 		} else if(ready_for_mate){
-			Debug.Log("waiting for mate");
-		} else if(horney && CanGetSleep() && sex == FEMALE){
+			// animation???
+		} else if(horney && sex == FEMALE && CanGetSleep()){
 			Burrow b = wl.GetClosestBurrowSleep(mySquare);
 			if(b != null){
 				currentDestination = b.main_block;
 				if(mySquare == currentDestination && Time.time > last_action + speed){
-					anim.SetBool("Sleep", true);
-					if(wl.StartSleep(mySquare)){
-						ready_for_mate = true;
-					}
+					//anim.SetBool("Sleep", true);
+					ready_for_mate = true;
 				}
 			}
 		} else if(horney && sex == MALE && CanGetFemale() != null){
 			RabbitLogic female = CanGetFemale();
 			if(female.mySquare == mySquare){
+				anim.SetBool("Hump", true);
+				sexing = true;
+				sex_start = Time.time;
 				female.Mate(this);
 				horney = false;
 				last_mating = Time.time;
 			} else {
-				currentDestination = CanGetFemale().mySquare;
+				currentDestination = female.mySquare;
 			}
 			//else pick new Destination or work
 		} else {
@@ -265,6 +276,17 @@ public class RabbitLogic : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		if(sexing && Time.time < sex_length + sex_start){
+			return;
+		}
+		if(sexing && Time.time > sex_length + sex_start){
+			sexing = false;
+			if(sex == FEMALE){
+				Birth();
+			} else {
+				anim.SetBool("Hump", false);
+			}
+		}
 		//Checks for a path to the destination (In case it has changed), and moves to the next node if not currently transitioning between nodes
 		if(currentDestination != null && mySquare != currentDestination){
 			if(!rm.Moving){
@@ -287,10 +309,6 @@ public class RabbitLogic : MonoBehaviour {
 					wl.EndSleep(mySquare);
 					anim.SetBool("Sleep", false);
 				}
-
-			} else if(Time.time > last_mating + mating_cooldown) {
-				horney = true;
-			// First check to make sure don't need sleep
 			} else {
 				PickDestination();
 			}
@@ -308,15 +326,19 @@ public class RabbitLogic : MonoBehaviour {
 				hp -= 5;
 			}
 			if(hunger <= 0 && !sleeping){
-				hp--;
+				hp -= 4;
 				hunger = 0;
 			}
+			if(hunger < 0) hunger = 0;
 		}
 		if(hp <= 0){
 			Die();
 		}
 		if(Time.time > last_sleep + sleep_interval){
 			need_sleep = true;
+		}
+		if(Time.time > last_mating + mating_cooldown) {
+			horney = true;
 		}
 	}
 

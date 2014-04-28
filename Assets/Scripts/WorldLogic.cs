@@ -284,6 +284,14 @@ public class WorldLogic : MonoBehaviour {
 		food_counts = new Dictionary<Vertex, int>();
 	}
 
+	public void BirthRabbit(RabbitLogic father, RabbitLogic mother){
+		rabbit.SetActive(false);
+		GameObject r = (GameObject)Instantiate(rabbit, transform.position, transform.rotation);
+		r.GetComponent<RabbitLogic>().mySquare = mother.mySquare;
+		r.GetComponent<RabbitLogic>().profession = "Guard";
+		r.SetActive(true);
+	}
+
 	public Vertex GetClosestEnemy(Vertex v){
 		float cur_distance = -1f;
 		Enemy closest = null;
@@ -411,7 +419,7 @@ public class WorldLogic : MonoBehaviour {
 		float cur_distance = -1f;
 		Burrow closest = null;
 		foreach(Burrow b in burrows){
-			if((cur_distance == -1f || Vertex.Distance(b.main_block, v) < cur_distance) && b.rabbits < b.RabbitCapacity()){
+			if((cur_distance == -1f || (Vertex.Distance(b.main_block, v) < cur_distance) && b.rabbits < b.RabbitCapacity())){
 				cur_distance = Vertex.Distance(b.main_block, v);
 				closest = b;
 			}
