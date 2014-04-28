@@ -81,6 +81,8 @@ MonoBehaviour:
   hunger: 100
   full: 20
   sex: 0
+  mating_cooldown: 10
+  ready_for_mate: 0
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1

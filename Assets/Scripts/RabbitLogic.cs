@@ -45,6 +45,12 @@ public class RabbitLogic : MonoBehaviour {
 	public const int MALE = 0;
 	public const int FEMALE = 1;
 
+	private bool horney = false;
+	public float mating_cooldown = 30f;
+	private float last_mating;
+	public bool ready_for_mate = false;
+
+
 	// Use this for initialization
 	void Start () {
 		rrand = Random.Range(0, 100);
@@ -52,6 +58,7 @@ public class RabbitLogic : MonoBehaviour {
 		last_hunger = Time.time;
 		last_action = Time.time;
 		last_sleep = Time.time + Random.Range(0, sleep_interval);
+		last_mating = Time.time + Random.Range(mating_cooldown/2, mating_cooldown);
 		nextNode = mySquare;
 		currentDestination = mySquare;
 		wg = GameObject.FindGameObjectWithTag("world").GetComponent<WorldGen>();
@@ -84,6 +91,12 @@ public class RabbitLogic : MonoBehaviour {
 			return "sleeping";
 		} else if(need_sleep){
 			return "looking for sleep";
+		} else if(ready_for_mate){
+			return "waiting for mate";
+		} else if(horney && sex == FEMALE){
+			return "looking for burrow to mate";
+		} else if(horney && sex == MALE){
+			return "looking for female";
 		} else if(mySquare == currentDestination){
 		switch(profession){
 			case "Burrower":
@@ -115,6 +128,35 @@ public class RabbitLogic : MonoBehaviour {
 		return wl.GetClosestBurrowSleep(mySquare) != null;
 	}
 
+	RabbitLogic CanGetFemale(){
+		Dictionary<RabbitLogic, int> ladies = new Dictionary<RabbitLogic, int>();
+		foreach(GameObject go in GameObject.FindGameObjectsWithTag("Rabbit")){
+			RabbitLogic rl = go.GetComponent<RabbitLogic>();
+			if(rl.sex == FEMALE && rl.ready_for_mate){
+				List<Vertex> d = rf.FindPath(mySquare, currentDestination, wg.GetPathfindingCosts());
+				if(d != null){
+					ladies[rl] = d.Count;
+				}
+			}
+		}
+		int lowest = -1;
+		RabbitLogic lucky_lady = null;
+		foreach(RabbitLogic rl in ladies.Keys){
+			if(lowest != -1 && ladies[rl] < lowest){
+				lucky_lady = rl;
+				lowest = ladies[rl];
+			}
+		}
+        return lucky_lady;
+	}
+
+	void Mate(RabbitLogic male){
+		Debug.Log("Rabbit sex");
+		horney = false;
+		last_mating = Time.time;
+		ready_for_mate = false;
+	}
+
 	void PickDestination(){
 		if(CanGetSleep() && need_sleep){
 			// Find closest burrow with sleeping room
@@ -142,7 +184,28 @@ public class RabbitLogic : MonoBehaviour {
 					}
 				}
 			}
-			
+		} else if(ready_for_mate){
+			Debug.Log("waiting for mate");
+		} else if(horney && CanGetSleep() && sex == FEMALE){
+			Burrow b = wl.GetClosestBurrowSleep(mySquare);
+			if(b != null){
+				currentDestination = b.main_block;
+				if(mySquare == currentDestination && Time.time > last_action + speed){
+					anim.SetBool("Sleep", true);
+					if(wl.StartSleep(mySquare)){
+						ready_for_mate = true;
+					}
+				}
+			}
+		} else if(horney && sex == MALE && CanGetFemale() != null){
+			RabbitLogic female = CanGetFemale();
+			if(female.mySquare == mySquare){
+				female.Mate(this);
+				horney = false;
+				last_mating = Time.time;
+			} else {
+				currentDestination = CanGetFemale().mySquare;
+			}
 			//else pick new Destination or work
 		} else {
 			if(profession == "Burrower"){
@@ -224,6 +287,9 @@ public class RabbitLogic : MonoBehaviour {
 					wl.EndSleep(mySquare);
 					anim.SetBool("Sleep", false);
 				}
+
+			} else if(Time.time > last_mating + mating_cooldown) {
+				horney = true;
 			// First check to make sure don't need sleep
 			} else {
 				PickDestination();
