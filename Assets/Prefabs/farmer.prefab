@@ -11,13 +11,15 @@ GameObject:
   - 212: {fileID: 21200000}
   - 114: {fileID: 11400000}
   - 95: {fileID: 9500000}
+  - 114: {fileID: 11400002}
+  - 114: {fileID: 11400004}
   m_Layer: 0
   m_Name: farmer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &400000
 Transform:
   m_ObjectHideFlags: 1
@@ -25,7 +27,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.75059652, y: -15.1270151, z: 0}
+  m_LocalPosition: {x: 5.07493877, y: -10.3587484, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -38,7 +40,7 @@ Animator:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 56851620a66afc547bdc40b9253d8dec, type: 2}
   m_CullingMode: 0
   m_ApplyRootMotion: 1
   m_AnimatePhysics: 0
@@ -55,6 +57,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 
+  spd: 3
+--- !u!114 &11400002
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6be6f75b3269a948b18dea0326712e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &11400004
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96163410be2d79a43be160b7497e0dd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Moving: 0
 --- !u!212 &21200000
 SpriteRenderer:
   m_ObjectHideFlags: 1

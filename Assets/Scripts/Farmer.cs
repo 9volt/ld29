@@ -9,8 +9,8 @@ public class Farmer : MonoBehaviour {
 	private RabbitMover rm;
 	private RabbitFinder rf;
 	private WorldGen wg;
-	//private WorldLogic wl;
-	private int hp = 200;
+	private WorldLogic wl;
+	private int hp;
 	private int maxhp = 200;
 	private Animator anim;
 	//private float last_action;
@@ -18,18 +18,20 @@ public class Farmer : MonoBehaviour {
 	private int i = 0; //number of ferrets currently spawned
 	private int num_spawn = 3; //max number of ferrets to spawn
 	private bool releasing = false;
-	
+	public int spd = 3;
+
 	// Use this for initialization
 	void Start () {
 		next_node = pos;
 		hp = maxhp;
 		//last_action = Time.time;
 		wg = GameObject.FindGameObjectWithTag("world").GetComponent<WorldGen>();
-		//wl = GameObject.FindGameObjectWithTag("world").GetComponent<WorldLogic>();
+		wl = GameObject.FindGameObjectWithTag("world").GetComponent<WorldLogic>();
 		rf = gameObject.GetComponent<RabbitFinder>();
 		rm = gameObject.GetComponent<RabbitMover>();
 		anim = gameObject.GetComponent<Animator>();
 		rm.SetPosition(wg.VertexToVector3(pos));
+		Camera.main.gameObject.GetComponent<CameraMove>().SetPosition(pos);
 		FindTarget();
 	}
 	
@@ -39,15 +41,19 @@ public class Farmer : MonoBehaviour {
 	}
 	
 	void FindTarget(){
-		for(int w = wg.width; w < wg.width; w++){
-			for(int h = 0; h < wg.height; h++){
+		for(int w = 1; w < wg.width-1; w++){
+			for(int h = 1; h < wg.height -1; h++){
 				Vertex v = new Vertex(w, h);
 				if(wg.VertexToType(v) == WorldGen.TUNNEL){
 					Vertex v2 = new Vertex(w+1, h);
 					Vertex v3 = new Vertex(w, h+1);
 					if (wg.VertexToType(v2) == WorldGen.TUNNEL || wg.VertexToType(v3) == WorldGen.TUNNEL){
-						currentDestination = v;
-						break;
+						List<Vertex> p = rf.FindPath(pos, v, wg.GetPathfindingCosts());
+						if(p != null && p.Count > 1){
+							currentDestination = v;
+							Debug.Log("Picked a tunnel " + currentDestination);
+							return;
+						}
 					}
 				}
 			}
@@ -85,10 +91,11 @@ public class Farmer : MonoBehaviour {
 					next_node = p[1];
 					rm.Move(wg.VertexToVector3(next_node));
 				} else {
+					Debug.Log("Reached " + currentDestination);
 					currentDestination = pos;
 				}
 			}
-		}else if(!releasing){ //if havent started releasing
+		}else if(currentDestination == pos && !releasing){ //if havent started releasing
 			releasing = true;
 			anim.SetBool("Releasing", true);
 			StartCoroutine(ReleaseFerrets());

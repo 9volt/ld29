@@ -14,8 +14,10 @@ public class RabbitMover : MonoBehaviour {
 		anim = gameObject.GetComponent<Animator>();
 		if(gameObject.GetComponent<RabbitLogic>() != null){
 			speed = gameObject.GetComponent<RabbitLogic>().spd;
-		} else {
+		} else if(gameObject.GetComponent<Enemy>() != null){
 			speed = gameObject.GetComponent<Enemy>().spd;
+		} else if(gameObject.GetComponent<Farmer>() != null){
+			speed = gameObject.GetComponent<Farmer>().spd;
 		}
 	}
 	

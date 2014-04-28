@@ -277,10 +277,10 @@ public class WorldLogic : MonoBehaviour {
 			Vertex v = new Vertex(w, h);
 			if(wg.VertexToType(v) == WorldGen.DIRT){
 				v = new Vertex(v.x, v.y - 1);
-				//farmer.SetActive(false);
-				GameObject f = (GameObject)Instantiate(farmer,wg.VertexToVector3(v), transform.rotation);
-				//f.GetComponent<Enemy>().pos = v;
-				//f.SetActive(true);
+				farmer.SetActive(false);
+				GameObject f = (GameObject)Instantiate(farmer,wg.VertexToVector3(v), transform.rotation);//wg.VertexToVector3(v)
+				f.GetComponent<Farmer>().pos = v;
+				f.SetActive(true);
 				h = wg.height;
 			}
 		}
