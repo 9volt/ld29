@@ -179,8 +179,8 @@ public class RabbitFinder : MonoBehaviour {
 				ret.Add(new Vertex(current.x - 1, current.y));
 			}
 		}
-		// If Fox ignore all TUNNELS
-		if(gameObject.GetComponent<Enemy>() != null && gameObject.GetComponent<Enemy>().type == "fox"){
+		// If Farmer or Fox ignore all TUNNELS
+		if(gameObject.GetComponent<Enemy>() != null || gameObject.GetComponent<Farmer>() != null){
 			List<Vertex> removes = new List<Vertex>();
  			foreach(Vertex v in ret){
 				if(wg.VertexToType(v) == WorldGen.TUNNEL){

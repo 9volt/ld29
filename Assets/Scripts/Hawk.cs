@@ -21,10 +21,10 @@ public class Hawk : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		if(!leaving){ //if havent eaten a rabbit yet
-
-				if(seeking_rabbit){ //if hasnt picked a rabbit
-
+		if(!leaving){
+			//if havent eaten a rabbit yet
+				if(seeking_rabbit){
+					//if hasnt picked a rabbit
 					rabbits = GameObject.FindGameObjectsWithTag("Rabbit");
 					for(int i = 0; i < rabbits.Length; i++){
 						if(wg.VertexToType(rabbits[i].GetComponent<RabbitLogic>().mySquare)  == WorldGen.AIR){//look for a rabbit that is above ground

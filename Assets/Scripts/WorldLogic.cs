@@ -308,6 +308,7 @@ public class WorldLogic : MonoBehaviour {
 	void KillCrops(){
 		foreach(Vertex crop in food_counts.Keys){
 			wg.SetVertex(crop, WorldGen.TUNNEL);
+			food_targets.Remove(crop);
 		}
 		food_counts = new Dictionary<Vertex, int>();
 	}
