@@ -15,6 +15,9 @@ public class Burrow {
 	}
 
 	public int FoodCapacity(){
+		if(food > blocks.Count / 2){
+			food = blocks.Count / 2;
+		}
 		return blocks.Count / 2;
 	}
 	
@@ -576,8 +579,16 @@ public class WorldLogic : MonoBehaviour {
 				          && wg.VertexToType(one_above) == WorldGen.TUNNEL
 				          && wg.VertexToType(two_above) == WorldGen.DIRT
 				          && wg.VertexToType(one_below) == WorldGen.DIRT){
-					vertex_in_burrow.Add(cur_point);
-					vertex_in_burrow.Add(one_above);
+					if(VertexInBurrow(cur_point) != null){
+						// We have run into an old burrow, attempt to merge
+						growing = VertexInBurrow(cur_point);
+						vertex_in_burrow.Add(one_above);
+						vertex_in_burrow.Add(cur_point);
+						//growing.Merge(new Burrow(vertex_in_burrow));
+					} else {
+						vertex_in_burrow.Add(cur_point);
+						vertex_in_burrow.Add(one_above);
+					}
 				} else if(start_of_burrow != null
 				          && (wg.VertexToType(cur_point) != WorldGen.TUNNEL
 				          || wg.VertexToType(one_above) != WorldGen.TUNNEL
