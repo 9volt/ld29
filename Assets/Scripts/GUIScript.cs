@@ -150,8 +150,8 @@ public class GUIScript : MonoBehaviour {
 		game_over = true;
 		myPastRabbits = (RabbitLogic[])Resources.FindObjectsOfTypeAll(typeof(RabbitLogic));
 		gameObject.GetComponent<Camera>().cullingMask = 0;
-		Destroy(gameObject.GetComponent<WorldGen>());
-		Destroy(gameObject.GetComponent<WorldLogic>());
+		//Destroy(gameObject.GetComponent<WorldGen>());
+		Destroy(wl);
 		Destroy(gameObject.GetComponent<CameraMove>());
 		bg.renderer.material.mainTexture = black;
 		bg2.renderer.material.mainTexture = black;

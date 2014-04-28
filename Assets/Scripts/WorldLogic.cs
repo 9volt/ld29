@@ -86,6 +86,7 @@ public class WorldLogic : MonoBehaviour {
 	public int starting_rabbits = 4;
 
 	public GameObject fox;
+	public GameObject hawk;
 
 
 	// Use this for initialization
@@ -245,7 +246,7 @@ public class WorldLogic : MonoBehaviour {
 	}
 
 	void SpawnHawks(){
-	/*	for(int w = wg.width - year - 1; w < wg.width - 1; w++){ //havent gotten to test yet
+		for(int w = wg.width - year - 1; w < wg.width - 1; w++){ //havent gotten to test yet
 			for(int h = 0; h < wg.height; h++){
 				Vertex v = new Vertex(w, h);
 				if(wg.VertexToType(v) == WorldGen.AIR){
@@ -255,7 +256,7 @@ public class WorldLogic : MonoBehaviour {
 					h = wg.height;
 				}
 			}
-		}*/
+		}
 	}
 
 	void PlantCrops(){
