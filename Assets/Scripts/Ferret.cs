@@ -13,7 +13,6 @@ public class Ferret : MonoBehaviour {
 	private WorldGen wg;
 	private WorldLogic wl;
 	private RabbitFinder rf;
-	private Animator anim;
 	private float last_action;
 	private float speed = 1f;
 	public int str = 5;
@@ -30,7 +29,6 @@ public class Ferret : MonoBehaviour {
 		wl = GameObject.FindGameObjectWithTag("world").GetComponent<WorldLogic>();
 		rf = gameObject.GetComponent<RabbitFinder>();
 		rm = gameObject.GetComponent<RabbitMover>();
-		anim = gameObject.GetComponent<Animator>();
 		rm.SetPosition(wg.VertexToVector3(pos));
 		Camera.main.gameObject.GetComponent<CameraMove>().SetPosition(pos);
 	}
