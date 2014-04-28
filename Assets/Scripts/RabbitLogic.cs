@@ -137,6 +137,7 @@ public class RabbitLogic : MonoBehaviour {
 		last_mating = Time.time;
 		ready_for_mate = false;
 		father = male;
+		anim.SetBool("Mating", false);
 	}
 
 	void Birth(){
@@ -145,6 +146,7 @@ public class RabbitLogic : MonoBehaviour {
 
 	void PickDestination(){
 		if(need_sleep && CanGetSleep()){
+			ready_for_mate = false;
 			// Find closest burrow with sleeping room
 			Burrow b = wl.GetClosestBurrowSleep(mySquare);
 			if(b != null){
@@ -161,6 +163,7 @@ public class RabbitLogic : MonoBehaviour {
 				}
 			}
 		} else if(need_food && CanGetFood()){
+			ready_for_mate = false;
 			// Find closest burrow with food
 			Burrow b = wl.GetClosestBurrowFood(mySquare);
 			if(b != null){
@@ -178,16 +181,14 @@ public class RabbitLogic : MonoBehaviour {
 			}
 		} else if(ready_for_mate){
 			// animation???
+			anim.SetBool("Mating", true);
 			current_action = "waiting for mate";
 		} else if(horney && sex == FEMALE && CanGetSleep()){
 			Burrow b = wl.GetClosestBurrowSleep(mySquare);
 			if(b != null){
 				currentDestination = b.main_block;
 				if(mySquare == currentDestination && Time.time > last_action + speed){
-					//anim.SetBool("Sleep", true);
-					current_action = "mating";
 					ready_for_mate = true;
-					anim.SetBool("Mating", true);
 				} else {
 					current_action = "finding mating burrow";
 				}
@@ -217,6 +218,8 @@ public class RabbitLogic : MonoBehaviour {
 					if(currentDestination != null){
 						current_action = "moving to fill";
 						filling = true;
+					} else {
+						current_action = "idle";
 					}
 				} else {
 					current_action = "moving to dig";
@@ -232,8 +235,6 @@ public class RabbitLogic : MonoBehaviour {
 						current_action = "filling";
 						wl.Fill(mySquare, str);
 						filling = false;
-					} else {
-						current_action = "idle";
 					}
 				}
 			} else if(profession == "Forager"){
@@ -242,8 +243,10 @@ public class RabbitLogic : MonoBehaviour {
 					if(mySquare == currentDestination && Time.time > last_action + speed){
 						anim.SetTrigger("Dig");
 						food_hold = wl.TakeFood(mySquare, str);
-					} else {
+					} else if(currentDestination != null){
 						current_action = "moving to forage";
+					} else {
+						current_action = "idle";
 					}
 				} else {
 					//return to closest burrow with space
