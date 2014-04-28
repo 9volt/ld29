@@ -61,7 +61,7 @@ public class GUIScript : MonoBehaviour {
 		 if(!game_over){
 			// Draw season and Burrow Stats
 			GUI.Box(new Rect(0, 0, 400,42), "");
-			GUI.DrawTexture(new Rect(0,0,32,32), season_art[wl.season]);
+			GUI.DrawTexture(new Rect(5,5,32,32), season_art[wl.season]);
 			GUI.DrawTexture(new Rect(70,0,32,32), bunny);
 			GameObject[] g = GameObject.FindGameObjectsWithTag("Rabbit");
 
