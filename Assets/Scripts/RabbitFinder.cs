@@ -122,7 +122,17 @@ public class RabbitFinder : MonoBehaviour {
 	}
 
 	private List<Vertex> NeighborNodes(Vertex current, float[,] costs, Vertex target){
+		
 		List<Vertex> ret = new List<Vertex>();
+
+		if(new Vertex(current.x+1, current.y) == target
+		   || new Vertex(current.x-1, current.y) == target
+		   || new Vertex(current.x, current.y+1) == target
+		   || new Vertex(current.x, current.y-1) == target
+		   ){
+			ret.Add(target);
+		}
+
 		// First check to see if target is within 1 distance and if so add it
 		if(current.y > 0){
 			// top
@@ -183,13 +193,6 @@ public class RabbitFinder : MonoBehaviour {
 			foreach(Vertex v in removes){
 				ret.Remove(v);
 			}
-		}
-		if(new Vertex(current.x+1, current.y) == target
-		   || new Vertex(current.x-1, current.y) == target
-		   || new Vertex(current.x, current.y+1) == target
-		   || new Vertex(current.x, current.y-1) == target
-		   ){
-			ret.Add(target);
 		}
 		return ret;
 	}

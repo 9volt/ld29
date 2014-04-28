@@ -53,7 +53,7 @@ public class Farmer : MonoBehaviour {
 					if((wg.VertexToType(below) == WorldGen.TUNNEL || wg.VertexToType(left) == WorldGen.TUNNEL || wg.VertexToType(right) == WorldGen.TUNNEL) && wg.VertexToType(above) == WorldGen.AIR){
 						List<Vertex> p = rf.FindPath(pos, v, wg.GetPathfindingCosts());
 						if(p != null && p.Count > 1){
-							currentDestination = v;
+							currentDestination = above;
 							Debug.Log("Picked a tunnel " + currentDestination);
 							return;
 						}

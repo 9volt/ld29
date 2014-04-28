@@ -224,6 +224,7 @@ public class WorldLogic : MonoBehaviour {
 					GameObject r = (GameObject)Instantiate(rabbit, transform.position, transform.rotation);
 					r.GetComponent<RabbitLogic>().mySquare = v;
 					r.GetComponent<RabbitLogic>().sex = w % 2;
+					r.GetComponent<RabbitLogic>().starting_rabbit = true;
 					r.SetActive(true);
 					h = wg.height;
 				}

@@ -56,6 +56,7 @@ public class RabbitLogic : MonoBehaviour {
 
 	public string cause_of_death;
 	private string current_action = "idle";
+	public bool starting_rabbit = false;
 
 	// Use this for initialization
 	void Start () {
@@ -84,8 +85,8 @@ public class RabbitLogic : MonoBehaviour {
 		str = Random.Range(1,4);
 		spd = Random.Range(1,4);
 		speed = 1 / (float)spd;
-		profession = "Burrower";
-		if(sex == null){
+		if(!starting_rabbit){
+			profession = "Guard";
 			sex = Random.Range(0,2);
 		}
 	}
@@ -356,6 +357,7 @@ public class RabbitLogic : MonoBehaviour {
 
 	public bool Damage(string who, int d){
 		sleeping = false;
+		ready_for_mate = false;
 		hp -= d;
 		profession = "Guard";
 		if(hp <= 0){
