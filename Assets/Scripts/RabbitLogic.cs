@@ -55,6 +55,7 @@ public class RabbitLogic : MonoBehaviour {
 	private RabbitLogic father;
 
 	public string cause_of_death;
+	private string current_action = "idle";
 
 	// Use this for initialization
 	void Start () {
@@ -90,34 +91,7 @@ public class RabbitLogic : MonoBehaviour {
 	}
 
 	public string WhatAmIDoing(){
-		if(!rm.Moving && profession == "Guard"){
-			return "cowering";
-		} else if(sleeping){
-			return "sleeping";
-		} else if(need_sleep){
-			return "looking for sleep";
-		} else if(ready_for_mate){
-			return "waiting for mate";
-		} else if(horney && sex == FEMALE && CanGetSleep()){
-			return "looking for burrow to mate";
-		} else if(horney && sex == MALE && CanGetFemale() != null){
-			return "looking for female";
-		} else if(mySquare == currentDestination){
-		switch(profession){
-			case "Burrower":
-				return "burrowing";
-			case "Forager":
-				return "foraging";
-			case "Guard":
-				return "fleeing";
-			default:
-				return "bumming";
-			}
-		} else if(currentDestination == null){
-			return "idling";
-		} else {
-			return "running";
-		}
+		return current_action;
 	}
 
 	void Die(){
@@ -177,9 +151,12 @@ public class RabbitLogic : MonoBehaviour {
 				if(mySquare == currentDestination && Time.time > last_action + speed){
 					anim.SetBool("Sleep", true);
 					if(wl.StartSleep(mySquare)){
+						current_action = "sleeping";
 						sleeping = true;
 						last_sleep = Time.time;
 					}
+				} else {
+					current_action = "finding sleep";
 				}
 			}
 		} else if(need_food && CanGetFood()){
@@ -190,27 +167,35 @@ public class RabbitLogic : MonoBehaviour {
 				if(mySquare == currentDestination && Time.time > last_action + speed){
 					anim.SetTrigger("Dig");
 					if(wl.EatFood(mySquare)){
+						current_action = "eating";
 						hunger = full;
 						need_food = false;
 					}
+				} else {
+					current_action = "finding food";
 				}
 			}
 		} else if(ready_for_mate){
 			// animation???
+			current_action = "waiting for mate";
 		} else if(horney && sex == FEMALE && CanGetSleep()){
 			Burrow b = wl.GetClosestBurrowSleep(mySquare);
 			if(b != null){
 				currentDestination = b.main_block;
 				if(mySquare == currentDestination && Time.time > last_action + speed){
 					//anim.SetBool("Sleep", true);
+					current_action = "mating";
 					ready_for_mate = true;
 					anim.SetBool("Mating", true);
+				} else {
+					current_action = "finding mating burrow";
 				}
 			}
 		} else if(horney && sex == MALE && CanGetFemale() != null){
 			RabbitLogic female = CanGetFemale();
 			if(female.mySquare == mySquare){
 				anim.SetBool("Hump", true);
+				current_action = "mating";
 				sexing = true;
 				sex_start = Time.time;
 				female.Mate(this);
@@ -218,6 +203,7 @@ public class RabbitLogic : MonoBehaviour {
 				last_mating = Time.time;
 			} else {
 				currentDestination = female.mySquare;
+				current_action = "moving to female";
 			}
 			//else pick new Destination or work
 		} else {
@@ -228,19 +214,25 @@ public class RabbitLogic : MonoBehaviour {
 					// If that fails find a square to fill in
 					currentDestination = wl.GetClosestFill(mySquare);
 					if(currentDestination != null){
+						current_action = "moving to fill";
 						filling = true;
 					}
 				} else {
+					current_action = "moving to dig";
 					digging = true;
 				}
 				if(mySquare == currentDestination && Time.time > last_action + speed){
 					anim.SetTrigger("Dig");
 					if(digging){
+						current_action = "digging";
 						wl.Dig(mySquare, str);
 						digging = false;
 					}else if(filling){
+						current_action = "filling";
 						wl.Fill(mySquare, str);
 						filling = false;
+					} else {
+						current_action = "idle";
 					}
 				}
 			} else if(profession == "Forager"){
@@ -249,16 +241,21 @@ public class RabbitLogic : MonoBehaviour {
 					if(mySquare == currentDestination && Time.time > last_action + speed){
 						anim.SetTrigger("Dig");
 						food_hold = wl.TakeFood(mySquare, str);
+					} else {
+						current_action = "moving to forage";
 					}
 				} else {
 					//return to closest burrow with space
 					Burrow b = wl.GetClosestBurrowDepositFood(mySquare);
 					if(b != null){
+						current_action = "returning with food";
 						currentDestination = b.main_block;
 						if(mySquare == currentDestination && Time.time > last_action + speed){
 							anim.SetTrigger("Dig");
 							food_hold = wl.DepositFood(mySquare, food_hold);
 						}
+					} else {
+						current_action = "need burrow to store food";
 					}
 				}
 			} else if(profession == "Guard"){
@@ -266,10 +263,9 @@ public class RabbitLogic : MonoBehaviour {
 				if(b != null){
 					currentDestination = b.GetRandomBlock(rrand);
 					if(mySquare == currentDestination){
-//						if(wl.StartSleep(mySquare)){
-//							sleeping = true;
-//							last_sleep = Time.time - sleep_length;
-//						}
+						current_action = "cowering";
+					} else {
+						current_action = "finding cover";
 					}
 				}
 			}
@@ -278,68 +274,76 @@ public class RabbitLogic : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		if(sexing && Time.time < sex_length + sex_start){
-			return;
-		}
-		if(sexing && Time.time > sex_length + sex_start){
-			sexing = false;
-			if(sex == FEMALE){
-				Birth();
-			} else {
-				anim.SetBool("Hump", false);
+		if(hp > 0){
+			if(sexing && Time.time < sex_length + sex_start){
+				return;
 			}
-		}
-		//Checks for a path to the destination (In case it has changed), and moves to the next node if not currently transitioning between nodes
-		if(currentDestination != null && mySquare != currentDestination){
-			if(!rm.Moving){
-				mySquare = nextNode;
-				PickDestination();
-				List<Vertex> p = rf.FindPath(mySquare, currentDestination, wg.GetPathfindingCosts());
-				if (p != null && p.Count > 1){
-					nextNode = p[1];
-					rm.Move(wg.VertexToVector3(nextNode));
-				}else{
-					currentDestination = mySquare;
+			if(sexing && Time.time > sex_length + sex_start){
+				sexing = false;
+				if(sex == FEMALE){
+					Birth();
+				} else {
+					anim.SetBool("Hump", false);
+				}
+			}
+			//Checks for a path to the destination (In case it has changed), and moves to the next node if not currently transitioning between nodes
+			if(currentDestination != null && mySquare != currentDestination){
+				if(!rm.Moving){
+					mySquare = nextNode;
+					PickDestination();
+					List<Vertex> p = rf.FindPath(mySquare, currentDestination, wg.GetPathfindingCosts());
+					if (p != null && p.Count > 1){
+						nextNode = p[1];
+						rm.Move(wg.VertexToVector3(nextNode));
+					}else{
+						currentDestination = mySquare;
+					}
+				}
+			} else {
+				if(sleeping){
+					if(Time.time > last_sleep + sleep_length){
+						sleeping = false;
+						need_sleep = false;
+						last_sleep = Time.time;
+						wl.EndSleep(mySquare);
+						anim.SetBool("Sleep", false);
+					}
+				} else {
+					PickDestination();
+				}
+			}
+			if(Time.time > last_hunger + hunger_tick){
+				hunger--;
+				last_hunger = Time.time;
+				if(hunger < (full * .25f)){
+					need_food = true;
+				}
+				if(hunger < (full * .50f)){
+					if(hp < maxhp) hp++;
+				}
+				if(need_sleep && !sleeping){
+					hp -= 5;
+					if(hp <= 0){
+						cause_of_death = "Lack of sleep";
+					}
+				}
+				if(hunger <= 0 && !sleeping){
+					hp -= 4;
+					hunger = 0;
+					if(hp <= 0){
+						cause_of_death = "Starved";
+					}
+				}
+				if(hunger < 0) hunger = 0;
+				if(wl.season == WorldLogic.WINTER && wg.VertexToType(mySquare) == WorldGen.AIR){
+					hp -= 5;
+					if(hp <= 0){
+						cause_of_death = "Froze";
+					}
 				}
 			}
 		} else {
-			if(sleeping){
-				if(Time.time > last_sleep + sleep_length){
-					sleeping = false;
-					need_sleep = false;
-					last_sleep = Time.time;
-					wl.EndSleep(mySquare);
-					anim.SetBool("Sleep", false);
-				}
-			} else {
-				PickDestination();
-			}
-		}
-		if(Time.time > last_hunger + hunger_tick){
-			hunger--;
-			last_hunger = Time.time;
-			if(hunger < (full * .25f)){
-				need_food = true;
-			}
-			if(hunger < (full * .50f)){
-				if(hp < maxhp) hp++;
-			}
-			if(need_sleep && !sleeping){
-				hp -= 5;
-				if(hp <= 0){
-					cause_of_death = "Lack of sleep";
-				}
-			}
-			if(hunger <= 0 && !sleeping){
-				hp -= 4;
-				hunger = 0;
-				if(hp <= 0){
-					cause_of_death = "Starved";
-				}
-			}
-			if(hunger < 0) hunger = 0;
-		}
-		if(hp <= 0){
+			current_action = "dieing";
 			Die();
 		}
 		if(Time.time > last_sleep + sleep_interval){
