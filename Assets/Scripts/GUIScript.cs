@@ -26,7 +26,6 @@ public class GUIScript : MonoBehaviour {
 	public GameObject bg;
 	public GameObject bg2;
 	public Texture black;
-	private bool starting = false;
 
 	// Use this for initialization
 	void Start () {
@@ -34,7 +33,7 @@ public class GUIScript : MonoBehaviour {
 			game_over = false;
 			reload = false;
 		}
-		if(!game_over && !starting){
+		if(!game_over){
 			scroll = Screen.height - 300;
 			myPastRabbits = null;
 			profession = Guard;
@@ -58,14 +57,7 @@ public class GUIScript : MonoBehaviour {
 	}
 	
 	void OnGUI(){
-		if(starting){
-			//start buton
-			if(GUI.Button(new Rect(Screen.width - 215, Screen.height - 160, 150, 150), "Start")){
-				starting = false;
-				Application.LoadLevel("SimWarren");
-			}
-
-		}else if(!game_over){
+		 if(!game_over){
 			// Draw season and Burrow Stats
 			GUI.Box(new Rect(0, 0, 400,42), "");
 			GUI.DrawTexture(new Rect(0,0,32,32), season_art[wl.season]);
@@ -82,9 +74,6 @@ public class GUIScript : MonoBehaviour {
 			GUI.Label(new Rect(290,10,100,32),"" + wl.FoodCount() + " / " + wl.FoodCapacity() ); 
 			GUI.DrawTexture(new Rect(340,2,32,32), foodcap);
 
-	//		if (GUI.Button(new Rect(Screen.width - 200, Screen.height - 200, 200,100), "Change name")){
-	//			name = gameObject.GetComponent<NameGen>().getName();
-	//		}
 			if(currentRabbit != null && currentRabbit.gameObject.activeSelf){
 
 				//Targeted Rabbit InfoBox
