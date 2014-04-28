@@ -84,7 +84,9 @@ public class RabbitLogic : MonoBehaviour {
 		str = Random.Range(1,4);
 		spd = Random.Range(1,4);
 		speed = 1 / (float)spd;
-		profession = "Burrower";
+		if(profession == null){
+			profession = "Burrower";
+		}
 		if(sex == null){
 			sex = Random.Range(0,2);
 		}
@@ -318,7 +320,7 @@ public class RabbitLogic : MonoBehaviour {
 				if(hunger < (full * .25f)){
 					need_food = true;
 				}
-				if(hunger < (full * .50f)){
+				if(hunger > (full * .5f)){
 					if(hp < maxhp) hp++;
 				}
 				if(need_sleep && !sleeping){
@@ -355,6 +357,7 @@ public class RabbitLogic : MonoBehaviour {
 	}
 
 	public bool Damage(string who, int d){
+		sleeping = false;
 		hp -= d;
 		profession = "Guard";
 		if(hp <= 0){

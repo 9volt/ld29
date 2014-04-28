@@ -15,7 +15,7 @@ public class Burrow {
 	}
 
 	public int FoodCapacity(){
-		return blocks.Count * 2;
+		return blocks.Count / 2;
 	}
 	
 	public int RabbitCapacity(){
@@ -234,7 +234,7 @@ public class WorldLogic : MonoBehaviour {
 
 	void DespawnFerrets(){
 		foreach(GameObject go in GameObject.FindGameObjectsWithTag("ferret")){
-			go.GetComponent<Enemy>().GoHome();
+			go.GetComponent<Ferret>().GoHome();
 		}
 		ferreted_burrows = new List<Burrow>();
 	}
