@@ -355,6 +355,8 @@ public class RabbitLogic : MonoBehaviour {
 		}
 		if(Time.time > last_mating + mating_cooldown) {
 			horney = true;
+		} else if(sex == MALE){
+			horney = true;
 		}
 	}
 
