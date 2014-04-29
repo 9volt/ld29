@@ -412,7 +412,7 @@ public class WorldLogic : MonoBehaviour {
 		float cur_distance = -1f;
 		Burrow closest = null;
 		foreach(Burrow b in burrows){
-			if((cur_distance == -1f || Vertex.Distance(b.main_block, v) < cur_distance) && !ferreted_burrows.Contains(b)){
+			if((cur_distance == -1f || Vertex.Distance(b.main_block, v) <= cur_distance) && !ferreted_burrows.Contains(b)){
 				cur_distance = Vertex.Distance(b.main_block, v);
 				closest = b;
 			}

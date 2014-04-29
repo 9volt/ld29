@@ -113,7 +113,7 @@ public class Farmer : MonoBehaviour {
 		wl.SpawnFerret(pos);
 		i++;
 		if (i < num_spawn * wl.year){
-			yield return new WaitForSeconds(3);
+			yield return new WaitForSeconds(1);
 			StartCoroutine(ReleaseFerrets());
 		}else{
 			Debug.Log("Going Home");

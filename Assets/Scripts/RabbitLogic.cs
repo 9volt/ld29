@@ -108,6 +108,16 @@ public class RabbitLogic : MonoBehaviour {
 		return wl.GetClosestBurrowSleep(mySquare) != null;
 	}
 
+	bool AreThereMales(){
+		foreach(GameObject go in GameObject.FindGameObjectsWithTag("Rabbit")){
+			RabbitLogic rl = go.GetComponent<RabbitLogic>();
+			if(rl.sex == MALE){
+					return true;
+			}
+		}
+		return false;
+	}
+
 	RabbitLogic CanGetFemale(){
 		Dictionary<RabbitLogic, int> ladies = new Dictionary<RabbitLogic, int>();
 		foreach(GameObject go in GameObject.FindGameObjectsWithTag("Rabbit")){
@@ -179,11 +189,11 @@ public class RabbitLogic : MonoBehaviour {
 					current_action = "finding food";
 				}
 			}
-		} else if(ready_for_mate){
+		} else if(ready_for_mate && AreThereMales()){
 			// animation???
 			anim.SetBool("Mating", true);
 			current_action = "waiting for mate";
-		} else if(horny && sex == FEMALE && CanGetSleep()){
+		} else if(horny && sex == FEMALE && CanGetSleep() && AreThereMales()){
 			Burrow b = wl.GetClosestBurrowSleep(mySquare);
 			if(b != null){
 				currentDestination = b.main_block;
