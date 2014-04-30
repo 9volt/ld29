@@ -359,8 +359,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4877154d3b6bb944f86b95a08b6970ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scroll_speed: 4
-  zoom_speed: 6
+  scroll_speed: 5
+  zoom_speed: 50
   bg: {fileID: 1296940671}
   bg_scroll_speed: .00219999999
   seasons:
