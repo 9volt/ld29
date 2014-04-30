@@ -37,12 +37,29 @@ public class Enemy : MonoBehaviour {
 		return hp <= 0;
 	}
 
+	void PickRandom(){
+		if(target == null){
+			// move to random square
+			int w = Random.Range(20, 80);
+			for(int h = 0; h < wg.height; h++){
+				if(wg.VertexToType(new Vertex(w, h)) == WorldGen.DIRT){
+					currentDestination = new Vertex(w, h);
+					h = wg.height;
+				}
+			}
+		}
+	}
+
 	void FindTarget(){
 		GameObject[] rabbits = GameObject.FindGameObjectsWithTag("Rabbit");
 		float distance = 9999f;
+		target = null;
 		foreach(GameObject r in rabbits){
 			RabbitLogic rl = r.GetComponent<RabbitLogic>();
-			if(Vertex.Distance(pos, rl.mySquare) < distance){
+			if(Vertex.Distance(pos, rl.mySquare) < distance
+			   && (wg.VertexToType(rl.mySquare) == WorldGen.AIR
+					 || wg.VertexToType(rl.mySquare) == WorldGen.CARROT
+					 || wg.VertexToType(new Vertex(rl.mySquare.x, rl.mySquare.y - 1)) == WorldGen.AIR)){
 				target = rl;
 				distance = Vertex.Distance(pos, rl.mySquare);
 			}
@@ -85,6 +102,7 @@ public class Enemy : MonoBehaviour {
 		if(currentDestination != null && pos != currentDestination){
 			if(!rm.Moving){
 				pos = next_node;
+				FindTarget();
 				UpdateTarget();
 				List<Vertex> p = rf.FindPath(pos, currentDestination, wg.GetPathfindingCosts());
 				if(p != null && p.Count > 1){
@@ -97,6 +115,9 @@ public class Enemy : MonoBehaviour {
 		} else {
 			FindTarget();
 			UpdateTarget();
+			if(target == null && hp > 0){
+				PickRandom();
+			}
 		}
 	}
 }
